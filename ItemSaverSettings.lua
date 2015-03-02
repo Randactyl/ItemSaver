@@ -128,7 +128,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 		type = "panel",
 		name = "Item Saver",
 		author = "ingeniousclown and Randactyl",
-		version = "1.1",
+		version = "1.2.0.1",
 		slashCommand = "/itemsaversettings",
 		registerForRefresh = true
 	}
