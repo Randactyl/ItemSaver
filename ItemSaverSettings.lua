@@ -32,6 +32,7 @@ local MARKER_TEXTURES = {
 }
 
 local TEXTURE_OPTIONS = { "Star", "Padlock", "Flag", "BoxStar", "Medic", "Timer" }
+local ANCHOR_OPTIONS = { "Top left", "Top right", "Bottom left", "Bottom right"}
 
 -----------------------------
 --UTIL FUNCTIONS
@@ -68,6 +69,8 @@ function ItemSaverSettings:Initialize()
 		filterShop = true,
 		filterDeconstruction = true,
 		filterResearch = true,
+
+		markerAnchor = BOTTOMLEFT,
 
 		--non-settings vars
 		markedItems = {}
@@ -108,6 +111,10 @@ end
 
 function ItemSaverSettings:GetTextureColor()
 	return HexToRGBA(settings.textureColor)
+end
+
+function ItemSaverSettings:GetMarkerAnchor()
+	return settings.markerAnchor
 end
 
 function ItemSaverSettings:GetMarkedItems()
@@ -168,11 +175,33 @@ function ItemSaverSettings:CreateOptionsMenu()
 		},
 
 		[4] = {
+			type = "dropdown",
+			name = str.ICON_ANCHOR_LABEL,
+			tooltip = str.ICON_ANCHOR_TOOLTIP,
+			choices = ANCHOR_OPTIONS,
+			getFunc = function()
+						local anchor = settings.markerAnchor
+						if anchor == TOPLEFT then return ANCHOR_OPTIONS[1] end
+						if anchor == TOPRIGHT then return ANCHOR_OPTIONS[2] end
+						if anchor == BOTTOMLEFT then return ANCHOR_OPTIONS[3] end
+						if anchor == BOTTOMRIGHT then return ANCHOR_OPTIONS[4] end
+					end,
+			setFunc = function(value)
+						if value == ANCHOR_OPTIONS[1] then settings.markerAnchor = TOPLEFT end
+						if value == ANCHOR_OPTIONS[2] then settings.markerAnchor = TOPRIGHT end
+						if value == ANCHOR_OPTIONS[3] then settings.markerAnchor = BOTTOMLEFT end
+						if value == ANCHOR_OPTIONS[4] then settings.markerAnchor = BOTTOMRIGHT end
+						ReloadUI()
+					end,
+			warning = "Will reload the UI",
+		},
+
+		[5] = {
 			type = "header",
 			name = "Filter options"
 		},
 
-		[5] = {
+		[6] = {
 			type = "checkbox",
 			name = str.FILTERS_TOGGLE_LABEL,
 			tooltip = str.FILTERS_TOGGLE_TOOLTIP,
@@ -183,7 +212,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 					end
 		},
 
-		[6] = {
+		[7] = {
 			type = "checkbox",
 			name = str.FILTERS_SHOP_LABEL,
 			tooltip = str.FILTERS_SHOP_TOOLTIP,
@@ -195,7 +224,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 			disabled = function() return not settings.isFilterOn end
 		},
 
-		[7] = {
+		[8] = {
 			type = "checkbox",
 			name = str.FILTERS_DECONSCRUCTION_LABEL,
 			tooltip = str.FILTERS_DECONSCRUCTION_TOOLTIP,
@@ -207,7 +236,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 			disabled = function() return not settings.isFilterOn end
 		},
 
-		[8] = {
+		[9] = {
 			type = "checkbox",
 			name = str.FILTERS_RESEARCH_LABEL,
 			tooltip = str.FILTERS_RESEARCH_TOOLTIP,

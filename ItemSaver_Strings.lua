@@ -26,6 +26,9 @@ ItemSaver_Strings = {
 		ICON_LABEL = "Icon Texture",
 		ICON_TOOLTIP = "Texture to use for your ItemSaver",
 
+		ICON_ANCHOR_LABEL = "Icon Position",
+		ICON_ANCHOR_TOOLTIP = "Position of the saved item marker",
+
 		TEXTURE_COLOR_LABEL = "Texture Color",
 		TEXTURE_COLOR_TOOLTIP = "Color to use for ItemSaver's texture",
 

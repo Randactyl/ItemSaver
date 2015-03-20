@@ -73,7 +73,7 @@ local function CreateMarkerControl(parent)
 		end
 		control:SetDrawTier(DT_HIGH)
 		control:ClearAnchors()
-		control:SetAnchor(CENTER, parent, BOTTOMLEFT, 12, -12)
+		control:SetAnchor(ISSettings:GetMarkerAnchor(), parent, ISSettings:GetMarkerAnchor())
 	else
 		control:ClearAnchors()
 		control:SetAnchor(LEFT, parent, LEFT)
@@ -85,7 +85,7 @@ end
 local function CreateMarkerControlForEquipment(parent)
 	local control = CreateMarkerControl(parent)
 	control:ClearAnchors()
-	control:SetAnchor(BOTTOMLEFT, parent, BOTTOMLEFT)
+	control:SetAnchor(ISSettings:GetMarkerAnchor(), parent, ISSettings:GetMarkerAnchor())
 	control:SetDimensions(20, 20)
 	control:SetDrawTier(1)
 end
