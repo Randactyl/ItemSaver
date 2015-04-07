@@ -1,0 +1,95 @@
+<GuiXml>
+	<Controls>
+		<TopLevelControl name="ItemSaverSaveDialog" inherits="ZO_CustomDialogBase">
+			<Controls>
+				<Control name="$(parent)Content" inherits="ZO_DialogContentAnchors">
+					<Controls>
+						<Label name="$(parent)SaveSetSelectLabel" font="ZoFontGame" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_SELECTED" horizontalAlignment="LEFT" modifyTextType="UPPERCASE" text="Select Save Set:">
+							<Anchor point="TOPLEFT"/>
+							<Dimensions x="165" y="26" />
+                        </Label>
+                        <Control name="$(parent)SaveSetSelect" inherits="ZO_ComboBox">
+							<Anchor point="LEFT" relativeTo="$(parent)SaveSetSelectLabel" relativePoint="RIGHT" offsetX="16"/>
+							<Dimensions x="160" y="26" />
+						</Control>
+
+						<Button name="$(parent)NewSetButton" inherits="ZO_CheckButton">
+							<Anchor point="TOPLEFT" relativeTo="$(parent)SaveSetSelectLabel" relativePoint="BOTTOMLEFT" offsetY="16"/>
+						</Button>
+
+						<Label name="$(parent)NameLabel" font="ZoFontGame" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_SELECTED" horizontalAlignment="LEFT" modifyTextType="UPPERCASE" text="Enter Name:">
+                            <Anchor point="TOPLEFT" relativeTo="$(parent)NewSetButton" relativePoint="BOTTOMLEFT" offsetY="16"/>
+                            <Dimensions x="160" y="26" />
+                        </Label>
+                        <EditBox name="$(parent)Name" inherits="ZO_DefaultEditForBackdrop" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_SELECTED">
+							<Anchor point="LEFT" relativeTo="$(parent)NameLabel" relativePoint="RIGHT" offsetY="4"/>
+							<Controls>
+								<Backdrop name="$(parent)Backdrop" inherits="ZO_EditBackdrop">
+									<AnchorFill/>
+								</Backdrop>
+							</Controls>
+						</EditBox>
+
+						<Label name="$(parent)IconLabel" font="ZoFontGame" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_SELECTED" horizontalAlignment="LEFT" modifyTextType="UPPERCASE" text="Select Icon:">
+							<Anchor point="TOPLEFT" relativeTo="$(parent)NameLabel" relativePoint="BOTTOMLEFT" offsetY="16"/>
+                        </Label>
+                        <Control name="$(parent)IconSelect" inherits="ZO_ComboBox">
+							<Anchor point="LEFT" relativeTo="$(parent)IconLabel" relativePoint="RIGHT" offsetX="16"/>
+							<Dimensions x="160" y="26" />
+						</Control>
+
+						<Label name="$(parent)IconColorLabel" font="ZoFontGame" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_SELECTED" horizontalAlignment="LEFT" modifyTextType="UPPERCASE" text="Select Icon Color:">
+							<Anchor point="TOPLEFT" relativeTo="$(parent)IconLabel" relativePoint="BOTTOMLEFT" offsetY="16"/>
+                        </Label>
+                        <Control name="$(parent)IconColor" mouseEnabled="true">
+							<Dimensions x="40" y="26" />
+							<Anchor point="LEFT" relativeTo="$(parent)IconColorLabel" relativePoint="RIGHT" offsetX="16"/>
+							<Controls>
+								<Texture name="$(parent)Texture" layer="2">
+									<Dimensions x="36" y="22" />
+									<Anchor point="LEFT" offsetX="4" />
+								</Texture>
+								<Texture name="$(parent)Border" textureFile="EsoUI/Art/ChatWindow/chatOptions_bgColSwatch_frame.dds">
+									<TextureCoords left="0" right="0.625" top="0" bottom="0.8125"/>
+									<Dimensions x="40" y="26" />
+									<Anchor point="CENTER" relativeTo="$(parent)Texture" />
+								</Texture>
+							</Controls>
+						</Control>
+
+						<Label name="$(parent)SelectFiltersLabel" font="ZoFontGame" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_SELECTED" horizontalAlignment="LEFT" modifyTextType="UPPERCASE" text="Select Filters:">
+							<Anchor point="TOPLEFT" relativeTo="$(parent)IconColorLabel" relativePoint="BOTTOMLEFT" offsetY="16"/>
+                        </Label>
+                        <Button name="$(parent)FilterShopButton" inherits="ZO_CheckButton">
+							<Anchor point="TOPLEFT" relativeTo="$(parent)SelectFiltersLabel" relativePoint="BOTTOMLEFT" offsetY="16"/>
+						</Button>
+						<Button name="$(parent)FilterDeconstructionButton" inherits="ZO_CheckButton">
+							<Anchor point="LEFT" relativeTo="$(parent)FilterShopButton" relativePoint="RIGHT" offsetY="16"/>
+						</Button>
+						<Button name="$(parent)FilterResearchButton" inherits="ZO_CheckButton">
+							<Anchor point="TOPLEFT" relativeTo="$(parent)FilterShopButton" relativePoint="BOTTOMLEFT" offsetY="16"/>
+						</Button>
+						<Button name="$(parent)FilterGuildStoreButton" inherits="ZO_CheckButton">
+							<Anchor point="LEFT" relativeTo="$(parent)FilterResearchButton" relativePoint="RIGHT" offsetY="16"/>
+						</Button>
+						<Button name="$(parent)FilterMailButton" inherits="ZO_CheckButton">
+							<Anchor point="TOPLEFT" relativeTo="$(parent)FilterResearchButton" relativePoint="BOTTOMLEFT" offsetY="16"/>
+						</Button>
+						<Button name="$(parent)FilterTradeButton" inherits="ZO_CheckButton">
+							<Anchor point="LEFT" relativeTo="$(parent)FilterMailButton" relativePoint="RIGHT" offsetY="16"/>
+						</Button>
+						<Button name="$(parent)FilterImprovementButton" inherits="ZO_CheckButton">
+							<Anchor point="TOPLEFT" relativeTo="$(parent)FilterMailButton" relativePoint="BOTTOMLEFT" offsetY="16"/>
+						</Button>
+						<Button name="$(parent)FilterFenceButton" inherits="ZO_CheckButton">
+							<Anchor point="LEFT" relativeTo="$(parent)FilterImprovementButton" relativePoint="RIGHT" offsetY="16"/>
+						</Button>
+						<Button name="$(parent)FilterLaunderButton" inherits="ZO_CheckButton">
+							<Anchor point="TOPLEFT" relativeTo="$(parent)SelectFiltersLabel" relativePoint="BOTTOMLEFT" offsetY="16"/>
+						</Button>
+					</Controls>
+				</Control>
+			</Controls>
+		</TopLevelControl>
+	</Controls>
+</GuiXml>
