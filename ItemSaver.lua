@@ -250,8 +250,12 @@ function ItemSaver_IsResearchFiltered()
 end
 
 --returns true if the item is saved, returns nil if the item is not saved
-function ItemSaver_IsItemSaved(bagId, slotIndex)
-	return markedItems[SignItemId(GetItemInstanceId(bagId, slotIndex))]
+function ItemSaver_IsItemSaved(bagIdOrItemId, slotIndex)
+	if slotIndex == nil then --ItemId
+		return markedItems[SignItemId(bagIdOrItemId)]
+	else -- bagId and slotId
+		return markedItems[SignItemId(GetItemInstanceId(bagIdOrItemId, slotIndex))]
+	end
 end
 
 function ItemSaver_ToggleItemSave(bagId, slotIndex)
