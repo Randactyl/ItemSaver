@@ -29,3 +29,9 @@ ItemSaverSaveDialog.lua
 ItemSaver.lua
 
 bindings.xml
+
+markertextures\boxstar.lua
+markertextures\flag.lua
+markertextures\padlock.lua
+markertextures\star.lua
+markertextures\timer.lua
