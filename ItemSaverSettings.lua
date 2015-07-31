@@ -29,7 +29,7 @@ local MARKER_TEXTURES = {
 	},
 }
 local TEXTURE_OPTIONS = { "Star", "Padlock", "Flag", "BoxStar", "Medic", "Timer" }
-local ANCHOR_OPTIONS = { "Top left", "Top right", "Bottom left", "Bottom right"}
+local ANCHOR_OPTIONS = { "Top left", "Top right", "Bottom left", "Bottom right" }
 
 -----------------------------
 --UTIL FUNCTIONS
@@ -63,21 +63,20 @@ function ItemSaverSettings:Initialize()
 			["Default"] = {
 				iconTexture = "Star",
 				iconColor = RGBAToHex(1, 1, 0, 1),
-				filterShop = true,
+				filterStore = true,
 				filterDeconstruction = true,
 				filterResearch = true,
 				filterGuildStore = false,
 				filterMail = false,
 				filterTrade = false,
-				filterImprovement = false,
-				filterFence = false,
-				filterLaunder = false,
 			},
 		},
 		savedItems = {},
 	}
 
 	settings = ZO_SavedVars:NewAccountWide("ItemSaver_Settings", 2.0, nil, defaults)
+
+	toggleAllFilters()
 
     self:CreateOptionsMenu()
 end
@@ -117,22 +116,111 @@ function ItemSaverSettings:CreateOptionsMenu()
 			tooltip = GetString(SI_ITEMSAVER_ICON_ANCHOR_TOOLTIP),
 			choices = ANCHOR_OPTIONS,
 			getFunc = function()
-						local anchor = settings.iconAnchor
-						if anchor == TOPLEFT then return ANCHOR_OPTIONS[1] end
-						if anchor == TOPRIGHT then return ANCHOR_OPTIONS[2] end
-						if anchor == BOTTOMLEFT then return ANCHOR_OPTIONS[3] end
-						if anchor == BOTTOMRIGHT then return ANCHOR_OPTIONS[4] end
-					end,
+					local anchor = settings.iconAnchor
+					if anchor == TOPLEFT then return ANCHOR_OPTIONS[1] end
+					if anchor == TOPRIGHT then return ANCHOR_OPTIONS[2] end
+					if anchor == BOTTOMLEFT then return ANCHOR_OPTIONS[3] end
+					if anchor == BOTTOMRIGHT then return ANCHOR_OPTIONS[4] end
+				end,
 			setFunc = function(value)
-						if value == ANCHOR_OPTIONS[1] then settings.iconAnchor = TOPLEFT end
-						if value == ANCHOR_OPTIONS[2] then settings.iconAnchor = TOPRIGHT end
-						if value == ANCHOR_OPTIONS[3] then settings.iconAnchor = BOTTOMLEFT end
-						if value == ANCHOR_OPTIONS[4] then settings.iconAnchor = BOTTOMRIGHT end
-						ReloadUI()
-					end,
-			warning = GetString(SI_ITEMSAVER_RELOAD_UI_WARNING),
+					if value == ANCHOR_OPTIONS[1] then settings.iconAnchor = TOPLEFT end
+					if value == ANCHOR_OPTIONS[2] then settings.iconAnchor = TOPRIGHT end
+					if value == ANCHOR_OPTIONS[3] then settings.iconAnchor = BOTTOMLEFT end
+					if value == ANCHOR_OPTIONS[4] then settings.iconAnchor = BOTTOMRIGHT end
+				end,
+		},
+		[4] = {
+			type = "header",
+			name = GetString(SI_ITEMSAVER_SET_DATA_HEADER)
 		},
 	}
+	for setName,setData in pairs(settings.savedSetInfo) do
+		local submenuData = {
+			type = "submenu",
+			name = setName,
+			tooltip = nil,
+			controls = {
+				[1] = {
+					type = "dropdown",
+					name = GetString(SI_ITEMSAVER_ICON_LABEL),
+					tooltip = GetString(SI_ITEMSAVER_ICON_TOOLTIP),
+					choices = TEXTURE_OPTIONS,
+					getFunc = function() return setData.iconTexture end,
+					setFunc = function(value)
+							setData.iconTexture = value
+						end,
+				},
+				[2] = {
+					type = "colorpicker",
+					name = GetString(SI_ITEMSAVER_TEXTURE_COLOR_LABEL),
+					tooltip = GetString(SI_ITEMSAVER_TEXTURE_COLOR_TOOLTIP),
+					getFunc = function()
+							local r, g, b, a = HexToRGBA(setData.iconColor)
+							return r, g, b
+						end,
+					setFunc = function(r, g, b)
+							setData.iconColor = RGBAToHex(r, g, b, 1)
+							icon:SetColor(r, g, b, 1)
+						end,
+				},
+				[3] = {
+					type = "checkbox",
+					name = GetString(SI_ITEMSAVER_FILTERS_STORE_LABEL),
+					tooltip = GetString(SI_ITEMSAVER_FILTERS_STORE_TOOLTIP),
+					getFunc = function() return setData.filterStore end,
+					setFunc = function(value)
+							setData.filterStore = value
+						end,
+				},
+				[4] = {
+					type = "checkbox",
+					name = GetString(SI_ITEMSAVER_FILTERS_DECONSTRUCTION_LABEL),
+					tooltip = GetString(SI_ITEMSAVER_FILTERS_DECONSTRUCTION_TOOLTIP),
+					getFunc = function() return setData.filterDeconstruction end,
+					setFunc = function(value)
+							setData.filterDeconstruction = value
+						end,
+				},
+				[5] = {
+					type = "checkbox",
+					name = GetString(SI_ITEMSAVER_FILTERS_RESEARCH_LABEL),
+					tooltip = GetString(SI_ITEMSAVER_FILTERS_RESEARCH_TOOLTIP),
+					getFunc = function() return setData.filterResearch end,
+					setFunc = function(value)
+							setData.filterResearch = value
+						end,
+				},
+				[6] = {
+					type = "checkbox",
+					name = GetString(SI_ITEMSAVER_FILTERS_GUILDSTORE_LABEL),
+					tooltip = GetString(SI_ITEMSAVER_FILTERS_GUILDSTORE_TOOLTIP),
+					getFunc = function() return setData.filterGuildStore end,
+					setFunc = function(value)
+							setData.filterGuildStore = value
+						end,
+				},
+				[7] = {
+					type = "checkbox",
+					name = GetString(SI_ITEMSAVER_FILTERS_MAIL_LABEL),
+					tooltip = GetString(SI_ITEMSAVER_FILTERS_MAIL_TOOLTIP),
+					getFunc = function() return setData.filterMail end,
+					setFunc = function(value)
+							setData.filterMail = value
+						end,
+				},
+				[8] = {
+					type = "checkbox",
+					name = GetString(SI_ITEMSAVER_FILTERS_TRADE_LABEL),
+					tooltip = GetString(SI_ITEMSAVER_FILTERS_TRADE_TOOLTIP),
+					getFunc = function() return setData.filterTrade end,
+					setFunc = function(value)
+							setData.filterTrade = value
+						end,
+				},
+			},
+		}
+		table.insert(optionsData, submenuData)
+	end
 
 	LAM:RegisterAddonPanel("ItemSaverSettingsPanel", panel)
 	LAM:RegisterOptionControls("ItemSaverSettingsPanel", optionsData)
