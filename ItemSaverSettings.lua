@@ -2,12 +2,15 @@ ItemSaverSettings = ZO_Object:Subclass()
 
 local LAM = LibStub("LibAddonMenu-2.0")
 local libFilters = LibStub("libFilters")
-local settings = nil
-MARKER_TEXTURES = {}
+
+local MARKER_TEXTURES = {}
 local MARKER_OPTIONS = {}
 local TEXTURE_SIZE = 32
 local ANCHOR_OPTIONS = { "Top left", "Top right", "Bottom left", "Bottom right" }
+local SIGNED_INT_MAX = 2^32 / 2 - 1
+local INT_MAX = 2^32
 
+local settings = nil
 -----------------------------
 --UTIL FUNCTIONS
 -----------------------------
@@ -23,14 +26,21 @@ local function HexToRGBA( hex )
     return tonumber(rhex, 16)/255, tonumber(ghex, 16)/255, tonumber(bhex, 16)/255
 end
 
+local function SignItemId(itemId)
+	if(itemId and itemId > SIGNED_INT_MAX) then
+		itemId = itemId - INT_MAX
+	end
+	return itemId
+end
+
 local function FilterSavedItems(bagId, slotIndex, ...)
-	if(markedItems[SignItemId(GetItemInstanceId(bagId, slotIndex))]) then
+	if(settings.savedItems[SignItemId(GetItemInstanceId(bagId, slotIndex))]) then
 		return false
 	end
 	return true
 end
 
-local function toggleStoreFilter(setName)
+local function ToggleStoreFilter(setName)
 	if settings.savedSetInfo[setName].filterStore == true then
 		libFilters:RegisterFilter("ItemSaver_"..setName.."_Store", LAF_STORE, FilterSavedItems)
 	else
@@ -38,7 +48,7 @@ local function toggleStoreFilter(setName)
 	end
 end
 
-local function toggleDeconstructionFilter(setName)
+local function ToggleDeconstructionFilter(setName)
 	if settings.savedSetInfo[setName].filterDeconstruction == true then
 		libFilters:RegisterFilter("ItemSaver_"..setName.."_Deconstruction", LAF_DECONSTRUCTION, FilterSavedItems)
 	else
@@ -46,7 +56,7 @@ local function toggleDeconstructionFilter(setName)
 	end
 end
 
-local function toggleResearchFilter(setName)
+local function ToggleResearchFilter(setName)
 	if settings.savedSetInfo[setName].filterResearch == true then
 		libFilters:RegisterFilter("ItemSaver_"..setName.."_Research", LAF_RESEARCH, FilterSavedItems)
 	else
@@ -54,7 +64,7 @@ local function toggleResearchFilter(setName)
 	end
 end
 
-local function toggleGuildStoreFilter(setName)
+local function ToggleGuildStoreFilter(setName)
 	if settings.savedSetInfo[setName].filterGuildStore == true then
 		libFilters:RegisterFilter("ItemSaver_"..setName.."_GuildStore", LAF_GUILDSTORE, FilterSavedItems)
 	else
@@ -62,7 +72,7 @@ local function toggleGuildStoreFilter(setName)
 	end
 end
 
-local function toggleMailFilter(setName)
+local function ToggleMailFilter(setName)
 	if settings.savedSetInfo[setName].filterMail == true then
 		libFilters:RegisterFilter("ItemSaver_"..setName.."_Mail", LAF_MAIL, FilterSavedItems)
 	else
@@ -70,7 +80,7 @@ local function toggleMailFilter(setName)
 	end
 end
 
-local function toggleTradeFilter(setName)
+local function ToggleTradeFilter(setName)
 	if settings.savedSetInfo[setName].filterTrade == true then
 		libFilters:RegisterFilter("ItemSaver_"..setName.."_Trade", LAF_TRADE, FilterSavedItems)
 	else
@@ -78,14 +88,14 @@ local function toggleTradeFilter(setName)
 	end
 end
 
-local function toggleAllFilters()
+local function ToggleAllFilters()
 	for setName,_ in pairs(settings.savedSetInfo) do
-		toggleStoreFilter(setName)
-		toggleDeconstructionFilter(setName)
-		toggleResearchFilter(setName)
-		toggleGuildStoreFilter(setName)
-		toggleMailFilter(setName)
-		toggleTradeFilter(setName)
+		ToggleStoreFilter(setName)
+		ToggleDeconstructionFilter(setName)
+		ToggleResearchFilter(setName)
+		ToggleGuildStoreFilter(setName)
+		ToggleMailFilter(setName)
+		ToggleTradeFilter(setName)
 	end
 end
 
@@ -119,7 +129,7 @@ function ItemSaverSettings:Initialize()
 
 	settings = ZO_SavedVars:NewAccountWide("ItemSaver_Settings", 2.0, nil, defaults)
 
-	toggleAllFilters()
+	ToggleAllFilters()
 
     self:CreateOptionsMenu()
 end
