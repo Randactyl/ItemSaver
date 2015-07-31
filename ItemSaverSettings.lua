@@ -3,33 +3,9 @@ ItemSaverSettings = ZO_Object:Subclass()
 local LAM = LibStub("LibAddonMenu-2.0")
 local libFilters = LibStub("libFilters")
 local settings = nil
-local MARKER_TEXTURES = {
-	["Star"] = {
-		texturePath = [[/esoui/art/campaign/overview_indexicon_bonus_disabled.dds]],
-		textureSize = 32
-	},
-	["Padlock"] =  {
-		texturePath = [[/esoui/art/campaign/campaignbrowser_fullpop.dds]],
-		textureSize = 32
-	},
-	["Flag"] = {
-		texturePath = [[/esoui/art/ava/tabicon_bg_score_disabled.dds]],
-		textureSize = 32
-	},
-	["BoxStar"] = {
-		texturePath = [[/esoui/art/guild/guild_rankicon_leader_large.dds]],
-		textureSize = 32
-	},
-	["Medic"] = {
-		texturePath = [[/esoui/art/miscellaneous/announce_icon_levelup.dds]],
-		textureSize = 32
-	},
-	["Timer"] = {
-		texturePath = [[/esoui/art/mounts/timer_icon.dds]],
-		textureSize = 32
-	},
-}
-local TEXTURE_OPTIONS = { "Star", "Padlock", "Flag", "BoxStar", "Medic", "Timer" }
+MARKER_TEXTURES = {}
+local MARKER_OPTIONS = {}
+local TEXTURE_SIZE = 32
 local ANCHOR_OPTIONS = { "Top left", "Top right", "Bottom left", "Bottom right" }
 
 -----------------------------
@@ -152,9 +128,9 @@ function ItemSaverSettings:CreateOptionsMenu()
 	--[[local icon = WINDOW_MANAGER:CreateControl("ItemSaver_Icon", ZO_OptionsWindowSettingsScrollChild, CT_TEXTURE)
 	icon:SetColor(HexToRGBA(settings.textureColor))
 	icon:SetHandler("OnShow", function()
-			self:SetTexture(MARKER_TEXTURES[settings.textureName].texturePath)
-			icon:SetDimensions(MARKER_TEXTURES[settings.textureName].textureSize, MARKER_TEXTURES[settings.textureName].textureSize)
-		end)]]
+			self:SetTexture(MARKER_TEXTURES[settings.textureName])
+			icon:SetDimensions(TEXTURE_SIZE, TEXTURE_SIZE)
+		end)]]--this is going to need to be reworked if I want it in each of the undetermined number of submenus
 
 	local panel = {
 		type = "panel",
@@ -211,10 +187,12 @@ function ItemSaverSettings:CreateOptionsMenu()
 					type = "dropdown",
 					name = GetString(SI_ITEMSAVER_ICON_LABEL),
 					tooltip = GetString(SI_ITEMSAVER_ICON_TOOLTIP),
-					choices = TEXTURE_OPTIONS,
+					choices = MARKER_OPTIONS,
 					getFunc = function() return setData.iconTexture end,
 					setFunc = function(value)
 							setData.iconTexture = value
+							--icon:SetTexture(MARKER_TEXTURES[value])
+							--icon:SetDimensions(TEXTURE_SIZE, TEXTURE_SIZE)
 						end,
 				},
 				[2] = {
@@ -297,4 +275,9 @@ function ItemSaverSettings:CreateOptionsMenu()
 
 	LAM:RegisterAddonPanel("ItemSaverSettingsPanel", panel)
 	LAM:RegisterOptionControls("ItemSaverSettingsPanel", optionsData)
+end
+
+function ItemSaver_RegisterMarker(markerInformation)
+	MARKER_TEXTURES[markerInformation.markerName] = markerInformation.texturePath
+	table.insert(MARKER_OPTIONS, markerInformation.markerName)
 end
