@@ -1,6 +1,7 @@
 ItemSaverSettings = ZO_Object:Subclass()
 
 local LAM = LibStub("LibAddonMenu-2.0")
+local libFilters = LibStub("libFilters")
 local settings = nil
 local MARKER_TEXTURES = {
 	["Star"] = {
@@ -44,6 +45,72 @@ end
 local function HexToRGBA( hex )
     local rhex, ghex, bhex, ahex = string.sub(hex, 1, 2), string.sub(hex, 3, 4), string.sub(hex, 5, 6), string.sub(hex, 7, 8)
     return tonumber(rhex, 16)/255, tonumber(ghex, 16)/255, tonumber(bhex, 16)/255
+end
+
+local function FilterSavedItems(bagId, slotIndex, ...)
+	if(markedItems[SignItemId(GetItemInstanceId(bagId, slotIndex))]) then
+		return false
+	end
+	return true
+end
+
+local function toggleStoreFilter(setName)
+	if settings.savedSetInfo[setName].filterStore == true then
+		libFilters:RegisterFilter("ItemSaver_"..setName.."_Store", LAF_STORE, FilterSavedItems)
+	else
+		libFilters:UnregisterFilter("ItemSaver_"..setName.."_Store", LAF_STORE)
+	end
+end
+
+local function toggleDeconstructionFilter(setName)
+	if settings.savedSetInfo[setName].filterDeconstruction == true then
+		libFilters:RegisterFilter("ItemSaver_"..setName.."_Deconstruction", LAF_DECONSTRUCTION, FilterSavedItems)
+	else
+		libFilters:UnregisterFilter("ItemSaver_"..setName.."_Deconstruction", LAF_DECONSTRUCTION)
+	end
+end
+
+local function toggleResearchFilter(setName)
+	if settings.savedSetInfo[setName].filterResearch == true then
+		libFilters:RegisterFilter("ItemSaver_"..setName.."_Research", LAF_RESEARCH, FilterSavedItems)
+	else
+		libFilters:UnregisterFilter("ItemSaver_"..setName.."_Research", LAF_RESEARCH)
+	end
+end
+
+local function toggleGuildStoreFilter(setName)
+	if settings.savedSetInfo[setName].filterGuildStore == true then
+		libFilters:RegisterFilter("ItemSaver_"..setName.."_GuildStore", LAF_GUILDSTORE, FilterSavedItems)
+	else
+		libFilters:UnregisterFilter("ItemSaver_"..setName.."_GuildStore", LAF_GUILDSTORE)
+	end
+end
+
+local function toggleMailFilter(setName)
+	if settings.savedSetInfo[setName].filterMail == true then
+		libFilters:RegisterFilter("ItemSaver_"..setName.."_Mail", LAF_MAIL, FilterSavedItems)
+	else
+		libFilters:UnregisterFilter("ItemSaver_"..setName.."_Mail", LAF_MAIL)
+	end
+end
+
+local function toggleTradeFilter(setName)
+	if settings.savedSetInfo[setName].filterTrade == true then
+		libFilters:RegisterFilter("ItemSaver_"..setName.."_Trade", LAF_TRADE, FilterSavedItems)
+	else
+		libFilters:UnregisterFilter("ItemSaver_"..setName.."_Trade", LAF_TRADE)
+	end
+end
+
+local function toggleAllFilters()
+	for setName,_ in pairs(settings.savedSetInfo) do
+		toggleStoreFilter(setName)
+		toggleDeconstructionFilter(setName)
+		toggleResearchFilter(setName)
+		toggleGuildStoreFilter(setName)
+		toggleMailFilter(setName)
+		toggleTradeFilter(setName)
+	end
 end
 
 ------------------------------
@@ -170,6 +237,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 					getFunc = function() return setData.filterStore end,
 					setFunc = function(value)
 							setData.filterStore = value
+							toggleStoreFilter(setName)
 						end,
 				},
 				[4] = {
@@ -179,6 +247,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 					getFunc = function() return setData.filterDeconstruction end,
 					setFunc = function(value)
 							setData.filterDeconstruction = value
+							toggleDeconstructionFilter(setName)
 						end,
 				},
 				[5] = {
@@ -188,6 +257,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 					getFunc = function() return setData.filterResearch end,
 					setFunc = function(value)
 							setData.filterResearch = value
+							toggleResearchFilter(setName)
 						end,
 				},
 				[6] = {
@@ -197,6 +267,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 					getFunc = function() return setData.filterGuildStore end,
 					setFunc = function(value)
 							setData.filterGuildStore = value
+							toggleGuildStoreFilter(setName)
 						end,
 				},
 				[7] = {
@@ -206,6 +277,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 					getFunc = function() return setData.filterMail end,
 					setFunc = function(value)
 							setData.filterMail = value
+							toggleMailFilter(setName)
 						end,
 				},
 				[8] = {
@@ -215,6 +287,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 					getFunc = function() return setData.filterTrade end,
 					setFunc = function(value)
 							setData.filterTrade = value
+							toggleTradeFilter(setName)
 						end,
 				},
 			},
