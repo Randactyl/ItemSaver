@@ -24,7 +24,7 @@ end
 local function GetInfoFromRowControl(rowControl)
 	--gotta do this in case deconstruction...
 	local dataEntry = rowControl.dataEntry
-	local bagId, slotIndex 
+	local bagId, slotIndex
 
 	--case to handle equiped items
 	if(not dataEntry) then
@@ -36,7 +36,7 @@ local function GetInfoFromRowControl(rowControl)
 	end
 
 	--case to handle list dialog, list dialog uses index instead of slotIndex and bag instead of badId...?
-	if(dataEntry and not bagId and not slotIndex) then 
+	if(dataEntry and not bagId and not slotIndex) then
 		bagId = rowControl.dataEntry.data.bag
 		slotIndex = rowControl.dataEntry.data.index
 	end
@@ -128,7 +128,7 @@ end
 local function ToggleSave(bagId, slotIndex)
 	local signedItemInstanceId = SignItemId(GetItemInstanceId(bagId, slotIndex))
 
-	if(not markedItems[signedItemInstanceId]) then 
+	if(not markedItems[signedItemInstanceId]) then
 		SaveItem(bagId, slotIndex)
 		return true
 	end
@@ -140,9 +140,9 @@ local function AddContextMenuOption(rowControl)
 	local bagId, slotIndex = GetInfoFromRowControl(rowControl)
 	local signedItemInstanceId = SignItemId(GetItemInstanceId(bagId, slotIndex))
 
-	if(not markedItems[signedItemInstanceId]) then 
-		AddMenuItem("Save item", function() 
-				SaveItem(bagId, slotIndex) 
+	if(not markedItems[signedItemInstanceId]) then
+		AddMenuItem("Save item", function()
+				SaveItem(bagId, slotIndex)
 
 				if(GetItemSaverControl(rowControl)) then
 					GetItemSaverControl(rowControl):SetHidden(false)
@@ -304,13 +304,13 @@ local function ItemSaver_Loaded(eventCode, addOnName)
     for _,v in pairs(PLAYER_INVENTORY.inventories) do
 		local listView = v.listView
 		if listView and listView.dataTypes and listView.dataTypes[1] then
-			local hookedFunctions = listView.dataTypes[1].setupCallback				
-			
-			listView.dataTypes[1].setupCallback = 
-				function(rowControl, slot)						
+			local hookedFunctions = listView.dataTypes[1].setupCallback
+
+			listView.dataTypes[1].setupCallback =
+				function(rowControl, slot)
 					hookedFunctions(rowControl, slot)
 					CreateMarkerControl(rowControl)
-				end				
+				end
 		end
 	end
 

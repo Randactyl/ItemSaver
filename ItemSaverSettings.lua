@@ -123,7 +123,7 @@ end
 
 function ItemSaverSettings:CreateOptionsMenu()
 	local str = ItemSaver_Strings[self:GetLanguage()]
-	
+
 	local icon = WINDOW_MANAGER:CreateControl("ItemSaver_Icon", ZO_OptionsWindowSettingsScrollChild, CT_TEXTURE)
 	icon:SetColor(HexToRGBA(settings.textureColor))
 	icon:SetHandler("OnShow", function()
