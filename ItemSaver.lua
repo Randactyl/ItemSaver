@@ -227,12 +227,6 @@ function ItemSaver_IsItemSaved(bagIdOrItemId, slotIndex)
 	return ISSettings:IsItemSaved(bagIdOrItemId, slotIndex)
 end
 
---returns string name of the set an item is saved to. Returns nil if the item is
---not saved.
-function ItemSaver_GetItemSaveSet(bagIdOrItemId, slotIndex)
-	return ISSettings:GetItemSaveSet(bagIdOrItemId, slotIndex)
-end
-
 --returns true if item was saved successfully. Returns false if item was unsaved.
 function ItemSaver_ToggleItemSave(setName, bagIdOrItemId, slotIndex)
 	local returnVal
