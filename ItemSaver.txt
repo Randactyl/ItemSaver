@@ -1,12 +1,12 @@
 ## Title: Item Saver
 ## Author: Randactyl, ingeniousclown
 ## Version: 2.0.0.0
-## APIVersion: 100011
+## APIVersion: 100012
 ## SavedVariables: ItemSaver_Settings
-## OptionalDependsOn: libFilters LibAddonMenu-2.0
 
 lib\LibStub\LibStub.lua
 lib\libFilters\libFilters.lua
+lib\LibCustomMenu\LibCustomMenu.lua
 lib\LibAddonMenu-2.0\LibAddonMenu-2.0.lua
 lib\LibAddonMenu-2.0\controls\panel.lua
 lib\LibAddonMenu-2.0\controls\submenu.lua
@@ -21,11 +21,10 @@ lib\LibAddonMenu-2.0\controls\header.lua
 lib\LibAddonMenu-2.0\controls\slider.lua
 lib\LibAddonMenu-2.0\controls\texture.lua
 
-ItemSaverLib.lua
 ItemSaverStrings.lua
 ItemSaverSettings.lua
-ItemSaverSaveDialog.xml
 ItemSaverSaveDialog.lua
+ItemSaverSaveDialog.xml
 ItemSaver.lua
 
 bindings.xml
