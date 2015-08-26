@@ -1,6 +1,6 @@
 local strings = {
 	["de"] = {
-    },
+	},
 	["en"] = {
 		["SI_ITEMSAVER_ADDON_NAME"] = "Item Saver",
 
