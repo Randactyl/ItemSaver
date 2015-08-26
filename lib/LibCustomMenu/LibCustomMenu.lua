@@ -1,8 +1,8 @@
 -- authors: votan, sirinsidiator
--- thanks to: baertram
+-- thanks to: baertram & circonian
 
 -- Register with LibStub
-local MAJOR, MINOR = "LibCustomMenu", 3
+local MAJOR, MINOR = "LibCustomMenu", 4
 local lib, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end -- the same or newer version of this lib is already loaded into memory
 
@@ -123,7 +123,7 @@ function Submenu:Initialize(name)
 		end
 		local function MouseUp(control)
 			if upInside == true then
-				control.OnSelect()
+				ZO_Menu_ClickItem(control, 1)
 				self:Clear()
 			end
 		end
@@ -324,7 +324,7 @@ local function SubMenuItemFactory(pool)
 		end
 	end
 	local function MouseDown(control)
-		IgnoreMouseDownEditFocusLoss(control)
+		IgnoreMouseDownEditFocusLoss()
 		-- re-open sub menu on click
 		clicked = true
 		control:OnSelect(SUBMENU_ITEM_MOUSE_ENTER)
