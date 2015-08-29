@@ -142,16 +142,6 @@ local function RefreshEquipmentControls()
 	end
 end
 
-local function RefreshAll()
-	ZO_ScrollList_RefreshVisible(BACKPACK)
-	ZO_ScrollList_RefreshVisible(BANK)
-	ZO_ScrollList_RefreshVisible(GUILD_BANK)
-	ZO_ScrollList_RefreshVisible(DECONSTRUCTION)
-	ZO_ScrollList_RefreshVisible(ENCHANTING)
-	ZO_ScrollList_RefreshVisible(LIST_DIALOG)
-	RefreshEquipmentControls()
-end
-
 local function ItemSaver_Loaded(eventCode, addonName)
 	if addonName ~= "ItemSaver" then return end
 
@@ -160,7 +150,30 @@ local function ItemSaver_Loaded(eventCode, addonName)
 	ZO_PreHook("ZO_InventorySlot_ShowContextMenu", AddContextMenuOptionSoon)
 	ZO_PreHook("PlayOnEquippedAnimation", CreateMarkerControlForEquipment)
 
-	--RefreshEquipmentControls()
+	--hook each control to force a refresh and pick up changes to the marker control
+	ZO_PreHookHandler(BACKPACK, "OnEffectivelyShown", function()
+		ZO_ScrollList_RefreshVisible(BACKPACK)
+		RefreshEquipmentControls()
+	end)
+	ZO_PreHookHandler(BANK, "OnEffectivelyShown", function()
+		ZO_ScrollList_RefreshVisible(BANK)
+		RefreshEquipmentControls()
+	end)
+	ZO_PreHookHandler(GUILD_BANK, "OnEffectivelyShown", function()
+		ZO_ScrollList_RefreshVisible(GUILD_BANK)
+		RefreshEquipmentControls()
+	end)
+	ZO_PreHookHandler(DECONSTRUCTION, "OnEffectivelyShown", function()
+		ZO_ScrollList_RefreshVisible(DECONSTRUCTION)
+		RefreshEquipmentControls()
+	end)
+	ZO_PreHookHandler(ENCHANTING, "OnEffectivelyShown", function()
+		ZO_ScrollList_RefreshVisible(ENCHANTING)
+		RefreshEquipmentControls()
+	end)
+	ZO_PreHookHandler(LIST_DIALOG, "OnEffectivelyShown", function()
+		ZO_ScrollList_RefreshVisible(LIST_DIALOG)
+	end)
 
 	--inventory hooks
 	--Wobin, if you're reading this: <3
@@ -168,54 +181,52 @@ local function ItemSaver_Loaded(eventCode, addonName)
 		local listView = inventory.listView
 		if listView and listView.dataTypes and listView.dataTypes[1] then
 			local hookedFunctions = listView.dataTypes[1].setupCallback
-
-			listView.dataTypes[1].setupCallback =
-				function(rowControl, slot)
-					hookedFunctions(rowControl, slot)
-					CreateMarkerControl(rowControl)
-				end
+			listView.dataTypes[1].setupCallback = function(rowControl, slot)
+				hookedFunctions(rowControl, slot)
+				CreateMarkerControl(rowControl)
+			end
 		end
 	end
 
 	--deconstruction hook
+	--hookedFunctions re-declared over and over again because the game was
+	--freaking out otherwise?
 	local hookedFunctions = DECONSTRUCTION.dataTypes[1].setupCallback
 	DECONSTRUCTION.dataTypes[1].setupCallback = function(rowControl, slot)
-			hookedFunctions(rowControl, slot)
-			CreateMarkerControl(rowControl)
-		end
+		hookedFunctions(rowControl, slot)
+		CreateMarkerControl(rowControl)
+	end
 
 	--enchanting hook
 	local hookedFunctions = ENCHANTING.dataTypes[1].setupCallback
 	ENCHANTING.dataTypes[1].setupCallback = function(rowControl, slot)
-			hookedFunctions(rowControl, slot)
-			CreateMarkerControl(rowControl)
-		end
+		hookedFunctions(rowControl, slot)
+		CreateMarkerControl(rowControl)
+	end
 
 	--research list hook
 	local hookedFunctions = LIST_DIALOG.dataTypes[1].setupCallback
 	LIST_DIALOG.dataTypes[1].setupCallback = function(rowControl, slot)
-			hookedFunctions(rowControl, slot)
-			CreateMarkerControl(rowControl)
+		hookedFunctions(rowControl, slot)
+		CreateMarkerControl(rowControl)
 
-			local data = rowControl.dataEntry.data
-			local isSoulGem = false
-			local bagId, slotIndex = GetInfoFromRowControl(rowControl)
+		local data = rowControl.dataEntry.data
+		local isSoulGem = false
+		local bagId, slotIndex = GetInfoFromRowControl(rowControl)
 
-			if data and GetSoulGemItemInfo(data.bag, data.index) > 0 then
-				isSoulGem = true
-			end
-
-			local isSaved, setName = ItemSaver_IsItemSaved(bagId, slotIndex)
-
-			if not isSoulGem and isSaved and ItemSaver_GetFilters(setName).research then
-				rowControl:SetMouseEnabled(false)
-				rowControl:GetNamedChild("Name"):SetColor(.75, 0, 0, 1)
-			else
-				rowControl:SetMouseEnabled(true)
-			end
+		if data and GetSoulGemItemInfo(data.bag, data.index) > 0 then
+			isSoulGem = true
 		end
 
-	RefreshAll()
+		local isSaved, setName = ItemSaver_IsItemSaved(bagId, slotIndex)
+
+		if not isSoulGem and isSaved and ItemSaver_GetFilters(setName).research then
+			rowControl:SetMouseEnabled(false)
+			rowControl:GetNamedChild("Name"):SetColor(.75, 0, 0, 1)
+		else
+			rowControl:SetMouseEnabled(true)
+		end
+	end
 end
 
 EVENT_MANAGER:RegisterForEvent("ItemSaverLoaded", EVENT_ADD_ON_LOADED, ItemSaver_Loaded)
