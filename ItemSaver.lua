@@ -142,6 +142,16 @@ local function RefreshEquipmentControls()
 	end
 end
 
+local function RefreshAll()
+	ZO_ScrollList_RefreshVisible(BACKPACK)
+	ZO_ScrollList_RefreshVisible(BANK)
+	ZO_ScrollList_RefreshVisible(GUILD_BANK)
+	ZO_ScrollList_RefreshVisible(DECONSTRUCTION)
+	ZO_ScrollList_RefreshVisible(ENCHANTING)
+	ZO_ScrollList_RefreshVisible(LIST_DIALOG)
+	RefreshEquipmentControls()
+end
+
 local function ItemSaver_Loaded(eventCode, addonName)
 	if addonName ~= "ItemSaver" then return end
 
