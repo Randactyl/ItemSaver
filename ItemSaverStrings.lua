@@ -15,10 +15,10 @@ local strings = {
 		["SI_ITEMSAVER_SET_DATA_HEADER"] = "Set Data",
 
 		["SI_ITEMSAVER_MARKER_LABEL"] = "Marker Texture",
-		["SI_ITEMSAVER_MARKER_TOOLTIP"] = "Texture to use for your Item Saver",
+		["SI_ITEMSAVER_MARKER_TOOLTIP"] = "Texture to use for the marker",
 
 		["SI_ITEMSAVER_TEXTURE_COLOR_LABEL"] = "Texture Color",
-		["SI_ITEMSAVER_TEXTURE_COLOR_TOOLTIP"] = "Color to use for Item Saver's texture",
+		["SI_ITEMSAVER_TEXTURE_COLOR_TOOLTIP"] = "Color to use for the marker's texture",
 
 		["SI_ITEMSAVER_FILTERS_STORE_LABEL"] = "Filter Store?",
 		["SI_ITEMSAVER_FILTERS_STORE_TOOLTIP"] = "Should saved items be removed from the vendor sell list?",
