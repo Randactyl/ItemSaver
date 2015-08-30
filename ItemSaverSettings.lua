@@ -47,7 +47,8 @@ local function GetInfoFromRowControl(rowControl)
 		slotIndex = dataEntry.data.slotIndex
 	end
 
-	--case to handle list dialog, list dialog uses index instead of slotIndex and bag instead of badId...?
+	--case to handle list dialog, list dialog uses index instead of slotIndex
+	--and bag instead of badId...?
 	if dataEntry and not bagId and not slotIndex then
 		bagId = rowControl.dataEntry.data.bag
 		slotIndex = rowControl.dataEntry.data.index
@@ -56,18 +57,15 @@ local function GetInfoFromRowControl(rowControl)
 	return bagId, slotIndex
 end
 
-local function FilterSavedItems(bagId, slotIndex, ...)
-	if settings.savedItems[SignItemId(GetItemInstanceId(bagId, slotIndex))] then
-		return false
+local function FilterSavedItems(slotOrBagId, slotIndex)
+	local bagId
+	if slotIndex == nil then
+		bagId, slotIndex = GetInfoFromRowControl(slotOrBagId)
+	else
+		bagId = slotOrBagId
 	end
-	return true
-end
 
-local function FilterSavedItemsForShop(slot)
-	local bagId, slotIndex = GetInfoFromRowControl(slot)
-	local signedItemInstanceId = SignItemId(GetItemInstanceId(bagId, slotIndex))
-
-	if settings.savedItems[signedItemInstanceId] then
+	if settings.savedItems[SignItemId(GetItemInstanceId(bagId, slotIndex))] then
 		return false
 	end
 	return true
@@ -76,7 +74,7 @@ end
 local function ToggleStoreFilter(setName)
 	local isRegistered = libFilters:IsFilterRegistered("ItemSaver_"..setName.."_Store", LAF_STORE)
 	if settings.savedSetInfo[setName].filterStore == true and not isRegistered then
-		libFilters:RegisterFilter("ItemSaver_"..setName.."_Store", LAF_STORE, FilterSavedItemsForShop)
+		libFilters:RegisterFilter("ItemSaver_"..setName.."_Store", LAF_STORE, FilterSavedItems)
 	else
 		libFilters:UnregisterFilter("ItemSaver_"..setName.."_Store", LAF_STORE)
 	end
@@ -141,7 +139,7 @@ function ItemSaverSettings:Initialize()
 	local defaults = {
 		markerAnchor = TOPRIGHT,
 		savedSetInfo = {
-		--indexed by set name
+			--indexed by set name
 			["Default"] = {
 				markerTexture = "Star",
 				markerColor = RGBAToHex(1, 1, 0, 1),
