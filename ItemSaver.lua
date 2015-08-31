@@ -309,19 +309,19 @@ function ItemSaver_GetSaveSets()
 end
 
 --DEPRECIATED. You should use ItemSaver_GetFilters(setName) in conjunction with
---ItemSaver_GetItemSaveSet(bagIdOrItemId, slotIndex).
+--ItemSaver_IsItemSaved(bagIdOrItemId, slotIndex).
 function ItemSaver_IsShopFiltered()
 	return ItemSaver_GetFilters("Default").store
 end
 
 --DEPRECIATED. You should use ItemSaver_GetFilters(setName) in conjunction with
---ItemSaver_GetItemSaveSet(bagIdOrItemId, slotIndex).
+--ItemSaver_IsItemSaved(bagIdOrItemId, slotIndex).
 function ItemSaver_IsDeconstructionFiltered()
 	return ItemSaver_GetFilters("Default").deconstruction
 end
 
 --DEPRECIATED. You should use ItemSaver_GetFilters(setName) in conjunction with
---ItemSaver_GetItemSaveSet(bagIdOrItemId, slotIndex).
+--ItemSaver_IsItemSaved(bagIdOrItemId, slotIndex).
 function ItemSaver_IsResearchFiltered()
 	return ItemSaver_GetFilters("Default").research
 end
