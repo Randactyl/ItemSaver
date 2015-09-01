@@ -57,24 +57,117 @@ local function GetInfoFromRowControl(rowControl)
 	return bagId, slotIndex
 end
 
-local function FilterSavedItems(slotOrBagId, slotIndex)
-	local bagId
+local function FilterSavedItemsForStore(slotOrBagId, slotIndex)
+	local bagId, saved, filtered
+
 	if slotIndex == nil then
 		bagId, slotIndex = GetInfoFromRowControl(slotOrBagId)
 	else
 		bagId = slotOrBagId
 	end
 
-	if settings.savedItems[SignItemId(GetItemInstanceId(bagId, slotIndex))] then
-		return false
+	--will be set name if saved
+	saved = settings.savedItems[SignItemId(GetItemInstanceId(bagId, slotIndex))]
+	d(saved)
+
+	if saved then
+		filtered = settings.savedSetInfo[saved].filterStore
+		if filtered == true then
+			return false
+		end
+	end
+	return true
+end
+
+local function FilterSavedItemsForDeconstruction(slotOrBagId, slotIndex)
+	local bagId, saved, filtered
+
+	if slotIndex == nil then
+		bagId, slotIndex = GetInfoFromRowControl(slotOrBagId)
+	else
+		bagId = slotOrBagId
+	end
+
+	--will be set name if saved
+	saved = settings.savedItems[SignItemId(GetItemInstanceId(bagId, slotIndex))]
+
+	if saved then
+		filtered = settings.savedSetInfo[saved].filterDeconstruction
+		if filtered == true then
+			return false
+		end
+	end
+	return true
+end
+
+local function FilterSavedItemsForGuildStore(slotOrBagId, slotIndex)
+	local bagId, saved, filtered
+
+	if slotIndex == nil then
+		bagId, slotIndex = GetInfoFromRowControl(slotOrBagId)
+	else
+		bagId = slotOrBagId
+	end
+
+	--will be set name if saved
+	saved = settings.savedItems[SignItemId(GetItemInstanceId(bagId, slotIndex))]
+
+	if saved then
+		filtered = settings.savedSetInfo[saved].filterGuildStore
+		if filtered == true then
+			return false
+		end
+	end
+	return true
+end
+
+local function FilterSavedItemsForMail(slotOrBagId, slotIndex)
+	local bagId, saved, filtered
+
+	if slotIndex == nil then
+		bagId, slotIndex = GetInfoFromRowControl(slotOrBagId)
+	else
+		bagId = slotOrBagId
+	end
+
+	--will be set name if saved
+	saved = settings.savedItems[SignItemId(GetItemInstanceId(bagId, slotIndex))]
+
+	if saved then
+		filtered = settings.savedSetInfo[saved].filterMail
+		if filtered == true then
+			return false
+		end
+	end
+	return true
+end
+
+local function FilterSavedItemsForTrade(slotOrBagId, slotIndex)
+	local bagId, saved, filtered
+
+	if slotIndex == nil then
+		bagId, slotIndex = GetInfoFromRowControl(slotOrBagId)
+	else
+		bagId = slotOrBagId
+	end
+
+	--will be set name if saved
+	saved = settings.savedItems[SignItemId(GetItemInstanceId(bagId, slotIndex))]
+
+	if saved then
+		filtered = settings.savedSetInfo[saved].filterTrade
+		if filtered == true then
+			return false
+		end
 	end
 	return true
 end
 
 local function ToggleStoreFilter(setName)
 	local isRegistered = libFilters:IsFilterRegistered("ItemSaver_"..setName.."_Store", LAF_STORE)
+
 	if settings.savedSetInfo[setName].filterStore == true and not isRegistered then
-		libFilters:RegisterFilter("ItemSaver_"..setName.."_Store", LAF_STORE, FilterSavedItems)
+		libFilters:RegisterFilter("ItemSaver_"..setName.."_Store", LAF_STORE, FilterSavedItemsForStore)
 	else
 		libFilters:UnregisterFilter("ItemSaver_"..setName.."_Store", LAF_STORE)
 	end
@@ -83,7 +176,7 @@ end
 local function ToggleDeconstructionFilter(setName)
 	local isRegistered = libFilters:IsFilterRegistered("ItemSaver_"..setName.."_Deconstruction", LAF_DECONSTRUCTION)
 	if settings.savedSetInfo[setName].filterDeconstruction == true and not isRegistered then
-		libFilters:RegisterFilter("ItemSaver_"..setName.."_Deconstruction", LAF_DECONSTRUCTION, FilterSavedItems)
+		libFilters:RegisterFilter("ItemSaver_"..setName.."_Deconstruction", LAF_DECONSTRUCTION, FilterSavedItemsForDeconstruction)
 	else
 		libFilters:UnregisterFilter("ItemSaver_"..setName.."_Deconstruction", LAF_DECONSTRUCTION)
 	end
@@ -92,7 +185,7 @@ end
 local function ToggleGuildStoreFilter(setName)
 	local isRegistered = libFilters:IsFilterRegistered("ItemSaver_"..setName.."_GuildStore", LAF_GUILDSTORE)
 	if settings.savedSetInfo[setName].filterGuildStore == true and not isRegistered then
-		libFilters:RegisterFilter("ItemSaver_"..setName.."_GuildStore", LAF_GUILDSTORE, FilterSavedItems)
+		libFilters:RegisterFilter("ItemSaver_"..setName.."_GuildStore", LAF_GUILDSTORE, FilterSavedItemsForGuildStore)
 	else
 		libFilters:UnregisterFilter("ItemSaver_"..setName.."_GuildStore", LAF_GUILDSTORE)
 	end
@@ -101,7 +194,7 @@ end
 local function ToggleMailFilter(setName)
 	local isRegistered = libFilters:IsFilterRegistered("ItemSaver_"..setName.."_Mail", LAF_MAIL)
 	if settings.savedSetInfo[setName].filterMail == true and not isRegistered then
-		libFilters:RegisterFilter("ItemSaver_"..setName.."_Mail", LAF_MAIL, FilterSavedItems)
+		libFilters:RegisterFilter("ItemSaver_"..setName.."_Mail", LAF_MAIL, FilterSavedItemsForMail)
 	else
 		libFilters:UnregisterFilter("ItemSaver_"..setName.."_Mail", LAF_MAIL)
 	end
@@ -110,7 +203,7 @@ end
 local function ToggleTradeFilter(setName)
 	local isRegistered = libFilters:IsFilterRegistered("ItemSaver_"..setName.."_Trade", LAF_TRADE)
 	if settings.savedSetInfo[setName].filterTrade == true and not isRegistered then
-		libFilters:RegisterFilter("ItemSaver_"..setName.."_Trade", LAF_TRADE, FilterSavedItems)
+		libFilters:RegisterFilter("ItemSaver_"..setName.."_Trade", LAF_TRADE, FilterSavedItemsForTrade)
 	else
 		libFilters:UnregisterFilter("ItemSaver_"..setName.."_Trade", LAF_TRADE)
 	end
