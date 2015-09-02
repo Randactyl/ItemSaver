@@ -95,12 +95,6 @@ local strings = {
 
 		["SI_BINDING_NAME_ITEM_SAVER_TOGGLE"] = "Toggle Item Saved",
 	},
-	["es"] = {
-	},
-	["fr"] = {
-	},
-	["ru"] = {
-	},
 }
 
 local function AddStringsToGame()
