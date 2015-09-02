@@ -44,6 +44,9 @@ local strings = {
 		["SI_ITEMSAVER_CREATE_SAVE_SET"] = "+ Create Set",
 		["SI_ITEMSAVER_UNSAVE_ITEM"] = "Unsave item",
 
+		["SI_ITEMSAVER_SET_NAME_LABEL"] = "Name:",
+		["SI_ITEMSAVER_SELECT_FILTERS_LABEL"] = "Filters:",
+
 		["SI_BINDING_NAME_ITEM_SAVER_TOGGLE"] = "Toggle Item Saved",
 	},
 	["es"] = {
