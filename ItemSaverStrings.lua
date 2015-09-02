@@ -1,6 +1,52 @@
 local strings = {
 	["de"] = {
-	},
+        ["SI_ITEMSAVER_ADDON_NAME"] = "Item Saver",
+
+        ["SI_ITEMSAVER_GENERAL_OPTIONS_HEADER"] = "Allgemeine Optionen",
+
+        ["SI_ITEMSAVER_RELOAD_UI_WARNING"] = "UI wird neu geladen",
+        ["SI_ITEMSAVER_APPLY_CHANGES_BUTTON"] = "Änderungen anwenden",
+        ["SI_ITEMSAVER_APPLY_CHANGES_TOOLTIP"] = "Button betätigen wenn eine Änderung vorgenommen wurde",
+        ["SI_ITEMSAVER_MARKER_ANCHOR_LABEL"] = "Markierungsposition",
+        ["SI_ITEMSAVER_MARKER_ANCHOR_TOOLTIP"] = "Position der Markierung bei geschützten Gegenständen",
+
+        ["SI_ITEMSAVER_SET_DATA_HEADER"] = "Setdaten",
+
+        ["SI_ITEMSAVER_MARKER_LABEL"] = "Aussehen der Markierung",
+        ["SI_ITEMSAVER_MARKER_TOOLTIP"] = "Die Textur die für die Markierung verwendet wird",
+
+        ["SI_ITEMSAVER_TEXTURE_COLOR_LABEL"] = "Markierungsfarbe",
+        ["SI_ITEMSAVER_TEXTURE_COLOR_TOOLTIP"] = "Die Farbe die für die Markierung verwendet wird",
+
+        ["SI_ITEMSAVER_FILTERS_STORE_LABEL"] = "Händler filtern?",
+        ["SI_ITEMSAVER_FILTERS_STORE_TOOLTIP"] = "Sollen die geschützten Gegenstände beim NPC Händler verborgen werden?",
+
+        ["SI_ITEMSAVER_FILTERS_DECONSTRUCTION_LABEL"] = "Zerlegen filtern?",
+        ["SI_ITEMSAVER_FILTERS_DECONSTRUCTION_TOOLTIP"] = "Sollen die geschützten Gegenstände beim Zerlegen an der Handwerksstation verborgen werden?",
+
+        ["SI_ITEMSAVER_FILTERS_RESEARCH_LABEL"] = "Erforschen filtern?",
+        ["SI_ITEMSAVER_FILTERS_RESEARCH_TOOLTIP"] = "Sollen die geschützten Gegenstände beim Erforschen an der Handwerksstation verborgen werden?",
+
+        ["SI_ITEMSAVER_FILTERS_GUILDSTORE_LABEL"] = "Gildenladen filtern?",
+        ["SI_ITEMSAVER_FILTERS_GUILDSTORE_TOOLTIP"] = "Sollen die geschützten Gegenstände im Gildenladenverkaufsfenster verborgen werden?",
+
+        ["SI_ITEMSAVER_FILTERS_MAIL_LABEL"] = "Post filtern?",
+        ["SI_ITEMSAVER_FILTERS_MAIL_TOOLTIP"] = "Sollen die geschützten Gegenstände im Postanhangfenster verborgen werden?",
+
+        ["SI_ITEMSAVER_FILTERS_TRADE_LABEL"] = "Handel filtern?",
+        ["SI_ITEMSAVER_FILTERS_TRADE_TOOLTIP"] = "Sollen die geschützten Gegenstände beim Handel mit anderen Spielern verborgen werden?",
+
+        ["SI_ITEMSAVER_DELETE_SET_BUTTON"] = "Set löschen",
+        ["SI_ITEMSAVER_DELETE_SET_TOOLTIP"] = "Entfernt das Set und weist alle Gegenstände im Set dem \"Default\" Set zu",
+
+        ["SI_ITEMSAVER_CREATE_SAVE_SET"] = "+ Set erstellen",
+        ["SI_ITEMSAVER_UNSAVE_ITEM"] = "Gegenstand nicht mehr schützen",
+
+		["SI_ITEMSAVER_SET_NAME_LABEL"] = "Name:",
+		["SI_ITEMSAVER_SELECT_FILTERS_LABEL"] = "Filter:",
+
+        ["SI_BINDING_NAME_ITEM_SAVER_TOGGLE"] = "Gegenstand schützen",
+    },
 	["en"] = {
 		["SI_ITEMSAVER_ADDON_NAME"] = "Item Saver",
 
