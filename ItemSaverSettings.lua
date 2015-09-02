@@ -404,8 +404,10 @@ function ItemSaverSettings:CreateOptionsMenu()
 					func = function()
 						settings.savedSetInfo[setName] = nil
 
-						for _,name in pairs(settings.savedItems) do
-							if name == setName then name = "Default" end
+						for savedItem, name in pairs(settings.savedItems) do
+							if name == setName then
+								settings.savedItems[savedItem] = "Default"
+							end
 						end
 					end,
 					disabled = not setData.canDelete,
