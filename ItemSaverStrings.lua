@@ -21,11 +21,11 @@ local strings = {
         ["SI_ITEMSAVER_FILTERS_STORE_LABEL"] = "Händler filtern?",
         ["SI_ITEMSAVER_FILTERS_STORE_TOOLTIP"] = "Sollen die geschützten Gegenstände beim NPC Händler verborgen werden?",
 
-        ["SI_ITEMSAVER_FILTERS_DECONSTRUCTION_LABEL"] = "Zerlegen filtern?",
-        ["SI_ITEMSAVER_FILTERS_DECONSTRUCTION_TOOLTIP"] = "Sollen die geschützten Gegenstände beim Zerlegen an der Handwerksstation verborgen werden?",
+        ["SI_ITEMSAVER_FILTERS_DECONSTRUCTION_LABEL"] = "Verwertung filtern?",
+		["SI_ITEMSAVER_FILTERS_DECONSTRUCTION_TOOLTIP"] = "Sollen die geschützten Gegenstände beim Verwerten an der Handwerksstation verborgen werden?",
 
-        ["SI_ITEMSAVER_FILTERS_RESEARCH_LABEL"] = "Erforschen filtern?",
-        ["SI_ITEMSAVER_FILTERS_RESEARCH_TOOLTIP"] = "Sollen die geschützten Gegenstände beim Erforschen an der Handwerksstation verborgen werden?",
+        ["SI_ITEMSAVER_FILTERS_RESEARCH_LABEL"] = "Analyse filtern?",
+        ["SI_ITEMSAVER_FILTERS_RESEARCH_TOOLTIP"] = "Sollen die geschützten Gegenstände beim Analysieren an der Handwerksstation verborgen werden?",
 
         ["SI_ITEMSAVER_FILTERS_GUILDSTORE_LABEL"] = "Gildenladen filtern?",
         ["SI_ITEMSAVER_FILTERS_GUILDSTORE_TOOLTIP"] = "Sollen die geschützten Gegenstände im Gildenladenverkaufsfenster verborgen werden?",
