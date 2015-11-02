@@ -11,6 +11,8 @@ local SIGNED_INT_MAX = 2^32 / 2 - 1
 local INT_MAX = 2^32
 
 local settings = nil
+
+local addonVersion = "2.0.2.1"
 -----------------------------
 --UTIL FUNCTIONS
 -----------------------------
@@ -266,7 +268,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 		type = "panel",
 		name = "Item Saver",
 		author = "Randactyl, ingeniousclown",
-		version = "2.0.2.0",
+		version = addonVersion,
 		slashCommand = "/itemsaver",
 		registerForRefresh = true,
 	}
