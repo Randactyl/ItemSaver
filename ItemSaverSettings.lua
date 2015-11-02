@@ -488,7 +488,7 @@ end
 function ItemSaverSettings:GetSaveSets()
 	local setNames = {}
 
-	for setName,_ in pairs(settings.savedSetInfo) do
+	for setName, _ in pairs(settings.savedSetInfo) do
 		table.insert(setNames, setName)
 	end
 

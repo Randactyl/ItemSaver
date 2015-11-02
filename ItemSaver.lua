@@ -51,7 +51,8 @@ local function GetInfoFromRowControl(rowControl)
 		slotIndex = dataEntry.data.slotIndex
 	end
 
-	--case to handle list dialog, list dialog uses index instead of slotIndex and bag instead of badId...?
+	--case to handle list dialog, list dialog uses index instead of slotIndex
+	--and bag instead of badId...?
 	if dataEntry and not bagId and not slotIndex then
 		bagId = rowControl.dataEntry.data.bag
 		slotIndex = rowControl.dataEntry.data.index
@@ -79,7 +80,8 @@ end
 
 local function AddContextMenuOptionSoon(rowControl)
 	if rowControl:GetOwningWindow() == ZO_TradingHouse then return end
-	if BACKPACK:IsHidden() and BANK:IsHidden() and GUILD_BANK:IsHidden() and DECONSTRUCTION:IsHidden() and ENCHANTING:IsHidden() then return end
+	if BACKPACK:IsHidden() and BANK:IsHidden() and GUILD_BANK:IsHidden()
+	  and DECONSTRUCTION:IsHidden() and ENCHANTING:IsHidden() then return end
 
 	if rowControl:GetParent() ~= ZO_Character then
 		zo_callLater(function() AddContextMenuOption(rowControl:GetParent()) end, 50)
