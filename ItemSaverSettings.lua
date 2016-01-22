@@ -494,6 +494,8 @@ function ItemSaverSettings:GetSaveSets()
 		table.insert(setNames, setName)
 	end
 
+	table.sort(setNames)
+
 	return setNames
 end
 

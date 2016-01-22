@@ -307,9 +307,7 @@ end
 
 --returns an alphabetically sorted array of the names of available save sets.
 function ItemSaver_GetSaveSets()
-	local sets = ISSettings:GetSaveSets()
-	table.sort(sets)
-	return sets
+	return ISSettings:GetSaveSets()
 end
 
 --DEPRECIATED. You should use ItemSaver_GetFilters(setName) in conjunction with
