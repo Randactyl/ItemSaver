@@ -22,7 +22,7 @@ local function SetupSubmenu(bagId, slotIndex)
 
 	for _,setName in pairs(setNames) do
 		local entry = {
-			label = setName,
+			label = GetString(SI_ITEMSAVER_SAVE_TO) .. " \"" .. setName .. "\"",
 			callback = function()
 				ItemSaver_ToggleItemSave(setName, bagId, slotIndex)
 				--[[if GetItemSaverControl(rowControl) then
@@ -65,7 +65,21 @@ local function AddContextMenuOption(rowControl)
 	local bagId, slotIndex = GetInfoFromRowControl(rowControl)
 
 	if not ItemSaver_IsItemSaved(bagId, slotIndex) then
-		SetupSubmenu(bagId, slotIndex)
+		local deferSubmenu, deferSubmenuNum = ISSettings:GetSubmenuDeferredStatus()
+		if deferSubmenu then
+			local setNames = ItemSaver_GetSaveSets()
+			if #setNames > deferSubmenuNum then
+				SetupSubmenu(bagId, slotIndex)
+			else
+				for _, setName in pairs(setNames) do
+					AddMenuItem(GetString(SI_ITEMSAVER_SAVE_TO) .. " \"" .. setName .. "\"", function()
+						ItemSaver_ToggleItemSave(setName, bagId, slotIndex)
+					end, MENU_ADD_OPTION_LABEL)
+				end
+			end
+		else
+			SetupSubmenu(bagId, slotIndex)
+		end
 	else
 		AddMenuItem(GetString(SI_ITEMSAVER_UNSAVE_ITEM), function()
 				ItemSaver_ToggleItemSave(nil, bagId, slotIndex)
