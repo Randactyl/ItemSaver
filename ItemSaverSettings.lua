@@ -6,9 +6,10 @@ local libFilters = LibStub("libFilters")
 local MARKER_TEXTURES = {}
 local MARKER_OPTIONS = {}
 local TEXTURE_SIZE = 32
-local ANCHOR_OPTIONS = { "Top left", "Top right", "Bottom left", "Bottom right" }
+local ANCHOR_OPTIONS = { "Top left", "Top right", "Bottom left", "Bottom right", }
 local SIGNED_INT_MAX = 2^32 / 2 - 1
 local INT_MAX = 2^32
+local DEFER_SUBMENU_OPTIONS = { "1", "2", "3", "4", "5", }
 
 local settings = nil
 
@@ -247,6 +248,8 @@ function ItemSaverSettings:Initialize()
 			},
 		},
 		savedItems = {},
+		deferSubmenu = false,
+		deferSubmenuNum = 3,
 	}
 
 	settings = ZO_SavedVars:NewAccountWide("ItemSaver_Settings", 2.0, nil, defaults)
@@ -318,6 +321,42 @@ function ItemSaverSettings:CreateOptionsMenu()
 				end,
 		},
 		[4] = {
+			type = "checkbox",
+			name = GetString(SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_LABEL),
+			tooltip = GetString(SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_TOOLTIP),
+			getFunc = function() return settings.deferSubmenu end,
+			setFunc = function(value)
+				settings.deferSubmenu = value
+				local dropdown = WINDOW_MANAGER:GetControlByName("IS_DeferSubmenuDropdown")
+				dropdown.data.disabled = not value
+			end,
+			width = "half",
+		},
+		[5] = {
+			type = "dropdown",
+			name = GetString(SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_LABEL),
+			tooltip = GetString(SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_TOOLTIP),
+			choices = DEFER_SUBMENU_OPTIONS,
+			getFunc = function()
+					local num = settings.deferSubmenuNum
+					if num == 1 then return DEFER_SUBMENU_OPTIONS[1] end
+					if num == 2 then return DEFER_SUBMENU_OPTIONS[2] end
+					if num == 3 then return DEFER_SUBMENU_OPTIONS[3] end
+					if num == 4 then return DEFER_SUBMENU_OPTIONS[4] end
+					if num == 5 then return DEFER_SUBMENU_OPTIONS[5] end
+				end,
+			setFunc = function(value)
+					if value == DEFER_SUBMENU_OPTIONS[1] then settings.deferSubmenuNum = 1 end
+					if value == DEFER_SUBMENU_OPTIONS[2] then settings.deferSubmenuNum = 2 end
+					if value == DEFER_SUBMENU_OPTIONS[3] then settings.deferSubmenuNum = 3 end
+					if value == DEFER_SUBMENU_OPTIONS[4] then settings.deferSubmenuNum = 4 end
+					if value == DEFER_SUBMENU_OPTIONS[5] then settings.deferSubmenuNum = 5 end
+				end,
+			width = "half",
+			disabled = not settings.deferSubmenu,
+			reference = "IS_DeferSubmenuDropdown",
+		},
+		[6] = {
 			type = "header",
 			name = GetString(SI_ITEMSAVER_SET_DATA_HEADER)
 		},
@@ -510,6 +549,13 @@ function ItemSaverSettings:GetSaveSets()
 	table.sort(setNames)
 
 	return setNames
+end
+
+function ItemSaverSettings:GetSubmenuDeferredStatus()
+	if settings.deferSubmenu then
+		return settings.deferSubmenu, settings.deferSubmenuNum
+	end
+	return settings.deferSubmenu
 end
 
 function ItemSaver_RegisterMarker(markerInformation)
