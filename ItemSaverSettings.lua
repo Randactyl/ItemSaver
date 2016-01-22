@@ -263,6 +263,19 @@ function ItemSaverSettings:CreateOptionsMenu()
 			self:SetTexture(MARKER_TEXTURES[settings.textureName])
 			icon:SetDimensions(TEXTURE_SIZE, TEXTURE_SIZE)
 		end)]]--this is going to need to be reworked if I want it in each of the undetermined number of submenus
+	local function pairsByKeys(t)
+		local a = {}
+		for n in pairs(t) do table.insert(a, n) end
+		table.sort(a)
+		local i = 0
+		local iter = function()
+			i = i + 1
+			if a[i] == nil then return nil
+			else return a[i], t[a[i]]
+			end
+		end
+		return iter
+	end
 
 	local panel = {
 		type = "panel",
@@ -309,7 +322,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 			name = GetString(SI_ITEMSAVER_SET_DATA_HEADER)
 		},
 	}
-	for setName,setData in pairs(settings.savedSetInfo) do
+	for setName,setData in pairsByKeys(settings.savedSetInfo) do
 		local submenuData = {
 			type = "submenu",
 			name = setName,
