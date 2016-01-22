@@ -305,9 +305,11 @@ function ItemSaver_GetMarkerOptions()
 	return ISSettings:GetMarkerOptions()
 end
 
---returns array of the names of available save sets.
+--returns an alphabetically sorted array of the names of available save sets.
 function ItemSaver_GetSaveSets()
-	return ISSettings:GetSaveSets()
+	local sets = ISSettings:GetSaveSets()
+	table.sort(sets)
+	return sets
 end
 
 --DEPRECIATED. You should use ItemSaver_GetFilters(setName) in conjunction with
