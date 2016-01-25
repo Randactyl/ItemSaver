@@ -244,12 +244,12 @@ function ItemSaverSettings:Initialize()
 				filterGuildStore = false,
 				filterMail = false,
 				filterTrade = false,
-		defaultSet = "Default",
 			},
 		},
 		savedItems = {},
 		deferSubmenu = false,
 		deferSubmenuNum = 3,
+		defaultSet = "Default",
 	}
 
 	settings = ZO_SavedVars:NewAccountWide("ItemSaver_Settings", 2.0, nil, defaults)
