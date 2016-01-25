@@ -474,6 +474,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 					type = "button",
 					name = GetString(SI_ITEMSAVER_DELETE_SET_BUTTON),
 					tooltip = GetString(SI_ITEMSAVER_DELETE_SET_TOOLTIP),
+					warning = GetString(SI_ITEMSAVER_RELOAD_UI_WARNING),
 					func = function()
 						settings.savedSetInfo[setName] = nil
 
@@ -482,6 +483,8 @@ function ItemSaverSettings:CreateOptionsMenu()
 								settings.savedItems[savedItem] = settings.defaultSet
 							end
 						end
+
+						ReloadUI()
 					end,
 					disabled = setName == settings.defaultSet,
 					reference = "IS_" .. setName .. "DeleteButton",
