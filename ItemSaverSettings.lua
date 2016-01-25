@@ -378,6 +378,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 							--icon:SetTexture(MARKER_TEXTURES[value])
 							--icon:SetDimensions(TEXTURE_SIZE, TEXTURE_SIZE)
 						end,
+					width = "half",
 				},
 				[2] = {
 					type = "colorpicker",
@@ -391,6 +392,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 							setData.markerColor = RGBAToHex(r, g, b, 1)
 							--icon:SetColor(r, g, b, 1)
 						end,
+					width = "half",
 				},
 				[3] = {
 					type = "checkbox",
@@ -401,6 +403,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 							setData.filterStore = value
 							ToggleStoreFilter(setName)
 						end,
+					width = "half",
 				},
 				[4] = {
 					type = "checkbox",
@@ -411,6 +414,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 							setData.filterDeconstruction = value
 							ToggleDeconstructionFilter(setName)
 						end,
+					width = "half",
 				},
 				[5] = {
 					type = "checkbox",
@@ -420,6 +424,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 					setFunc = function(value)
 							setData.filterResearch = value
 						end,
+					width = "half",
 				},
 				[6] = {
 					type = "checkbox",
@@ -430,6 +435,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 							setData.filterGuildStore = value
 							ToggleGuildStoreFilter(setName)
 						end,
+					width = "half",
 				},
 				[7] = {
 					type = "checkbox",
@@ -440,6 +446,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 							setData.filterMail = value
 							ToggleMailFilter(setName)
 						end,
+					width = "half",
 				},
 				[8] = {
 					type = "checkbox",
@@ -450,6 +457,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 							setData.filterTrade = value
 							ToggleTradeFilter(setName)
 						end,
+					width = "half",
 				},
 				[9] = {
 					type = "button",
