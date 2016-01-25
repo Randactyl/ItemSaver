@@ -302,13 +302,13 @@ function ItemSaverSettings:CreateOptionsMenu()
 			choices = self.GetSaveSets(),
 			getFunc = function() return settings.defaultSet end,
 			setFunc = function(value)
-					local deleteButton = WINDOW_MANAGER:GetControlByName("IS_" .. settings.defaultSet .. "DeleteButton")
-					deleteButton.disabled = false
-					deleteButton = WINDOW_MANAGER:GetControlByName("IS_" .. value .. "DeleteButton")
-					deleteButton.disabled = true
+					--enable if/when my LibAddonMenu fix is out
+					--WINDOW_MANAGER:GetControlByName("IS_" .. settings.defaultSet .. "DeleteButton").data.disabled = false
+					--WINDOW_MANAGER:GetControlByName("IS_" .. value .. "DeleteButton").data.disabled = true
 
 					settings.defaultSet = value
 
+					--remove this if/when my LibAddonMenu fix is out
 					ReloadUI()
 				end,
 		},
@@ -369,7 +369,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 		},
 		[6] = {
 			type = "header",
-			name = GetString(SI_ITEMSAVER_SET_DATA_HEADER)
+			name = GetString(SI_ITEMSAVER_SET_DATA_HEADER),
 		},
 	}
 	for setName,setData in pairsByKeys(settings.savedSetInfo) do
