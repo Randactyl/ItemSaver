@@ -295,13 +295,28 @@ function ItemSaverSettings:CreateOptionsMenu()
 			name = GetString(SI_ITEMSAVER_GENERAL_OPTIONS_HEADER),
 		},
 		[2] = {
+			type = "dropdown",
+			name = GetString(SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_LABEL),
+			tooltip = GetString(SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_TOOLTIP),
+			choices = self.GetSaveSets(),
+			getFunc = function() return settings.defaultSet end,
+			setFunc = function(value)
+					local deleteButton = WINDOW_MANAGER:GetControlByName("IS_" .. settings.defaultSet .. "DeleteButton")
+					deleteButton.disabled = false
+					deleteButton = WINDOW_MANAGER:GetControlByName("IS_" .. value .. "DeleteButton")
+					deleteButton.disabled = true
+
+					settings.defaultSet = value
+				end,
+		},
+		[3] = {
 			type = "button",
 			name = GetString(SI_ITEMSAVER_APPLY_CHANGES_BUTTON),
 			tooltip = GetString(SI_ITEMSAVER_APPLY_CHANGES_TOOLTIP),
 			func = function() ReloadUI() end,
 			warning = GetString(SI_ITEMSAVER_RELOAD_UI_WARNING),
 		},
-		[3] = {
+		[4] = {
 			type = "dropdown",
 			name = GetString(SI_ITEMSAVER_MARKER_ANCHOR_LABEL),
 			tooltip = GetString(SI_ITEMSAVER_MARKER_ANCHOR_TOOLTIP),
@@ -320,7 +335,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 					if value == ANCHOR_OPTIONS[4] then settings.markerAnchor = BOTTOMRIGHT end
 				end,
 		},
-		[4] = {
+		[5] = {
 			type = "checkbox",
 			name = GetString(SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_LABEL),
 			tooltip = GetString(SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_TOOLTIP),
@@ -332,7 +347,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 			end,
 			width = "half",
 		},
-		[5] = {
+		[6] = {
 			type = "dropdown",
 			name = GetString(SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_LABEL),
 			tooltip = GetString(SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_TOOLTIP),
@@ -356,7 +371,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 			disabled = not settings.deferSubmenu,
 			reference = "IS_DeferSubmenuDropdown",
 		},
-		[6] = {
+		[7] = {
 			type = "header",
 			name = GetString(SI_ITEMSAVER_SET_DATA_HEADER)
 		},

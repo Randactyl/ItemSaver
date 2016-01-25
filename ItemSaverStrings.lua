@@ -4,6 +4,8 @@ local strings = {
 
         ["SI_ITEMSAVER_GENERAL_OPTIONS_HEADER"] = "Allgemeine Optionen",
 
+		["SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_LABEL"] = "Default Set",
+		["SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_TOOLTIP"] = "This set will be used for the keybind, when deleting other sets, and when a set is not specified.",
         ["SI_ITEMSAVER_RELOAD_UI_WARNING"] = "UI wird neu geladen",
         ["SI_ITEMSAVER_APPLY_CHANGES_BUTTON"] = "Änderungen anwenden",
         ["SI_ITEMSAVER_APPLY_CHANGES_TOOLTIP"] = "Button betätigen wenn eine Änderung vorgenommen wurde",
@@ -57,6 +59,8 @@ local strings = {
 
 		["SI_ITEMSAVER_GENERAL_OPTIONS_HEADER"] = "General Options",
 
+		["SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_LABEL"] = "Default Set",
+		["SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_TOOLTIP"] = "This set will be used for the keybind, when deleting other sets, and when a set is not specified.",
 		["SI_ITEMSAVER_RELOAD_UI_WARNING"] = "Will reload UI",
 		["SI_ITEMSAVER_APPLY_CHANGES_BUTTON"] = "Apply Changes",
 		["SI_ITEMSAVER_APPLY_CHANGES_TOOLTIP"] = "Click this whenever you make a change below",
