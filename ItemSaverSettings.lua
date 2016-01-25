@@ -472,7 +472,8 @@ function ItemSaverSettings:CreateOptionsMenu()
 							end
 						end
 					end,
-					disabled = not setData.canDelete,
+					disabled = setName == settings.defaultSet,
+					reference = "IS_" .. setName .. "DeleteButton",
 				},
 			},
 		}
