@@ -244,7 +244,7 @@ function ItemSaverSettings:Initialize()
 				filterGuildStore = false,
 				filterMail = false,
 				filterTrade = false,
-				canDelete = false,
+		defaultSet = "Default",
 			},
 		},
 		savedItems = {},
@@ -468,7 +468,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 
 						for savedItem, name in pairs(settings.savedItems) do
 							if name == setName then
-								settings.savedItems[savedItem] = "Default"
+								settings.savedItems[savedItem] = settings.defaultSet
 							end
 						end
 					end,
@@ -513,6 +513,7 @@ function ItemSaverSettings:IsItemSaved(bagIdOrItemId, slotIndex)
 end
 
 function ItemSaverSettings:ToggleItemSave(setName, bagIdOrItemId, slotIndex)
+	if not setName then setName = settings.defaultSet end
 	local signedId
 
 	if not slotIndex then --itemId

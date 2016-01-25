@@ -23,7 +23,6 @@ local function handleDialog(dialog)
 
     setData.markerTexture = comboBox.m_selectedItemData["name"]
     setData.markerColor = RGBAToHex(1, 1, 0, 1)
-    setData.canDelete = true
     if shopButton:GetState() == 1 then
         setData.filterStore = true
     else

@@ -268,7 +268,6 @@ end
 --if setName is nil, the default set will be used.
 function ItemSaver_ToggleItemSave(setName, bagIdOrItemId, slotIndex)
 	local returnVal
-	if setName == nil then setName = "Default" end
 
 	if bagIdOrItemId == nil then --keybind
 		local mouseOverControl = WINDOW_MANAGER:GetMouseOverControl()
