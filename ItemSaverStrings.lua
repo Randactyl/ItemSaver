@@ -48,7 +48,7 @@ local strings = {
 		["SI_ITEMSAVER_SAVE_TO"] = "Save to",
 
 		["SI_ITEMSAVER_SET_NAME_LABEL"] = "Name:",
-		["SI_ITEMSAVER_MISSING_NAME_WARNIG"] = "Set not saved - no name was given for the set.",
+		["SI_ITEMSAVER_MISSING_NAME_WARNING"] = "Set not saved - no name was given for the set.",
 		["SI_ITEMSAVER_USED_NAME_WARNING"] = "Set not saved - given set name is already in use.",
 		["SI_ITEMSAVER_SELECT_FILTERS_LABEL"] = "Filter:",
 
@@ -103,7 +103,7 @@ local strings = {
 		["SI_ITEMSAVER_SAVE_TO"] = "Save to",
 
 		["SI_ITEMSAVER_SET_NAME_LABEL"] = "Name:",
-		["SI_ITEMSAVER_MISSING_NAME_WARNIG"] = "Set not saved - no name was given for the set.",
+		["SI_ITEMSAVER_MISSING_NAME_WARNING"] = "Set not saved - no name was given for the set.",
 		["SI_ITEMSAVER_USED_NAME_WARNING"] = "Set not saved - given set name is already in use.",
 		["SI_ITEMSAVER_SELECT_FILTERS_LABEL"] = "Filters:",
 

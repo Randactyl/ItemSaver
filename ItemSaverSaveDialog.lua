@@ -102,7 +102,7 @@ function ItemSaver_SetupDialog(self)
 					local setName = ItemSaverDialogNameEditbox:GetText()
 					local setExists = ItemSaver_GetFilters(setName)
 					if setName == "" then
-						d(GetString(SI_ITEMSAVER_MISSING_NAME_WARNIG))
+						d(GetString(SI_ITEMSAVER_MISSING_NAME_WARNING))
 					elseif setExists then
 						d(GetString(SI_ITEMSAVER_USED_NAME_WARNING))
 					else
