@@ -13,7 +13,7 @@ local DEFER_SUBMENU_OPTIONS = { "1", "2", "3", "4", "5", }
 
 local settings = nil
 
-local addonVersion = "2.0.2.1"
+local addonVersion = "2.1.0.0"
 -----------------------------
 --UTIL FUNCTIONS
 -----------------------------
@@ -374,7 +374,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 			name = GetString(SI_ITEMSAVER_SET_DATA_HEADER),
 		},
 	}
-	for setName,setData in pairsByKeys(settings.savedSetInfo) do
+	for setName, setData in pairsByKeys(settings.savedSetInfo) do
 		local submenuData = {
 			type = "submenu",
 			name = setName,
