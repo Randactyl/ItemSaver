@@ -19,11 +19,9 @@ local function handleDialog(dialog)
     local setData = {}
 
 	local setName = editBox:GetText()
-	if setName == "" then setName = "Default" end
 
     setData.markerTexture = comboBox.m_selectedItemData["name"]
     setData.markerColor = RGBAToHex(1, 1, 0, 1)
-    setData.canDelete = true
     if shopButton:GetState() == 1 then
         setData.filterStore = true
     else
@@ -101,7 +99,15 @@ function ItemSaver_SetupDialog(self)
                 control = GetControl(self, "Create"),
                 text = SI_DIALOG_ACCEPT,
                 callback = function(self)
-					handleDialog(self)
+					local setName = ItemSaverDialogNameEditbox:GetText()
+					local setExists = ItemSaver_GetFilters(setName)
+					if setName == "" then
+						d(GetString(SI_ITEMSAVER_MISSING_NAME_WARNING))
+					elseif setExists then
+						d(GetString(SI_ITEMSAVER_USED_NAME_WARNING))
+					else
+						handleDialog(self)
+					end
                 end,
             },
             [2] = {

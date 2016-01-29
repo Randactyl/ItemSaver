@@ -4,11 +4,15 @@ local strings = {
 
         ["SI_ITEMSAVER_GENERAL_OPTIONS_HEADER"] = "Allgemeine Optionen",
 
+		["SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_LABEL"] = "Default Set",
+		["SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_TOOLTIP"] = "This set will be used for the keybind, when deleting other sets, and when a set is not specified.",
         ["SI_ITEMSAVER_RELOAD_UI_WARNING"] = "UI wird neu geladen",
-        ["SI_ITEMSAVER_APPLY_CHANGES_BUTTON"] = "Änderungen anwenden",
-        ["SI_ITEMSAVER_APPLY_CHANGES_TOOLTIP"] = "Button betätigen wenn eine Änderung vorgenommen wurde",
         ["SI_ITEMSAVER_MARKER_ANCHOR_LABEL"] = "Markierungsposition",
         ["SI_ITEMSAVER_MARKER_ANCHOR_TOOLTIP"] = "Position der Markierung bei geschützten Gegenständen",
+		["SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_LABEL"] = "Defer Submenu Creation",
+		["SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_TOOLTIP"] = "Only use a submenu if there are more than the specified number of sets.",
+		["SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_LABEL"] = "Number of Sets",
+		["SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_TOOLTIP"] = "A submenu will be used if there are more than this number of sets.",
 
         ["SI_ITEMSAVER_SET_DATA_HEADER"] = "Setdaten",
 
@@ -41,8 +45,11 @@ local strings = {
 
         ["SI_ITEMSAVER_CREATE_SAVE_SET"] = "+ Set erstellen",
         ["SI_ITEMSAVER_UNSAVE_ITEM"] = "Gegenstand nicht mehr schützen",
+		["SI_ITEMSAVER_SAVE_TO"] = "Save to",
 
 		["SI_ITEMSAVER_SET_NAME_LABEL"] = "Name:",
+		["SI_ITEMSAVER_MISSING_NAME_WARNING"] = "Set not saved - no name was given for the set.",
+		["SI_ITEMSAVER_USED_NAME_WARNING"] = "Set not saved - given set name is already in use.",
 		["SI_ITEMSAVER_SELECT_FILTERS_LABEL"] = "Filter:",
 
         ["SI_BINDING_NAME_ITEM_SAVER_TOGGLE"] = "Gegenstand schützen",
@@ -52,11 +59,15 @@ local strings = {
 
 		["SI_ITEMSAVER_GENERAL_OPTIONS_HEADER"] = "General Options",
 
+		["SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_LABEL"] = "Default Set",
+		["SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_TOOLTIP"] = "This set will be used for the keybind, when deleting other sets, and when a set is not specified.",
 		["SI_ITEMSAVER_RELOAD_UI_WARNING"] = "Will reload UI",
-		["SI_ITEMSAVER_APPLY_CHANGES_BUTTON"] = "Apply Changes",
-		["SI_ITEMSAVER_APPLY_CHANGES_TOOLTIP"] = "Click this whenever you make a change below",
 		["SI_ITEMSAVER_MARKER_ANCHOR_LABEL"] = "Marker Position",
 		["SI_ITEMSAVER_MARKER_ANCHOR_TOOLTIP"] = "Position of the saved item marker",
+		["SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_LABEL"] = "Defer Submenu Creation",
+		["SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_TOOLTIP"] = "Only use a submenu if there are more than the specified number of sets.",
+		["SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_LABEL"] = "Number of Sets",
+		["SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_TOOLTIP"] = "A submenu will be used if there are more than this number of sets.",
 
 		["SI_ITEMSAVER_SET_DATA_HEADER"] = "Set Data",
 
@@ -89,8 +100,11 @@ local strings = {
 
 		["SI_ITEMSAVER_CREATE_SAVE_SET"] = "+ Create Set",
 		["SI_ITEMSAVER_UNSAVE_ITEM"] = "Unsave item",
+		["SI_ITEMSAVER_SAVE_TO"] = "Save to",
 
 		["SI_ITEMSAVER_SET_NAME_LABEL"] = "Name:",
+		["SI_ITEMSAVER_MISSING_NAME_WARNING"] = "Set not saved - no name was given for the set.",
+		["SI_ITEMSAVER_USED_NAME_WARNING"] = "Set not saved - given set name is already in use.",
 		["SI_ITEMSAVER_SELECT_FILTERS_LABEL"] = "Filters:",
 
 		["SI_BINDING_NAME_ITEM_SAVER_TOGGLE"] = "Toggle Item Saved",

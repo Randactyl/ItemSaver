@@ -6,9 +6,10 @@ local libFilters = LibStub("libFilters")
 local MARKER_TEXTURES = {}
 local MARKER_OPTIONS = {}
 local TEXTURE_SIZE = 32
-local ANCHOR_OPTIONS = { "Top left", "Top right", "Bottom left", "Bottom right" }
+local ANCHOR_OPTIONS = { "Top left", "Top right", "Bottom left", "Bottom right", }
 local SIGNED_INT_MAX = 2^32 / 2 - 1
 local INT_MAX = 2^32
+local DEFER_SUBMENU_OPTIONS = { "1", "2", "3", "4", "5", }
 
 local settings = nil
 
@@ -232,24 +233,28 @@ end
 function ItemSaverSettings:Initialize()
 	local defaults = {
 		markerAnchor = TOPRIGHT,
-		savedSetInfo = {
-			--indexed by set name
-			["Default"] = {
-				markerTexture = "Star",
-				markerColor = RGBAToHex(1, 1, 0, 1),
-				filterStore = true,
-				filterDeconstruction = true,
-				filterResearch = true,
-				filterGuildStore = false,
-				filterMail = false,
-				filterTrade = false,
-				canDelete = false,
-			},
-		},
+		savedSetInfo = {},
 		savedItems = {},
+		deferSubmenu = false,
+		deferSubmenuNum = 3,
+		defaultSet = "Default",
+		shouldCreateDefault = true,
 	}
 
 	settings = ZO_SavedVars:NewAccountWide("ItemSaver_Settings", 2.0, nil, defaults)
+
+	if settings.shouldCreateDefault then
+		settings.savedSetInfo["Default"] = {
+			markerTexture = "Star",
+			markerColor = RGBAToHex(1, 1, 0, 1),
+			filterStore = true,
+			filterDeconstruction = true,
+			filterResearch = true,
+			filterGuildStore = false,
+			filterMail = false,
+			filterTrade = false,
+		}
+	end
 
 	ToggleAllFilters()
 
@@ -263,6 +268,19 @@ function ItemSaverSettings:CreateOptionsMenu()
 			self:SetTexture(MARKER_TEXTURES[settings.textureName])
 			icon:SetDimensions(TEXTURE_SIZE, TEXTURE_SIZE)
 		end)]]--this is going to need to be reworked if I want it in each of the undetermined number of submenus
+	local function pairsByKeys(t)
+		local a = {}
+		for n in pairs(t) do table.insert(a, n) end
+		table.sort(a)
+		local i = 0
+		local iter = function()
+			i = i + 1
+			if a[i] == nil then return nil
+			else return a[i], t[a[i]]
+			end
+		end
+		return iter
+	end
 
 	local panel = {
 		type = "panel",
@@ -279,11 +297,22 @@ function ItemSaverSettings:CreateOptionsMenu()
 			name = GetString(SI_ITEMSAVER_GENERAL_OPTIONS_HEADER),
 		},
 		[2] = {
-			type = "button",
-			name = GetString(SI_ITEMSAVER_APPLY_CHANGES_BUTTON),
-			tooltip = GetString(SI_ITEMSAVER_APPLY_CHANGES_TOOLTIP),
-			func = function() ReloadUI() end,
+			type = "dropdown",
+			name = GetString(SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_LABEL),
+			tooltip = GetString(SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_TOOLTIP),
 			warning = GetString(SI_ITEMSAVER_RELOAD_UI_WARNING),
+			choices = self.GetSaveSets(),
+			getFunc = function() return settings.defaultSet end,
+			setFunc = function(value)
+					--enable if/when my LibAddonMenu fix is out
+					--WINDOW_MANAGER:GetControlByName("IS_" .. settings.defaultSet .. "DeleteButton").data.disabled = false
+					--WINDOW_MANAGER:GetControlByName("IS_" .. value .. "DeleteButton").data.disabled = true
+
+					settings.defaultSet = value
+
+					--remove this if/when my LibAddonMenu fix is out
+					ReloadUI()
+				end,
 		},
 		[3] = {
 			type = "dropdown",
@@ -305,11 +334,47 @@ function ItemSaverSettings:CreateOptionsMenu()
 				end,
 		},
 		[4] = {
+			type = "checkbox",
+			name = GetString(SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_LABEL),
+			tooltip = GetString(SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_TOOLTIP),
+			getFunc = function() return settings.deferSubmenu end,
+			setFunc = function(value)
+				settings.deferSubmenu = value
+				local dropdown = WINDOW_MANAGER:GetControlByName("IS_DeferSubmenuDropdown")
+				dropdown.data.disabled = not value
+			end,
+			width = "half",
+		},
+		[5] = {
+			type = "dropdown",
+			name = GetString(SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_LABEL),
+			tooltip = GetString(SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_TOOLTIP),
+			choices = DEFER_SUBMENU_OPTIONS,
+			getFunc = function()
+					local num = settings.deferSubmenuNum
+					if num == 1 then return DEFER_SUBMENU_OPTIONS[1] end
+					if num == 2 then return DEFER_SUBMENU_OPTIONS[2] end
+					if num == 3 then return DEFER_SUBMENU_OPTIONS[3] end
+					if num == 4 then return DEFER_SUBMENU_OPTIONS[4] end
+					if num == 5 then return DEFER_SUBMENU_OPTIONS[5] end
+				end,
+			setFunc = function(value)
+					if value == DEFER_SUBMENU_OPTIONS[1] then settings.deferSubmenuNum = 1 end
+					if value == DEFER_SUBMENU_OPTIONS[2] then settings.deferSubmenuNum = 2 end
+					if value == DEFER_SUBMENU_OPTIONS[3] then settings.deferSubmenuNum = 3 end
+					if value == DEFER_SUBMENU_OPTIONS[4] then settings.deferSubmenuNum = 4 end
+					if value == DEFER_SUBMENU_OPTIONS[5] then settings.deferSubmenuNum = 5 end
+				end,
+			width = "half",
+			disabled = not settings.deferSubmenu,
+			reference = "IS_DeferSubmenuDropdown",
+		},
+		[6] = {
 			type = "header",
-			name = GetString(SI_ITEMSAVER_SET_DATA_HEADER)
+			name = GetString(SI_ITEMSAVER_SET_DATA_HEADER),
 		},
 	}
-	for setName,setData in pairs(settings.savedSetInfo) do
+	for setName,setData in pairsByKeys(settings.savedSetInfo) do
 		local submenuData = {
 			type = "submenu",
 			name = setName,
@@ -326,6 +391,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 							--icon:SetTexture(MARKER_TEXTURES[value])
 							--icon:SetDimensions(TEXTURE_SIZE, TEXTURE_SIZE)
 						end,
+					width = "half",
 				},
 				[2] = {
 					type = "colorpicker",
@@ -339,6 +405,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 							setData.markerColor = RGBAToHex(r, g, b, 1)
 							--icon:SetColor(r, g, b, 1)
 						end,
+					width = "half",
 				},
 				[3] = {
 					type = "checkbox",
@@ -349,6 +416,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 							setData.filterStore = value
 							ToggleStoreFilter(setName)
 						end,
+					width = "half",
 				},
 				[4] = {
 					type = "checkbox",
@@ -359,6 +427,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 							setData.filterDeconstruction = value
 							ToggleDeconstructionFilter(setName)
 						end,
+					width = "half",
 				},
 				[5] = {
 					type = "checkbox",
@@ -368,6 +437,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 					setFunc = function(value)
 							setData.filterResearch = value
 						end,
+					width = "half",
 				},
 				[6] = {
 					type = "checkbox",
@@ -378,6 +448,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 							setData.filterGuildStore = value
 							ToggleGuildStoreFilter(setName)
 						end,
+					width = "half",
 				},
 				[7] = {
 					type = "checkbox",
@@ -388,6 +459,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 							setData.filterMail = value
 							ToggleMailFilter(setName)
 						end,
+					width = "half",
 				},
 				[8] = {
 					type = "checkbox",
@@ -398,21 +470,30 @@ function ItemSaverSettings:CreateOptionsMenu()
 							setData.filterTrade = value
 							ToggleTradeFilter(setName)
 						end,
+					width = "half",
 				},
 				[9] = {
 					type = "button",
 					name = GetString(SI_ITEMSAVER_DELETE_SET_BUTTON),
 					tooltip = GetString(SI_ITEMSAVER_DELETE_SET_TOOLTIP),
+					warning = GetString(SI_ITEMSAVER_RELOAD_UI_WARNING),
 					func = function()
 						settings.savedSetInfo[setName] = nil
 
 						for savedItem, name in pairs(settings.savedItems) do
 							if name == setName then
-								settings.savedItems[savedItem] = "Default"
+								settings.savedItems[savedItem] = settings.defaultSet
 							end
 						end
+
+						if setName == "Default" then
+							settings.shouldCreateDefault = false
+						end
+
+						ReloadUI()
 					end,
-					disabled = not setData.canDelete,
+					disabled = setName == settings.defaultSet,
+					reference = "IS_" .. setName .. "DeleteButton",
 				},
 			},
 		}
@@ -453,6 +534,7 @@ function ItemSaverSettings:IsItemSaved(bagIdOrItemId, slotIndex)
 end
 
 function ItemSaverSettings:ToggleItemSave(setName, bagIdOrItemId, slotIndex)
+	if not setName then setName = settings.defaultSet end
 	local signedId
 
 	if not slotIndex then --itemId
@@ -473,14 +555,17 @@ function ItemSaverSettings:ToggleItemSave(setName, bagIdOrItemId, slotIndex)
 end
 
 function ItemSaverSettings:GetFilters(setName)
-	return {
-		store = settings.savedSetInfo[setName].filterStore,
-		deconstruction = settings.savedSetInfo[setName].filterDeconstruction,
-		research = settings.savedSetInfo[setName].filterResearch,
-		guildStore = settings.savedSetInfo[setName].filterGuildStore,
-		mail = settings.savedSetInfo[setName].filterMail,
-		trade = settings.savedSetInfo[setName].filterTrade,
-	}
+	local setData = settings.savedSetInfo[setName]
+	if setData then
+		return {
+			store = setData.filterStore,
+			deconstruction = setData.filterDeconstruction,
+			research = setData.filterResearch,
+			guildStore = setData.filterGuildStore,
+			mail = setData.filterMail,
+			trade = setData.filterTrade,
+		}
+	else return nil end
 end
 
 function ItemSaverSettings:GetMarkerOptions()
@@ -494,19 +579,41 @@ function ItemSaverSettings:GetSaveSets()
 		table.insert(setNames, setName)
 	end
 
+	table.sort(setNames)
+
 	return setNames
 end
 
-function ItemSaver_RegisterMarker(markerInformation)
-	MARKER_TEXTURES[markerInformation.markerName] = markerInformation.texturePath
-	table.insert(MARKER_OPTIONS, markerInformation.markerName)
+function ItemSaverSettings:GetSubmenuDeferredStatus()
+	if settings.deferSubmenu then
+		return settings.deferSubmenu, settings.deferSubmenuNum
+	end
+	return settings.deferSubmenu
 end
 
-function ItemSaver_AddSet(setName, setData)
+function ItemSaverSettings:AddSet(setName, setData)
+	if setName == "" or settings.savedSetInfo[setName] then
+		return false
+	end
+
 	settings.savedSetInfo[setName] = setData
 	ToggleStoreFilter(setName)
 	ToggleDeconstructionFilter(setName)
 	ToggleGuildStoreFilter(setName)
 	ToggleMailFilter(setName)
 	ToggleTradeFilter(setName)
+
+	return true
+end
+
+--returns true if the marker was successfully registered, false if it was not.
+function ItemSaver_RegisterMarker(markerInformation)
+	if MARKER_TEXTURES[markerInformation.markerName] then
+		return false
+	end
+
+	MARKER_TEXTURES[markerInformation.markerName] = markerInformation.texturePath
+	table.insert(MARKER_OPTIONS, markerInformation.markerName)
+
+	return true
 end
