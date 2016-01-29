@@ -2,6 +2,8 @@ This Add-on is not created by, affiliated with or sponsored by ZeniMax Media Inc
 
 ---
 
+
+
 This started as a simple mod that allowed you to place a little marker on your items so you could remember to not accidentally sell or deconstruct them.
 
 With Item Saver 2.0.0.0, that simple functionality is extended with some awesome new features:
@@ -9,31 +11,40 @@ With Item Saver 2.0.0.0, that simple functionality is extended with some awesome
  - Create as many different sets of markers as you would like, all with their own marker texture, color, and filtering rules.
  - Add your own marker textures to use for Item Saver sets (details below).
 
+Full feature list:
+ - Create a new item set with the "+ Create Set" context menu option.
+ - Choose a set name, marker, color, and filters.
+ - Choose your default save set.
+ - Keybind for saving items to the default sets.
+ - Choose marker position if using [Inventory Grid View](http://www.esoui.com/downloads/info65-InventoryGridView.html).
+ - Item sets are listed in a submenu when right clicking an item.
+ - The context submenu can be deferred until there are more than a specified number of sets created (1 - 5).
+ - Edit created sets including the marker properties and which filters are active. These will update immediately without needing a UI reload.
+ - Delete sets you no longer need.
+
 ---
 
 Item Saver features an API for other addons to integrate with Item Saver's functionality. The full Item Saver API is listed here:
 
-    function ItemSaver_IsItemSaved(bagIdOrItemId, slotIndex)
-    --returns true and the string set name if the item is saved. Returns false if the item is not saved.
+```
+function ItemSaver_IsItemSaved(bagIdOrItemId, slotIndex)
+--returns true and the string set name if the item is saved. Returns false if the item is not saved.
 
-    function ItemSaver_ToggleItemSave(setName, bagIdOrItemId, slotIndex)
-    --returns true if item was saved successfully. Returns false if item was unsaved.
-    --if setName is nil, Item Saver will use the default set.
+function ItemSaver_ToggleItemSave(setName, bagIdOrItemId, slotIndex)
+--returns true if item was saved successfully. Returns false if item was unsaved.
+--if setName is nil, Item Saver will use the default set.
 
-    function ItemSaver_GetFilters(setName)
-    --returns a table with the following keys: store, deconstruction, research, guildStore, mail, trade. Each will have a value of true if they are filtered or false otherwise.
+function ItemSaver_GetFilters(setName)
+--if the given set exists, returns a table with the following keys: store, deconstruction, research, guildStore, mail, trade.
+--each will have a value of true if they are filtered or false if they are not.
+--if the set does not exist, returns nil
 
-    function ItemSaver_GetMarkerOptions()
-    --returns array of the names of available markers.
+function ItemSaver_GetMarkerOptions()
+--returns array of the names of available markers.
 
-    function ItemSaver_GetSaveSets()
-    --returns array of the names of available save sets.
-
-    function ItemSaver_IsShopFiltered()
-    function ItemSaver_IsDeconstructionFiltered()
-    function ItemSaver_IsResearchFiltered()
-    --DEPRECIATED. You should use ItemSaver_GetFilters(setName) in conjunction with ItemSaver_IsItemSaved(bagIdOrItemId, slotIndex).
-    --these will return info about the default set.
+function ItemSaver_GetSaveSets()
+--returns an alphabetically sorted array of the names of available save sets.
+```
 
 ---
 
