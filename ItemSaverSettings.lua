@@ -233,26 +233,28 @@ end
 function ItemSaverSettings:Initialize()
 	local defaults = {
 		markerAnchor = TOPRIGHT,
-		savedSetInfo = {
-			--indexed by set name
-			["Default"] = {
-				markerTexture = "Star",
-				markerColor = RGBAToHex(1, 1, 0, 1),
-				filterStore = true,
-				filterDeconstruction = true,
-				filterResearch = true,
-				filterGuildStore = false,
-				filterMail = false,
-				filterTrade = false,
-			},
-		},
+		savedSetInfo = {},
 		savedItems = {},
 		deferSubmenu = false,
 		deferSubmenuNum = 3,
 		defaultSet = "Default",
+		shouldCreateDefault = true,
 	}
 
 	settings = ZO_SavedVars:NewAccountWide("ItemSaver_Settings", 2.0, nil, defaults)
+
+	if settings.shouldCreateDefault then
+		settings.savedSetInfo["Default"] = {
+			markerTexture = "Star",
+			markerColor = RGBAToHex(1, 1, 0, 1),
+			filterStore = true,
+			filterDeconstruction = true,
+			filterResearch = true,
+			filterGuildStore = false,
+			filterMail = false,
+			filterTrade = false,
+		}
+	end
 
 	ToggleAllFilters()
 
@@ -482,6 +484,10 @@ function ItemSaverSettings:CreateOptionsMenu()
 							if name == setName then
 								settings.savedItems[savedItem] = settings.defaultSet
 							end
+						end
+
+						if setName == "Default" then
+							settings.shouldCreateDefault = false
 						end
 
 						ReloadUI()
