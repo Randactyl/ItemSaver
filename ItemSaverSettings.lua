@@ -549,14 +549,17 @@ function ItemSaverSettings:ToggleItemSave(setName, bagIdOrItemId, slotIndex)
 end
 
 function ItemSaverSettings:GetFilters(setName)
-	return {
-		store = settings.savedSetInfo[setName].filterStore,
-		deconstruction = settings.savedSetInfo[setName].filterDeconstruction,
-		research = settings.savedSetInfo[setName].filterResearch,
-		guildStore = settings.savedSetInfo[setName].filterGuildStore,
-		mail = settings.savedSetInfo[setName].filterMail,
-		trade = settings.savedSetInfo[setName].filterTrade,
-	}
+	local setData = settings.savedSetInfo[setName]
+	if setData then
+		return {
+			store = setData.filterStore,
+			deconstruction = setData.filterDeconstruction,
+			research = setData.filterResearch,
+			guildStore = setData.filterGuildStore,
+			mail = setData.filterMail,
+			trade = setData.filterTrade,
+		}
+	else return nil end
 end
 
 function ItemSaverSettings:GetMarkerOptions()

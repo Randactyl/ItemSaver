@@ -306,9 +306,10 @@ function ItemSaver_ToggleItemSave(setName, bagIdOrItemId, slotIndex)
 	end
 end
 
---returns a table with the following keys: store, deconstruction, research,
---guildStore, mail, trade. Each will have a value of true if they are filtered
---or false otherwise.
+--if the given set exists, returns a table with the following keys: store,
+--deconstruction, research, guildStore, mail, trade.
+--each will have a value of true if they are filtered or false if they are not.
+--if the set does not exist, returns nil
 function ItemSaver_GetFilters(setName)
 	return ISSettings:GetFilters(setName)
 end
