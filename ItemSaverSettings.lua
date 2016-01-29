@@ -591,16 +591,28 @@ function ItemSaverSettings:GetSubmenuDeferredStatus()
 	return settings.deferSubmenu
 end
 
-function ItemSaver_RegisterMarker(markerInformation)
+function ItemSaver:RegisterMarker(markerInformation)
+	if MARKER_TEXTURES[markerInformation.markerName] then
+		return false
+	end
+
 	MARKER_TEXTURES[markerInformation.markerName] = markerInformation.texturePath
 	table.insert(MARKER_OPTIONS, markerInformation.markerName)
+
+	return true
 end
 
-function ItemSaver_AddSet(setName, setData)
+function ItemSaver:AddSet(setName, setData)
+	if setName = "" or settings.savedSetInfo[setName] then
+		return false
+	end
+
 	settings.savedSetInfo[setName] = setData
 	ToggleStoreFilter(setName)
 	ToggleDeconstructionFilter(setName)
 	ToggleGuildStoreFilter(setName)
 	ToggleMailFilter(setName)
 	ToggleTradeFilter(setName)
+
+	return true
 end

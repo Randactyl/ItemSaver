@@ -323,4 +323,15 @@ end
 function ItemSaver_GetSaveSets()
 	return ISSettings:GetSaveSets()
 end
+
+--returns true if the marker was successfully registered, false if it was not.
+function ItemSaver_RegisterMarker(markerInformation)
+	return ISSettings:RegisterMarker(markerInformation)
+end
+
+--returns true if the set was successfully registered.
+--returns false if the set name is an empty string or already in use.
+function ItemSaver_AddSet(setName, setData)
+	return ISSettings:AddSet(setName, setData)
+end
 --[[END GLOBAL FUNCTIONS]]------------------------------------------------------
