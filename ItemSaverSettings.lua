@@ -254,6 +254,7 @@ function ItemSaverSettings:Initialize()
 			filterMail = false,
 			filterTrade = false,
 		}
+		settings.shouldCreateDefault = false
 	end
 
 	ToggleAllFilters()
