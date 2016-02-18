@@ -475,6 +475,20 @@ function ItemSaverSettings:CreateOptionsMenu()
 				},
 				[9] = {
 					type = "button",
+					name = GetString(SI_ITEMSAVER_CLEAR_SET_BUTTON),
+					tooltip = GetString(SI_ITEMSAVER_CLEAR_SET_TOOLTIP),
+					func = function()
+						for savedItem, name in pairs(settings.savedItems) do
+							if name == setName then
+								settings.savedItems[savedItem] = nil
+							end
+						end
+
+						d(GetString(SI_ITEMSAVER_CLEAR_SET_CONFIRMATION) .. " " .. setName)
+					end,
+				},
+				[10] = {
+					type = "button",
 					name = GetString(SI_ITEMSAVER_DELETE_SET_BUTTON),
 					tooltip = GetString(SI_ITEMSAVER_DELETE_SET_TOOLTIP),
 					warning = GetString(SI_ITEMSAVER_RELOAD_UI_WARNING),

@@ -40,6 +40,9 @@ local strings = {
         ["SI_ITEMSAVER_FILTERS_TRADE_LABEL"] = "Handel filtern?",
         ["SI_ITEMSAVER_FILTERS_TRADE_TOOLTIP"] = "Sollen die geschützten Gegenstände beim Handel mit anderen Spielern verborgen werden?",
 
+		["SI_ITEMSAVER_CLEAR_SET_BUTTON"] = "Clear Set",
+		["SI_ITEMSAVER_CLEAR_SET_TOOLTIP"] = "Unsaves any items currently in this set.",
+
         ["SI_ITEMSAVER_DELETE_SET_BUTTON"] = "Set löschen",
         ["SI_ITEMSAVER_DELETE_SET_TOOLTIP"] = "Entfernt das Set und weist alle Gegenstände im Set dem \"Default\" Set zu",
 
@@ -94,6 +97,10 @@ local strings = {
 
 		["SI_ITEMSAVER_FILTERS_TRADE_LABEL"] = "Filter Trade?",
 		["SI_ITEMSAVER_FILTERS_TRADE_TOOLTIP"] = "Should saved items be removed from the trade list?",
+
+		["SI_ITEMSAVER_CLEAR_SET_BUTTON"] = "Clear Set",
+		["SI_ITEMSAVER_CLEAR_SET_TOOLTIP"] = "Unsaves any items currently in this set.",
+		["SI_ITEMSAVER_CLEAR_SET_CONFIRMATION"] = "Removed all items from set:",
 
 		["SI_ITEMSAVER_DELETE_SET_BUTTON"] = "Delete Set",
 		["SI_ITEMSAVER_DELETE_SET_TOOLTIP"] = "Removes the set and changes any items in the set to the default set",
