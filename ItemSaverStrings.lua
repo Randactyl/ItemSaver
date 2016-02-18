@@ -66,7 +66,7 @@ local strings = {
 		["SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_TOOLTIP"] = "This set will be used for the keybind, when deleting other sets, and when a set is not specified.",
 		["SI_ITEMSAVER_RELOAD_UI_WARNING"] = "Will reload UI",
 		["SI_ITEMSAVER_MARKER_ANCHOR_LABEL"] = "Marker Position",
-		["SI_ITEMSAVER_MARKER_ANCHOR_TOOLTIP"] = "Position of the saved item marker",
+		["SI_ITEMSAVER_MARKER_ANCHOR_TOOLTIP"] = "Position of the saved item marker.",
 		["SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_LABEL"] = "Defer Submenu Creation",
 		["SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_TOOLTIP"] = "Only use a submenu if there are more than the specified number of sets.",
 		["SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_LABEL"] = "Number of Sets",
@@ -75,10 +75,10 @@ local strings = {
 		["SI_ITEMSAVER_SET_DATA_HEADER"] = "Set Data",
 
 		["SI_ITEMSAVER_MARKER_LABEL"] = "Marker Texture",
-		["SI_ITEMSAVER_MARKER_TOOLTIP"] = "Texture to use for the marker",
+		["SI_ITEMSAVER_MARKER_TOOLTIP"] = "Texture to use for the marker.",
 
 		["SI_ITEMSAVER_TEXTURE_COLOR_LABEL"] = "Texture Color",
-		["SI_ITEMSAVER_TEXTURE_COLOR_TOOLTIP"] = "Color to use for the marker's texture",
+		["SI_ITEMSAVER_TEXTURE_COLOR_TOOLTIP"] = "Color to use for the marker's texture.",
 
 		["SI_ITEMSAVER_FILTERS_STORE_LABEL"] = "Filter Store?",
 		["SI_ITEMSAVER_FILTERS_STORE_TOOLTIP"] = "Should saved items be removed from the vendor sell list?",
@@ -103,7 +103,7 @@ local strings = {
 		["SI_ITEMSAVER_CLEAR_SET_CONFIRMATION"] = "Removed all items from set:",
 
 		["SI_ITEMSAVER_DELETE_SET_BUTTON"] = "Delete Set",
-		["SI_ITEMSAVER_DELETE_SET_TOOLTIP"] = "Removes the set and changes any items in the set to the default set",
+		["SI_ITEMSAVER_DELETE_SET_TOOLTIP"] = "Removes the set and changes any items in the set to the default set.",
 
 		["SI_ITEMSAVER_CREATE_SAVE_SET"] = "+ Create Set",
 		["SI_ITEMSAVER_UNSAVE_ITEM"] = "Unsave item",
