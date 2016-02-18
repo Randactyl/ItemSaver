@@ -42,6 +42,7 @@ local strings = {
 
 		["SI_ITEMSAVER_CLEAR_SET_BUTTON"] = "Clear Set",
 		["SI_ITEMSAVER_CLEAR_SET_TOOLTIP"] = "Unsaves any items currently in this set.",
+		["SI_ITEMSAVER_CLEAR_SET_CONFIRMATION"] = "Removed all items from set:",
 
         ["SI_ITEMSAVER_DELETE_SET_BUTTON"] = "Set löschen",
         ["SI_ITEMSAVER_DELETE_SET_TOOLTIP"] = "Entfernt das Set und weist alle Gegenstände im Set dem \"Default\" Set zu",
