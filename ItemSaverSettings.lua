@@ -415,6 +415,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 					defaultColor = ZO_ColorDef:New(HexToRGB(setData.markerColor)),
 					width = "half",
 					--beforeShow = function(control, iconPicker) return preventShow end, --(optional)
+					reference = "IS_" .. setName .. "IconPicker",
 				},
 				[2] = {
 					type = "colorpicker",
@@ -425,6 +426,12 @@ function ItemSaverSettings:CreateOptionsMenu()
 							return r, g, b
 						end,
 					setFunc = function(r, g, b)
+							local iconPicker = WINDOW_MANAGER:GetControlByName("IS_"..setName.."IconPicker")
+							iconPicker.icon.color.r = r
+							iconPicker.icon.color.g = g
+							iconPicker.icon.color.b = b
+							iconPicker:SetColor(iconPicker.icon.color)
+
 							setData.markerColor = RGBToHex(r, g, b)
 							--icon:SetColor(r, g, b, 1)
 						end,
