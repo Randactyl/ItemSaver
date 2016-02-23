@@ -60,6 +60,20 @@ local function GetInfoFromRowControl(rowControl)
 	return bagId, slotIndex
 end
 
+local function pairsByKeys(t)
+	local a = {}
+	for n in pairs(t) do table.insert(a, n) end
+	table.sort(a)
+	local i = 0
+	local iter = function()
+		i = i + 1
+		if a[i] == nil then return nil
+		else return a[i], t[a[i]]
+		end
+	end
+	return iter
+end
+
 local function FilterSavedItemsForStore(slotOrBagId, slotIndex)
 	local bagId, saved, filtered
 
@@ -263,24 +277,14 @@ function ItemSaverSettings:Initialize()
 end
 
 function ItemSaverSettings:CreateOptionsMenu()
-	--[[local icon = WINDOW_MANAGER:CreateControl("ItemSaver_Icon", ZO_OptionsWindowSettingsScrollChild, CT_TEXTURE)
-	icon:SetColor(HexToRGBA(settings.textureColor))
-	icon:SetHandler("OnShow", function()
-			self:SetTexture(MARKER_TEXTURES[settings.textureName])
-			icon:SetDimensions(TEXTURE_SIZE, TEXTURE_SIZE)
-		end)]]--this is going to need to be reworked if I want it in each of the undetermined number of submenus
-	local function pairsByKeys(t)
-		local a = {}
-		for n in pairs(t) do table.insert(a, n) end
-		table.sort(a)
-		local i = 0
-		local iter = function()
-			i = i + 1
-			if a[i] == nil then return nil
-			else return a[i], t[a[i]]
-			end
+	local function getMarkerTextureArrays()
+		local arr1, arr2 = {}, {}
+		for name, path in pairsByKeys(MARKER_TEXTURES) do
+			table.insert(arr1, path)
+			table.insert(arr2, name)
 		end
-		return iter
+
+		return arr1, arr2
 	end
 
 	local panel = {
@@ -376,23 +380,41 @@ function ItemSaverSettings:CreateOptionsMenu()
 		},
 	}
 	for setName, setData in pairsByKeys(settings.savedSetInfo) do
+		local markerTexturePaths, markerTextureNames = getMarkerTextureArrays()
+
 		local submenuData = {
 			type = "submenu",
 			name = setName,
 			tooltip = nil,
 			controls = {
 				[1] = {
-					type = "dropdown",
+					type = "iconpicker",
 					name = GetString(SI_ITEMSAVER_MARKER_LABEL),
 					tooltip = GetString(SI_ITEMSAVER_MARKER_TOOLTIP),
-					choices = MARKER_OPTIONS,
-					getFunc = function() return setData.markerTexture end,
-					setFunc = function(value)
-							setData.markerTexture = value
-							--icon:SetTexture(MARKER_TEXTURES[value])
-							--icon:SetDimensions(TEXTURE_SIZE, TEXTURE_SIZE)
-						end,
+					choices = markerTexturePaths,
+					choicesTooltips = markerTextureNames, --(optional)
+					getFunc = function()
+						local markerTextureName = setData.markerTexture
+
+						for i, name in ipairs(markerTextureNames) do
+							if name == markerTextureName then
+								return markerTexturePaths[i]
+							end
+						end
+					end,
+					setFunc = function(markerTexturePath)
+						for i, path in ipairs(markerTexturePaths) do
+							if path == markerTexturePath then
+								setData.markerTexture = markerTextureNames[i]
+							end
+						end
+					end,
+					maxColumns = 5,
+					visibleRows = zo_min(zo_max(zo_floor(#MARKER_TEXTURES/5), 1), 4.5),
+					iconSize = 32,
+					defaultColor = ZO_ColorDef:New(HexToRGB(setData.markerColor)),
 					width = "half",
+					--beforeShow = function(control, iconPicker) return preventShow end, --(optional)
 				},
 				[2] = {
 					type = "colorpicker",
