@@ -7,10 +7,9 @@ end
 
 local function handleDialog(dialog)
 	local MARKER_TEXTURES = ItemSaver_GetMarkerTextures()
-	
+
     local editbox = ItemSaverDialogEditbox
     local iconpicker = ItemSaverDialogIconpicker
-    local colorpicker = ItemSaverDialogColorpicker
     local storeCheckbox = ItemSaverDialogStoreCheckbox
     local deconstructionCheckbox = ItemSaverDialogDeconstructionCheckbox
     local researchCheckbox = ItemSaverDialogResearchCheckbox
@@ -27,7 +26,7 @@ local function handleDialog(dialog)
 			setData.markerTexture = name
 		end
 	end
-    setData.markerColor = RGBToHex(iconpicker.icon.color:UnpackRGBA())
+    setData.markerColor = RGBToHex(COLOR_PICKER:GetColors())
 
     setData.filterStore = storeCheckbox.value
     setData.filterDeconstruction = deconstructionCheckbox.value
@@ -43,7 +42,14 @@ end
 local function SetupDialog(dialog)
 	ItemSaverDialogEditbox:UpdateValue()
 	ItemSaverDialogIconpicker:UpdateValue()
-	ItemSaverDialogColorpicker:UpdateValue()
+
+	--local colorpicker = ItemSaverDialogColorpickerContent
+	COLOR_PICKER.initialR = 1
+	COLOR_PICKER.initialG = 1
+	COLOR_PICKER.initialB = 0
+	COLOR_PICKER:SetColor(1, 1, 0)
+	COLOR_PICKER.previewInitialTexture:SetColor(1, 1, 0)
+
 	ItemSaverDialogStoreCheckbox:UpdateValue()
 	ItemSaverDialogDeconstructionCheckbox:UpdateValue()
 	ItemSaverDialogResearchCheckbox:UpdateValue()
@@ -79,7 +85,7 @@ function ItemSaver_SetupDialog(self)
                 control = GetControl(self, "Cancel"),
                 text = SI_DIALOG_CANCEL,
             },
-        }
+        },
     }
 
     ZO_Dialogs_RegisterCustomDialog("ITEMSAVER_SAVE", info)
@@ -134,22 +140,8 @@ function ItemSaver_InitializeDialog()
 			maxColumns = 5,
 			visibleRows = zo_min(zo_max(zo_floor(#MARKER_TEXTURES/5), 1), 4.5),
 			iconSize = 32,
-			defaultColor = ZO_ColorDef:New(1, 1, 0),
-			width = "half",
-		},
-		["colorpicker"] = {
-			type = "colorpicker",
-			name = GetString(SI_ITEMSAVER_TEXTURE_COLOR_LABEL),
-			tooltip = GetString(SI_ITEMSAVER_TEXTURE_COLOR_TOOLTIP),
-			getFunc = function() return 1, 1, 0 end,
-			setFunc = function(r, g, b)
-				local iconPicker = WINDOW_MANAGER:GetControlByName("ItemSaverDialogIconpicker")
-				iconPicker.icon.color.r = r
-				iconPicker.icon.color.g = g
-				iconPicker.icon.color.b = b
-				iconPicker:SetColor(iconPicker.icon.color)
-			end,
-			width = "half",
+			defaultColor = ZO_ColorDef:New(1, 1, 1),
+			width = "full",
 		},
 		["header"] = {
 			type = "header",
@@ -206,7 +198,7 @@ function ItemSaver_InitializeDialog()
 
 	local editbox = LAMCreateControl["editbox"](parent, controlData.editbox, "ItemSaverDialogEditbox")
 	local iconpicker = LAMCreateControl["iconpicker"](parent, controlData.iconpicker, "ItemSaverDialogIconpicker")
-	local colorpicker = LAMCreateControl["colorpicker"](parent, controlData.colorpicker, "ItemSaverDialogColorpicker")
+	local colorpicker = WINDOW_MANAGER:CreateControlFromVirtual("ItemSaverDialogColorpicker", parent, "IS_ColorPickerControl"):GetNamedChild("Content")
 	local header = LAMCreateControl["header"](parent, controlData.header, "ItemSaverDialogHeader")
 	local storeCheckbox = LAMCreateControl["checkbox"](parent, GetCheckboxData("store"), "ItemSaverDialogStoreCheckbox")
 	local deconstructionCheckbox = LAMCreateControl["checkbox"](parent, GetCheckboxData("deconstruction"), "ItemSaverDialogDeconstructionCheckbox")
@@ -217,8 +209,8 @@ function ItemSaver_InitializeDialog()
 
 	editbox:SetAnchor(TOPLEFT, ItemSaverDialogDivider, LEFT, 75, 16)
 	iconpicker:SetAnchor(TOPLEFT, editbox, BOTTOMLEFT, 0, 16)
-	colorpicker:SetAnchor(TOPLEFT, iconpicker, TOPRIGHT, 16)
-	header:SetAnchor(TOPLEFT, iconpicker, BOTTOMLEFT, 0, 48)
+	colorpicker:SetAnchor(TOP, iconpicker, BOTTOM, 0, 16)
+	header:SetAnchor(TOPLEFT, iconpicker, BOTTOMLEFT, 0, 240)
 	storeCheckbox:SetAnchor(TOPLEFT, header, BOTTOMLEFT, 0, 16)
 	deconstructionCheckbox:SetAnchor(TOPLEFT, storeCheckbox, TOPRIGHT, 16)
 	researchCheckbox:SetAnchor(TOPLEFT, storeCheckbox, BOTTOMLEFT, 0, 16)
