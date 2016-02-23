@@ -17,16 +17,16 @@ local addonVersion = "2.1.1.0"
 -----------------------------
 --UTIL FUNCTIONS
 -----------------------------
-local function RGBAToHex(r, g, b, a)
+local function RGBToHex(r, g, b)
 	r = r <= 1 and r >= 0 and r or 0
 	g = g <= 1 and g >= 0 and g or 0
 	b = b <= 1 and b >= 0 and b or 0
-	return string.format("%02x%02x%02x%02x", r * 255, g * 255, b * 255, a * 255)
+	return string.format("%02x%02x%02x%02x", r * 255, g * 255, b * 255)
 end
 
-local function HexToRGBA(hex)
-    local rhex, ghex, bhex, ahex = string.sub(hex, 1, 2), string.sub(hex, 3, 4), string.sub(hex, 5, 6), string.sub(hex, 7, 8)
-    return tonumber(rhex, 16)/255, tonumber(ghex, 16)/255, tonumber(bhex, 16)/255, tonumber(ahex, 16)/255
+local function HexToRGB(hex)
+    local rhex, ghex, bhex = string.sub(hex, 1, 2), string.sub(hex, 3, 4), string.sub(hex, 5, 6)
+    return tonumber(rhex, 16)/255, tonumber(ghex, 16)/255, tonumber(bhex, 16)/255
 end
 
 local function SignItemId(itemId)
@@ -246,7 +246,7 @@ function ItemSaverSettings:Initialize()
 	if settings.shouldCreateDefault then
 		settings.savedSetInfo["Default"] = {
 			markerTexture = "Star",
-			markerColor = RGBAToHex(1, 1, 0, 1),
+			markerColor = RGBToHex(1, 1, 0),
 			filterStore = true,
 			filterDeconstruction = true,
 			filterResearch = true,
@@ -399,11 +399,11 @@ function ItemSaverSettings:CreateOptionsMenu()
 					name = GetString(SI_ITEMSAVER_TEXTURE_COLOR_LABEL),
 					tooltip = GetString(SI_ITEMSAVER_TEXTURE_COLOR_TOOLTIP),
 					getFunc = function()
-							local r, g, b, a = HexToRGBA(setData.markerColor)
+							local r, g, b = HexToRGB(setData.markerColor)
 							return r, g, b
 						end,
 					setFunc = function(r, g, b)
-							setData.markerColor = RGBAToHex(r, g, b, 1)
+							setData.markerColor = RGBToHex(r, g, b)
 							--icon:SetColor(r, g, b, 1)
 						end,
 					width = "half",
@@ -528,7 +528,7 @@ function ItemSaverSettings:GetMarkerInfo(bagId, slotIndex)
 		local signedId = SignItemId(GetItemInstanceId(bagId, slotIndex))
 		local savedSet = settings.savedSetInfo[settings.savedItems[signedId]]
 
-		return MARKER_TEXTURES[savedSet.markerTexture], HexToRGBA(savedSet.markerColor)
+		return MARKER_TEXTURES[savedSet.markerTexture], HexToRGB(savedSet.markerColor)
 	end
 	return nil
 end
