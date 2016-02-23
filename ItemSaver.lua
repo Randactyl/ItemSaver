@@ -253,6 +253,9 @@ local function ItemSaver_Loaded(eventCode, addonName)
 			rowControl:SetMouseEnabled(true)
 		end
 	end
+
+	--finish create set dialog initialization
+	ItemSaver_InitializeDialog()
 end
 
 EVENT_MANAGER:RegisterForEvent("ItemSaverLoaded", EVENT_ADD_ON_LOADED, ItemSaver_Loaded)
