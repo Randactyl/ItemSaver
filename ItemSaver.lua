@@ -101,7 +101,7 @@ local function AddContextMenuOptionSoon(rowControl)
 
 	if rowControl:GetParent() ~= ZO_Character then
 		zo_callLater(function() AddContextMenuOption(rowControl:GetParent()) end, 50)
-	else
+	elseif rowControl.stackCount > 0 then
 		zo_callLater(function() AddContextMenuOption(rowControl) end, 50)
 	end
 end
