@@ -1,5 +1,108 @@
 <GuiXml>
 	<Controls>
+		<!--inherits="ZO_CustomDialogBase"-->
+		<Control name="IS_ColorPickerControl" virtual="true">
+            <Dimensions x="512" y="256" />
+
+            <OnInitialized>
+                ZO_ColorPicker_OnInitialized(self)
+            </OnInitialized>
+            <Controls>
+                <Control name="$(parent)Content">
+					<Anchor point="TOP" relativeTo="$(parent)" relativePoint="TOP" />
+					<Dimensions x="192" y="192" />
+
+                    <Controls>
+                        <ColorSelect name="$(parent)ColorSelect" mouseEnabled="true">
+                            <Anchor point="TOP" relativeTo="$(parent)" relativePoint="TOP" />
+                            <Dimensions x="128" y="128" />
+
+                            <OnColorSelected>
+                                COLOR_PICKER:OnColorSet(r, g, b)
+                            </OnColorSelected>
+
+                            <Controls>
+                                <Texture name="$(parent)Thumb" textureFile="EsoUI/Art/Miscellaneous/colorPicker_pip.dds" layer="2">
+                                    <Dimensions x="32" y="32" />
+                                </Texture>
+                            </Controls>
+                        </ColorSelect>
+
+                        <Control name="$(parent)Preview">
+                            <Dimensions x="64" y="64" />
+                            <Anchor point="RIGHT" relativeTo="$(parent)ColorSelect" relativePoint="LEFT" offsetX="-25" />
+
+                            <Controls>
+                                <Texture name="$(parent)Border" textureFile="EsoUI/Art/Miscellaneous/colorPicker_swatchFrame.dds">
+                                    <Dimensions x="64" y="64" />
+                                    <Anchor point="CENTER" />
+                                </Texture>
+
+                                <Texture name="$(parent)TextureTop" layer="OVERLAY">
+                                    <Dimensions x="58" y="29" />
+                                    <Anchor point="TOP" offsetY="3" />
+                                </Texture>
+                                <Label name="$(parent)TopLabel" font="ZoFontWinH4" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_SELECTED" modifyTextType="UPPERCASE" text="SI_COLOR_PICKER_NEW">
+                                    <Anchor point="BOTTOM" relativeTo="$(parent)TextureTop" relativePoint="TOP" offsetY="-5" />
+                                </Label>
+
+                                <Texture name="$(parent)TextureBottom" layer="OVERLAY">
+                                    <Dimensions x="58" y="29" />
+                                    <Anchor point="BOTTOM" offsetY="-3" />
+                                </Texture>
+                                <Label name="$(parent)BottomLabel" font="ZoFontWinH4" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_SELECTED" modifyTextType="UPPERCASE" text="SI_COLOR_PICKER_CURRENT">
+                                    <Anchor point="TOP" relativeTo="$(parent)TextureBottom" relativePoint="BOTTOM" offsetY="5" />
+                                </Label>
+                            </Controls>
+                        </Control>
+
+                        <Slider name="$(parent)Value" inherits="ZO_ColorPickerControlVerticalSliderTemplate">
+                            <Anchor point="LEFT" relativeTo="$(parent)ColorSelect" relativePoint="RIGHT" offsetX="35" />
+
+                            <OnValueChanged>
+                                if eventReason == EVENT_REASON_HARDWARE then
+                                    COLOR_PICKER:OnValueSet(1 - value)
+                                end
+                            </OnValueChanged>
+                        </Slider>
+
+                        <Slider name="$(parent)Alpha" inherits="ZO_ColorPickerControlHorizontalSliderTemplate" hidden="true">
+                            <Anchor point="TOP" relativeTo="$(parent)ColorSelect" relativePoint="BOTTOM" offsetY="15" />
+                            <OnValueChanged>
+                                if eventReason == EVENT_REASON_HARDWARE then
+                                    COLOR_PICKER:OnAlphaSet(value)
+                                end
+                            </OnValueChanged>
+                        </Slider>
+                        <Label name="$(parent)AlphaLabel" font="ZoFontWinH4" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_SELECTED" horizontalAlignment="RIGHT" modifyTextType="UPPERCASE" text="SI_COLOR_PICKER_ALPHA" hidden="true">
+                            <Anchor point="TOPRIGHT" relativeTo="$(parent)Alpha" relativePoint="TOPLEFT" offsetX="-10" />
+						</Label>
+
+                        <Control name="$(parent)Spinners" resizeToFitDescendents="true">
+                            <Anchor point="BOTTOM" relativeTo="$(parent)" relativePoint="BOTTOM"/>
+                            <Controls>
+                                <Control name="$(parent)Red" inherits="ZO_EditSpinner">
+                                    <Anchor point="LEFT" />
+                                </Control>
+
+                                <Control name="$(parent)Green" inherits="ZO_EditSpinner">
+                                    <Anchor point="LEFT" relativeTo="$(parent)Red" relativePoint="RIGHT" offsetX="10" />
+                                </Control>
+
+                                <Control name="$(parent)Blue" inherits="ZO_EditSpinner">
+                                    <Anchor point="LEFT" relativeTo="$(parent)Green" relativePoint="RIGHT" offsetX="10" />
+                                </Control>
+
+                                <Control name="$(parent)Alpha" inherits="ZO_EditSpinner" hidden="true">
+                                    <Anchor point="LEFT" relativeTo="$(parent)Blue" relativePoint="RIGHT" offsetX="10" />
+								</Control>
+                            </Controls>
+                        </Control>
+                    </Controls>
+                </Control>
+            </Controls>
+        </Control>
+
 		<TopLevelControl name="ItemSaverDialog" inherits="ZO_CustomDialogBase">
 			<OnInitialized>
 				ItemSaver_SetupDialog(self)
