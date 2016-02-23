@@ -1,4 +1,5 @@
 local BACKPACK = ZO_PlayerInventoryBackpack
+local QUICKSLOT = ZO_QuickSlotList
 local BANK = ZO_PlayerBankBackpack
 local GUILD_BANK = ZO_GuildBankBackpack
 local DECONSTRUCTION = ZO_SmithingTopLevelDeconstructionPanelInventoryBackpack
@@ -181,6 +182,10 @@ local function ItemSaver_Loaded(eventCode, addonName)
 		ZO_ScrollList_RefreshVisible(BACKPACK)
 		RefreshEquipmentControls()
 	end)
+	ZO_PreHookHandler(QUICKSLOT, "OnEffectivelyShown", function()
+		ZO_ScrollList_RefreshVisible(QUICKSLOT)
+		RefreshEquipmentControls()
+	end)
 	ZO_PreHookHandler(BANK, "OnEffectivelyShown", function()
 		ZO_ScrollList_RefreshVisible(BANK)
 		RefreshEquipmentControls()
@@ -212,6 +217,18 @@ local function ItemSaver_Loaded(eventCode, addonName)
 				CreateMarkerControl(rowControl)
 			end
 		end
+	end
+
+	--quickslot hook
+	local hookedFunctions = QUICKSLOT.dataTypes[1].setupCallback
+	QUICKSLOT.dataTypes[1].setupCallback = function(rowControl, slot)
+		hookedFunctions(rowControl, slot)
+		CreateMarkerControl(rowControl)
+	end
+	local hookedFunctions = QUICKSLOT.dataTypes[2].setupCallback
+	QUICKSLOT.dataTypes[2].setupCallback = function(rowControl, slot)
+		hookedFunctions(rowControl, slot)
+		CreateMarkerControl(rowControl)
 	end
 
 	--deconstruction hook
