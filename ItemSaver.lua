@@ -95,8 +95,9 @@ end
 
 local function AddContextMenuOptionSoon(rowControl)
 	if rowControl:GetOwningWindow() == ZO_TradingHouse then return end
-	if BACKPACK:IsHidden() and BANK:IsHidden() and GUILD_BANK:IsHidden()
-	  and DECONSTRUCTION:IsHidden() and ENCHANTING:IsHidden() then return end
+	if BACKPACK:IsHidden() and QUICKSLOT:IsHidden() and BANK:IsHidden()
+	  and GUILD_BANK:IsHidden() and DECONSTRUCTION:IsHidden()
+	  and ENCHANTING:IsHidden() then return end
 
 	if rowControl:GetParent() ~= ZO_Character then
 		zo_callLater(function() AddContextMenuOption(rowControl:GetParent()) end, 50)
@@ -161,6 +162,7 @@ end
 
 local function RefreshAll()
 	ZO_ScrollList_RefreshVisible(BACKPACK)
+	ZO_ScrollList_RefreshVisible(QUICKSLOT)
 	ZO_ScrollList_RefreshVisible(BANK)
 	ZO_ScrollList_RefreshVisible(GUILD_BANK)
 	ZO_ScrollList_RefreshVisible(DECONSTRUCTION)
@@ -271,7 +273,6 @@ local function ItemSaver_Loaded(eventCode, addonName)
 		end
 	end
 end
-
 EVENT_MANAGER:RegisterForEvent("ItemSaverLoaded", EVENT_ADD_ON_LOADED, ItemSaver_Loaded)
 
 --[[GLOBAL FUNCTIONS]]----------------------------------------------------------
