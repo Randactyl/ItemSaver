@@ -140,7 +140,7 @@ function ItemSaver_InitializeDialog()
 			maxColumns = 5,
 			visibleRows = zo_min(zo_max(zo_floor(#MARKER_TEXTURES/5), 1), 4.5),
 			iconSize = 32,
-			defaultColor = ZO_ColorDef:New(1, 1, 1),
+			defaultColor = ZO_ColorDef:New(1, 1, 0),
 			width = "full",
 		},
 		["header"] = {
@@ -217,4 +217,15 @@ function ItemSaver_InitializeDialog()
 	guildStoreCheckbox:SetAnchor(TOPLEFT, researchCheckbox, TOPRIGHT, 16)
 	mailCheckbox:SetAnchor(TOPLEFT, researchCheckbox, BOTTOMLEFT, 0, 16)
 	tradeCheckbox:SetAnchor(TOPLEFT, mailCheckbox, TOPRIGHT, 16)
+
+	--prehook to change marker texture color
+	local oldOnColorSet = COLOR_PICKER.OnColorSet
+	COLOR_PICKER.OnColorSet = function(COLOR_PICKER, r, g, b)
+		iconpicker.icon.color.r = r
+		iconpicker.icon.color.g = g
+		iconpicker.icon.color.b = b
+		iconpicker:SetColor(iconpicker.icon.color)
+
+		oldOnColorSet(COLOR_PICKER, r, g, b)
+	end
 end
