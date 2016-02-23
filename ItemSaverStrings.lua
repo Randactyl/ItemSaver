@@ -51,10 +51,11 @@ local strings = {
         ["SI_ITEMSAVER_UNSAVE_ITEM"] = "Gegenstand nicht mehr schützen",
 		["SI_ITEMSAVER_SAVE_TO"] = "Save to",
 
-		["SI_ITEMSAVER_SET_NAME_LABEL"] = "Name:",
+		["SI_ITEMSAVER_SET_NAME_LABEL"] = "Name",
+		["SI_ITEMSAVER_SET_NAME_TOOLTIP"] = "The name that will be given to the new set.",
 		["SI_ITEMSAVER_MISSING_NAME_WARNING"] = "Set not saved - no name was given for the set.",
 		["SI_ITEMSAVER_USED_NAME_WARNING"] = "Set not saved - given set name is already in use.",
-		["SI_ITEMSAVER_SELECT_FILTERS_LABEL"] = "Filter:",
+		["SI_ITEMSAVER_SELECT_FILTERS_LABEL"] = "Filters",
 
         ["SI_BINDING_NAME_ITEM_SAVER_TOGGLE"] = "Gegenstand schützen",
     },
@@ -110,10 +111,11 @@ local strings = {
 		["SI_ITEMSAVER_UNSAVE_ITEM"] = "Unsave item",
 		["SI_ITEMSAVER_SAVE_TO"] = "Save to",
 
-		["SI_ITEMSAVER_SET_NAME_LABEL"] = "Name:",
+		["SI_ITEMSAVER_SET_NAME_LABEL"] = "Name",
+		["SI_ITEMSAVER_SET_NAME_TOOLTIP"] = "The name that will be given to the new set.",
 		["SI_ITEMSAVER_MISSING_NAME_WARNING"] = "Set not saved - no name was given for the set.",
 		["SI_ITEMSAVER_USED_NAME_WARNING"] = "Set not saved - given set name is already in use.",
-		["SI_ITEMSAVER_SELECT_FILTERS_LABEL"] = "Filters:",
+		["SI_ITEMSAVER_SELECT_FILTERS_LABEL"] = "Filters",
 
 		["SI_BINDING_NAME_ITEM_SAVER_TOGGLE"] = "Toggle Item Saved",
 	},

@@ -272,6 +272,9 @@ local function ItemSaver_Loaded(eventCode, addonName)
 			rowControl:SetMouseEnabled(true)
 		end
 	end
+
+	--finish create set dialog initialization
+	ItemSaver_InitializeDialog()
 end
 EVENT_MANAGER:RegisterForEvent("ItemSaverLoaded", EVENT_ADD_ON_LOADED, ItemSaver_Loaded)
 
@@ -342,6 +345,11 @@ end
 --returns array of the names of available markers.
 function ItemSaver_GetMarkerOptions()
 	return ISSettings:GetMarkerOptions()
+end
+
+--returns table with key/value pairs of markerName/markerPath
+function ItemSaver_GetMarkerTextures()
+	return ISSettings:GetMarkerTextures()
 end
 
 --returns an alphabetically sorted array of the names of available save sets.

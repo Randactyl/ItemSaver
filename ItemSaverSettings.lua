@@ -616,6 +616,10 @@ function ItemSaverSettings:GetMarkerOptions()
 	return MARKER_OPTIONS
 end
 
+function ItemSaverSettings:GetMarkerTextures()
+	return MARKER_TEXTURES
+end
+
 function ItemSaverSettings:GetSaveSets()
 	local setNames = {}
 

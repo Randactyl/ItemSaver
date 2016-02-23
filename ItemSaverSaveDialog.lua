@@ -6,87 +6,58 @@ local function RGBToHex(r, g, b)
 end
 
 local function handleDialog(dialog)
-    local editBox = ItemSaverDialogNameEditbox
-    local comboBox = ItemSaverDialogIconSelectDropdown.m_comboBox
-    --local markerColor = ItemSaverDialogIconColorPickerTexture
-    local shopButton = ItemSaverDialogFilterStoreButton
-    local deconstructionButton = ItemSaverDialogFilterDeconstructionButton
-    local researchButton = ItemSaverDialogFilterResearchButton
-    local guildStoreButton = ItemSaverDialogFilterGuildStoreButton
-    local mailButton = ItemSaverDialogFilterMailButton
-    local tradeButton = ItemSaverDialogFilterTradeButton
+	local MARKER_TEXTURES = ItemSaver_GetMarkerTextures()
 
-    local setData = {}
+    local editbox = ItemSaverDialogEditbox
+    local iconpicker = ItemSaverDialogIconpicker
+    local storeCheckbox = ItemSaverDialogStoreCheckbox
+    local deconstructionCheckbox = ItemSaverDialogDeconstructionCheckbox
+    local researchCheckbox = ItemSaverDialogResearchCheckbox
+    local guildStoreCheckbox = ItemSaverDialogGuildStoreCheckbox
+    local mailCheckbox = ItemSaverDialogMailCheckbox
+    local tradeCheckbox = ItemSaverDialogTradeCheckbox
 
-	local setName = editBox:GetText()
+	local setName = editbox.editbox:GetText()
+	local setData = {}
 
-    setData.markerTexture = comboBox.m_selectedItemData["name"]
-    setData.markerColor = RGBToHex(1, 1, 0)
-    if shopButton:GetState() == 1 then
-        setData.filterStore = true
-    else
-        setData.filterStore = false
-    end
-    if deconstructionButton:GetState() == 1 then
-        setData.filterDeconstruction = true
-    else
-        setData.filterDeconstruction = false
-    end
-    if researchButton:GetState() == 1 then
-        setData.filterResearch = true
-    else
-        setData.filterResearch = false
-    end
-    if guildStoreButton:GetState() == 1 then
-        setData.filterGuildStore = true
-    else
-        setData.filterGuildStore = false
-    end
-    if mailButton:GetState() == 1 then
-        setData.filterMail = true
-    else
-        setData.filterMail = false
-    end
-    if tradeButton:GetState() == 1 then
-        setData.filterTrade = true
-    else
-        setData.filterTrade = false
-    end
+	local texturePath = iconpicker.icon:GetTextureFileName()
+	for name, path in pairs(MARKER_TEXTURES) do
+		if path == texturePath then
+			setData.markerTexture = name
+		end
+	end
+    setData.markerColor = RGBToHex(COLOR_PICKER:GetColors())
+
+    setData.filterStore = storeCheckbox.value
+    setData.filterDeconstruction = deconstructionCheckbox.value
+    setData.filterResearch = researchCheckbox.value
+	setData.filterGuildStore = guildStoreCheckbox.value
+	setData.filterMail = mailCheckbox.value
+	setData.filterTrade = tradeCheckbox.value
 
     ItemSaver_AddSet(setName, setData)
 	ItemSaver_ToggleItemSave(setName, dialog.data[1], dialog.data[2])
 end
 
 local function SetupDialog(dialog)
-    local editBox = ItemSaverDialogNameEditbox
-    local comboBox = ItemSaverDialogIconSelectDropdown.m_comboBox
-    --local markerColor = ItemSaverDialogIconColorPickerTexture
-    local shopButton = ItemSaverDialogFilterStoreButton
-    local deconstructionButton = ItemSaverDialogFilterDeconstructionButton
-    local researchButton = ItemSaverDialogFilterResearchButton
-    local guildStoreButton = ItemSaverDialogFilterGuildStoreButton
-    local mailButton = ItemSaverDialogFilterMailButton
-    local tradeButton = ItemSaverDialogFilterTradeButton
+	ItemSaverDialogEditbox:UpdateValue()
+	ItemSaverDialogIconpicker:UpdateValue()
 
-    editBox:Clear()
+	--local colorpicker = ItemSaverDialogColorpickerContent
+	COLOR_PICKER.initialR = 1
+	COLOR_PICKER.initialG = 1
+	COLOR_PICKER.initialB = 0
+	COLOR_PICKER:SetColor(1, 1, 0)
+	COLOR_PICKER.previewInitialTexture:SetColor(1, 1, 0)
 
-    if comboBox then comboBox:ClearItems() end
-    for _,name in pairs(ItemSaver_GetMarkerOptions()) do
-        local itemEntry = ZO_ComboBox:CreateItemEntry(name)
-        comboBox:AddItem(itemEntry)
-    end
-    comboBox:SelectFirstItem()
-
-    --markerColor:SetColor(1, 1, 0, 1)
-
-    shopButton:SetState(0)
-    deconstructionButton:SetState(0)
-    researchButton:SetState(0)
-    guildStoreButton:SetState(0)
-    mailButton:SetState(0)
-    tradeButton:SetState(0)
+	ItemSaverDialogStoreCheckbox:UpdateValue()
+	ItemSaverDialogDeconstructionCheckbox:UpdateValue()
+	ItemSaverDialogResearchCheckbox:UpdateValue()
+	ItemSaverDialogGuildStoreCheckbox:UpdateValue()
+	ItemSaverDialogMailCheckbox:UpdateValue()
+	ItemSaverDialogTradeCheckbox:UpdateValue()
 end
-test = {}
+
 function ItemSaver_SetupDialog(self)
     local info = {
         customControl = self,
@@ -99,7 +70,7 @@ function ItemSaver_SetupDialog(self)
                 control = GetControl(self, "Create"),
                 text = SI_DIALOG_ACCEPT,
                 callback = function(self)
-					local setName = ItemSaverDialogNameEditbox:GetText()
+					local setName = ItemSaverDialogEditbox.editbox:GetText()
 					local setExists = ItemSaver_GetFilters(setName)
 					if setName == "" then
 						d(GetString(SI_ITEMSAVER_MISSING_NAME_WARNING))
@@ -114,21 +85,147 @@ function ItemSaver_SetupDialog(self)
                 control = GetControl(self, "Cancel"),
                 text = SI_DIALOG_CANCEL,
             },
-        }
+        },
     }
 
     ZO_Dialogs_RegisterCustomDialog("ITEMSAVER_SAVE", info)
 end
 
---[[local function ColorPickerCallback(r, g, b, a)
-    local markerColor = ItemSaverDialogIconColorPickerTexture
-    markerColor:SetColor(r, g, b, a)
+function ItemSaver_InitializeDialog()
+	local MARKER_TEXTURES = ItemSaver_GetMarkerTextures()
+	local function pairsByKeys(t)
+		local a = {}
+		for n in pairs(t) do table.insert(a, n) end
+		table.sort(a)
+		local i = 0
+		local iter = function()
+			i = i + 1
+			if a[i] == nil then return nil
+			else return a[i], t[a[i]]
+			end
+		end
+		return iter
+	end
+	local function getMarkerTextureArrays()
+		local arr1, arr2 = {}, {}
+		for name, path in pairsByKeys(MARKER_TEXTURES) do
+			table.insert(arr1, path)
+			table.insert(arr2, name)
+		end
+
+		return arr1, arr2
+	end
+	local markerTexturePaths, markerTextureNames = getMarkerTextureArrays()
+
+	local controlData = {
+		["editbox"] = {
+			type = "editbox",
+			name = GetString(SI_ITEMSAVER_SET_NAME_LABEL),
+			tooltip = GetString(SI_ITEMSAVER_SET_NAME_TOOLTIP),
+			getFunc = function() end,
+			setFunc = function(text) end,
+			isMultiline = false,
+			width = "full",
+		},
+		["iconpicker"] = {
+			type = "iconpicker",
+			name = GetString(SI_ITEMSAVER_MARKER_LABEL),
+			tooltip = GetString(SI_ITEMSAVER_MARKER_TOOLTIP),
+			choices = markerTexturePaths,
+			choicesTooltips = markerTextureNames,
+			getFunc = function()
+				return [[/esoui/art/campaign/overview_indexicon_bonus_disabled.dds]]
+			end,
+			setFunc = function(markerTexturePath) end,
+			maxColumns = 5,
+			visibleRows = zo_min(zo_max(zo_floor(#MARKER_TEXTURES/5), 1), 4.5),
+			iconSize = 32,
+			defaultColor = ZO_ColorDef:New(1, 1, 0),
+			width = "full",
+		},
+		["header"] = {
+			type = "header",
+			name = GetString(SI_ITEMSAVER_SELECT_FILTERS_LABEL),
+			width = "half",
+		},
+		["checkbox"] = {
+			type = "checkbox",
+			getFunc = function() return false end,
+			setFunc = function(value) end,
+			width = "half",
+		},
+	}
+	local function GetCheckboxData(str)
+		local lookup = {
+			["store"] = {
+				name = GetString(SI_ITEMSAVER_FILTERS_STORE_LABEL),
+				tooltip = GetString(SI_ITEMSAVER_FILTERS_STORE_TOOLTIP),
+			},
+			["deconstruction"] = {
+				name = GetString(SI_ITEMSAVER_FILTERS_DECONSTRUCTION_LABEL),
+				tooltip = GetString(SI_ITEMSAVER_FILTERS_DECONSTRUCTION_TOOLTIP),
+			},
+			["research"] = {
+				name = GetString(SI_ITEMSAVER_FILTERS_RESEARCH_LABEL),
+				tooltip = GetString(SI_ITEMSAVER_FILTERS_RESEARCH_TOOLTIP),
+			},
+			["guildStore"] = {
+				name = GetString(SI_ITEMSAVER_FILTERS_GUILDSTORE_LABEL),
+				tooltip = GetString(SI_ITEMSAVER_FILTERS_GUILDSTORE_TOOLTIP),
+			},
+			["mail"] = {
+				name = GetString(SI_ITEMSAVER_FILTERS_MAIL_LABEL),
+				tooltip = GetString(SI_ITEMSAVER_FILTERS_MAIL_TOOLTIP),
+			},
+			["trade"] = {
+				name = GetString(SI_ITEMSAVER_FILTERS_TRADE_LABEL),
+				tooltip = GetString(SI_ITEMSAVER_FILTERS_TRADE_TOOLTIP),
+			},
+		}
+		local t = controlData.checkbox
+		t.name = lookup[str].name
+		t.tooltip = lookup[str].tooltip
+
+		return t
+	end
+
+	local parent = ItemSaverDialog
+
+	--set so LAM doesn't break
+	parent.data = parent.data or {}
+	parent.data.registerForRefresh = false
+	parent.data.registerForDefaults = false
+
+	local editbox = LAMCreateControl["editbox"](parent, controlData.editbox, "ItemSaverDialogEditbox")
+	local iconpicker = LAMCreateControl["iconpicker"](parent, controlData.iconpicker, "ItemSaverDialogIconpicker")
+	local colorpicker = WINDOW_MANAGER:CreateControlFromVirtual("ItemSaverDialogColorpicker", parent, "IS_ColorPickerControl"):GetNamedChild("Content")
+	local header = LAMCreateControl["header"](parent, controlData.header, "ItemSaverDialogHeader")
+	local storeCheckbox = LAMCreateControl["checkbox"](parent, GetCheckboxData("store"), "ItemSaverDialogStoreCheckbox")
+	local deconstructionCheckbox = LAMCreateControl["checkbox"](parent, GetCheckboxData("deconstruction"), "ItemSaverDialogDeconstructionCheckbox")
+	local researchCheckbox = LAMCreateControl["checkbox"](parent, GetCheckboxData("research"), "ItemSaverDialogResearchCheckbox")
+	local guildStoreCheckbox = LAMCreateControl["checkbox"](parent, GetCheckboxData("guildStore"), "ItemSaverDialogGuildStoreCheckbox")
+	local mailCheckbox = LAMCreateControl["checkbox"](parent, GetCheckboxData("mail"), "ItemSaverDialogMailCheckbox")
+	local tradeCheckbox = LAMCreateControl["checkbox"](parent, GetCheckboxData("trade"), "ItemSaverDialogTradeCheckbox")
+
+	editbox:SetAnchor(TOPLEFT, ItemSaverDialogDivider, LEFT, 75, 16)
+	iconpicker:SetAnchor(TOPLEFT, editbox, BOTTOMLEFT, 0, 16)
+	colorpicker:SetAnchor(TOP, iconpicker, BOTTOM, 0, 16)
+	header:SetAnchor(TOPLEFT, iconpicker, BOTTOMLEFT, 0, 240)
+	storeCheckbox:SetAnchor(TOPLEFT, header, BOTTOMLEFT, 0, 16)
+	deconstructionCheckbox:SetAnchor(TOPLEFT, storeCheckbox, TOPRIGHT, 16)
+	researchCheckbox:SetAnchor(TOPLEFT, storeCheckbox, BOTTOMLEFT, 0, 16)
+	guildStoreCheckbox:SetAnchor(TOPLEFT, researchCheckbox, TOPRIGHT, 16)
+	mailCheckbox:SetAnchor(TOPLEFT, researchCheckbox, BOTTOMLEFT, 0, 16)
+	tradeCheckbox:SetAnchor(TOPLEFT, mailCheckbox, TOPRIGHT, 16)
+
+	--prehook to change marker texture color
+	local oldOnColorSet = COLOR_PICKER.OnColorSet
+	COLOR_PICKER.OnColorSet = function(COLOR_PICKER, r, g, b)
+		iconpicker.icon.color.r = r
+		iconpicker.icon.color.g = g
+		iconpicker.icon.color.b = b
+		iconpicker:SetColor(iconpicker.icon.color)
+
+		oldOnColorSet(COLOR_PICKER, r, g, b)
+	end
 end
-
-function ItemSaver_ColorPicker(self, button, upInside)
-    local markerColor = ItemSaverDialogIconColorPickerTexture
-    local r, g, b, a = markerColor:GetColor()
-
-    COLOR_PICKER:Show(ColorPickerCallback, r, g, b, a)
-    d("ksjgks")
-end]]
