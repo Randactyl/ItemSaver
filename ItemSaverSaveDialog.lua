@@ -1,8 +1,8 @@
-local function RGBAToHex(r, g, b, a)
+local function RGBToHex(r, g, b)
 	r = r <= 1 and r >= 0 and r or 0
 	g = g <= 1 and g >= 0 and g or 0
 	b = b <= 1 and b >= 0 and b or 0
-	return string.format("%02x%02x%02x%02x", r * 255, g * 255, b * 255, a * 255)
+	return string.format("%02x%02x%02x", r * 255, g * 255, b * 255)
 end
 
 local function handleDialog(dialog)
@@ -21,7 +21,7 @@ local function handleDialog(dialog)
 	local setName = editBox:GetText()
 
     setData.markerTexture = comboBox.m_selectedItemData["name"]
-    setData.markerColor = RGBAToHex(1, 1, 0, 1)
+    setData.markerColor = RGBToHex(1, 1, 0)
     if shopButton:GetState() == 1 then
         setData.filterStore = true
     else

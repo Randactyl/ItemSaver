@@ -107,7 +107,7 @@ end
 local function CreateMarkerControl(parent)
 	local control = parent:GetNamedChild("ItemSaver")
 	local bagId, slotIndex = GetInfoFromRowControl(parent)
-	local texturePath, r, g, b, a = ISSettings:GetMarkerInfo(bagId, slotIndex)
+	local texturePath, r, g, b = ISSettings:GetMarkerInfo(bagId, slotIndex)
 
 	if not control then
 		control = WINDOW_MANAGER:CreateControl(parent:GetName() .. "ItemSaver", parent, CT_TEXTURE)
@@ -116,7 +116,7 @@ local function CreateMarkerControl(parent)
 
 	if texturePath ~= nil then
 		control:SetTexture(texturePath)
-		control:SetColor(r, g, b, a)
+		control:SetColor(r, g, b)
 	end
 
 	if ItemSaver_IsItemSaved(bagId, slotIndex) then
@@ -248,7 +248,7 @@ local function ItemSaver_Loaded(eventCode, addonName)
 
 		if not isSoulGem and isSaved and ItemSaver_GetFilters(setName).research then
 			rowControl:SetMouseEnabled(false)
-			rowControl:GetNamedChild("Name"):SetColor(.75, 0, 0, 1)
+			rowControl:GetNamedChild("Name"):SetColor(.75, 0, 0)
 		else
 			rowControl:SetMouseEnabled(true)
 		end
