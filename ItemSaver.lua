@@ -319,6 +319,11 @@ function ItemSaver_GetMarkerOptions()
 	return ISSettings:GetMarkerOptions()
 end
 
+--returns table with key/value pairs of markerName/markerPath
+function ItemSaver_GetMarkerTextures()
+	return ISSettings:GetMarkerTextures()
+end
+
 --returns an alphabetically sorted array of the names of available save sets.
 function ItemSaver_GetSaveSets()
 	return ISSettings:GetSaveSets()
