@@ -275,6 +275,13 @@ local function ItemSaver_Loaded(eventCode, addonName)
 end
 EVENT_MANAGER:RegisterForEvent("ItemSaverLoaded", EVENT_ADD_ON_LOADED, ItemSaver_Loaded)
 
+local function handleEquipmentChange(eventCode, bagId, slotIndex)
+	if bagId ~= BAG_WORN then return end
+
+	RefreshEquipmentControls()
+end
+EVENT_MANAGER:RegisterForEvent("ItemSaverEquipChange", EVENT_INVENTORY_SINGLE_SLOT_UPDATE, handleEquipmentChange)
+
 --[[GLOBAL FUNCTIONS]]----------------------------------------------------------
 --returns true and the string set name if the item is saved. Returns false if
 --the item is not saved.
