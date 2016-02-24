@@ -138,7 +138,7 @@ function ItemSaver_InitializeDialog()
 			end,
 			setFunc = function(markerTexturePath) end,
 			maxColumns = 5,
-			visibleRows = zo_min(zo_max(zo_floor(#MARKER_TEXTURES/5), 1), 4.5),
+			visibleRows = zo_min(zo_max(zo_floor(#markerTexturePaths/5), 1), 4.5),
 			iconSize = 32,
 			defaultColor = ZO_ColorDef:New(1, 1, 0),
 			width = "full",

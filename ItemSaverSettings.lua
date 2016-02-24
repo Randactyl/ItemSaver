@@ -407,7 +407,7 @@ function ItemSaverSettings:CreateOptionsMenu()
 					name = GetString(SI_ITEMSAVER_MARKER_LABEL),
 					tooltip = GetString(SI_ITEMSAVER_MARKER_TOOLTIP),
 					choices = markerTexturePaths,
-					choicesTooltips = markerTextureNames, --(optional)
+					choicesTooltips = markerTextureNames,
 					getFunc = function()
 						local markerTextureName = setData.markerTexture
 
@@ -425,11 +425,10 @@ function ItemSaverSettings:CreateOptionsMenu()
 						end
 					end,
 					maxColumns = 5,
-					visibleRows = zo_min(zo_max(zo_floor(#MARKER_TEXTURES/5), 1), 4.5),
+					visibleRows = zo_min(zo_max(zo_floor(#markerTexturePaths/5), 1), 4.5),
 					iconSize = 32,
 					defaultColor = ZO_ColorDef:New(HexToRGB(setData.markerColor)),
 					width = "half",
-					--beforeShow = function(control, iconPicker) return preventShow end, --(optional)
 					reference = "IS_" .. setName .. "IconPicker",
 				},
 				[2] = {
