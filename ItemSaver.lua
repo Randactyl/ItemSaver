@@ -312,8 +312,8 @@ local function ItemSaver_Loaded(eventCode, addonName)
 end
 EVENT_MANAGER:RegisterForEvent("ItemSaverLoaded", EVENT_ADD_ON_LOADED, ItemSaver_Loaded)
 
-local function handleEquipmentChange(eventCode, bagId, slotIndex)
-	if bagId ~= BAG_WORN then return end
+local function handleEquipmentChange(eventCode, bagId, slotIndex, isNewItem, itemSoundCategory, inventoryUpdateReason)
+	if bagId ~= BAG_WORN or isNewItem or inventoryUpdateReason ~= 0 then return end
 
 	RefreshEquipmentControls()
 end
