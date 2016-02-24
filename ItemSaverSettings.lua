@@ -6,7 +6,8 @@ local libFilters = LibStub("libFilters")
 local MARKER_TEXTURES = {}
 local MARKER_OPTIONS = {}
 local TEXTURE_SIZE = 32
-local ANCHOR_OPTIONS = { "Top left", "Top right", "Bottom left", "Bottom right", }
+local ANCHOR_OPTIONS = {"Top Left", "Top", "Top Right", "Right", "Bottom Right",
+  "Bottom", "Bottom Left", "Left", "Center"}
 local SIGNED_INT_MAX = 2^32 / 2 - 1
 local INT_MAX = 2^32
 local DEFER_SUBMENU_OPTIONS = { "1", "2", "3", "4", "5", }
@@ -246,7 +247,7 @@ end
 
 function ItemSaverSettings:Initialize()
 	local defaults = {
-		markerAnchor = TOPRIGHT,
+		markerAnchor = TOPLEFT,
 		savedSetInfo = {},
 		savedItems = {},
 		deferSubmenu = false,
@@ -322,15 +323,25 @@ function ItemSaverSettings:CreateOptionsMenu()
 			getFunc = function()
 					local anchor = settings.markerAnchor
 					if anchor == TOPLEFT then return ANCHOR_OPTIONS[1] end
-					if anchor == TOPRIGHT then return ANCHOR_OPTIONS[2] end
-					if anchor == BOTTOMLEFT then return ANCHOR_OPTIONS[3] end
-					if anchor == BOTTOMRIGHT then return ANCHOR_OPTIONS[4] end
+					if anchor == TOP then return ANCHOR_OPTIONS[2] end
+					if anchor == TOPRIGHT then return ANCHOR_OPTIONS[3] end
+					if anchor == RIGHT then return ANCHOR_OPTIONS[4] end
+					if anchor == BOTTOMRIGHT then return ANCHOR_OPTIONS[5] end
+					if anchor == BOTTOM then return ANCHOR_OPTIONS[6] end
+					if anchor == BOTTOMLEFT then return ANCHOR_OPTIONS[7] end
+					if anchor == LEFT then return ANCHOR_OPTIONS[8] end
+					if anchor == CENTER then return ANCHOR_OPTIONS[9] end
 				end,
 			setFunc = function(value)
 					if value == ANCHOR_OPTIONS[1] then settings.markerAnchor = TOPLEFT end
-					if value == ANCHOR_OPTIONS[2] then settings.markerAnchor = TOPRIGHT end
-					if value == ANCHOR_OPTIONS[3] then settings.markerAnchor = BOTTOMLEFT end
-					if value == ANCHOR_OPTIONS[4] then settings.markerAnchor = BOTTOMRIGHT end
+					if value == ANCHOR_OPTIONS[2] then settings.markerAnchor = TOP end
+					if value == ANCHOR_OPTIONS[3] then settings.markerAnchor = TOPRIGHT end
+					if value == ANCHOR_OPTIONS[4] then settings.markerAnchor = RIGHT end
+					if value == ANCHOR_OPTIONS[5] then settings.markerAnchor = BOTTOMRIGHT end
+					if value == ANCHOR_OPTIONS[6] then settings.markerAnchor = BOTTOM end
+					if value == ANCHOR_OPTIONS[7] then settings.markerAnchor = BOTTOMLEFT end
+					if value == ANCHOR_OPTIONS[8] then settings.markerAnchor = LEFT end
+					if value == ANCHOR_OPTIONS[9] then settings.markerAnchor = CENTER end
 				end,
 		},
 		[4] = {
