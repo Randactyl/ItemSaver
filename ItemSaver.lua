@@ -146,7 +146,7 @@ end
 local function CreateMarkerControl(parent)
 	local anchorTarget = parent:GetNamedChild("Button")
 	if anchorTarget then
-		--inventory control
+		--list control
 		anchorTarget = anchorTarget:GetNamedChild("Icon")
 	end
 	if not anchorTarget then
@@ -177,15 +177,7 @@ local function CreateMarkerControl(parent)
 
 	local markerAnchor = ISSettings:GetMarkerAnchor()
 	local offsetX, offsetY = GetMarkerControlAnchorOffsets(markerAnchor)
-	--[[if parent:GetWidth() - parent:GetHeight() < 5 then
-		if parent:GetNamedChild("SellPrice") then
-			parent:GetNamedChild("SellPrice"):SetHidden(true)
-		end--what?
 
-	else
-		control:ClearAnchors()
-		control:SetAnchor(LEFT, anchorTarget, LEFT)
-	end]]
 	control:SetDrawTier(DT_HIGH)
 	control:ClearAnchors()
 	control:SetAnchor(markerAnchor, anchorTarget, markerAnchor, offsetX, offsetY)
@@ -193,21 +185,11 @@ local function CreateMarkerControl(parent)
 	return control
 end
 
-local function CreateMarkerControlForEquipment(parent)
-	local control = CreateMarkerControl(parent)
-	if not control then return end
-	--control:ClearAnchors()
-	--control:SetAnchor(ISSettings:GetMarkerAnchor(), parent, ISSettings:GetMarkerAnchor())
-	--control:SetDimensions(20, 20)
-	--control:SetDrawTier(1)
-end
-
 local function RefreshEquipmentControls()
-	d("refresh equipment controls")
 	for i = 1, ZO_Character:GetNumChildren() do
 		local child = ZO_Character:GetChild(i)
 		if child and child:GetName():find("ZO_CharacterEquipmentSlots") then
-			CreateMarkerControlForEquipment(ZO_Character:GetChild(i))
+			CreateMarkerControl(ZO_Character:GetChild(i))
 		end
 	end
 end
@@ -229,7 +211,7 @@ local function ItemSaver_Loaded(eventCode, addonName)
 	ISSettings = ItemSaverSettings:New()
 
 	ZO_PreHook("ZO_InventorySlot_ShowContextMenu", AddContextMenuOptionSoon)
-	ZO_PreHook("PlayOnEquippedAnimation", CreateMarkerControlForEquipment)
+	ZO_PreHook("PlayOnEquippedAnimation", CreateMarkerControl)
 
 	--hook each control to force a refresh and pick up changes to the marker control
 	ZO_PreHookHandler(BACKPACK, "OnEffectivelyShown", function()
