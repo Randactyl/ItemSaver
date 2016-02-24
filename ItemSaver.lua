@@ -106,7 +106,55 @@ local function AddContextMenuOptionSoon(rowControl)
 	end
 end
 
+local function GetMarkerControlAnchorOffsets(markerAnchor)
+	local offsetValue = 10
+	local offsets = {
+		[TOPLEFT] = {
+			x = -offsetValue,
+			y = -offsetValue,
+		},
+		[TOP] = {
+			y = -offsetValue,
+		},
+		[TOPRIGHT] = {
+			x = offsetValue,
+			y = -offsetValue,
+		},
+		[RIGHT] = {
+			x = offsetValue,
+		},
+		[BOTTOMRIGHT] = {
+			x = offsetValue,
+			y = offsetValue,
+		},
+		[BOTTOM] = {
+			y = offsetValue,
+		},
+		[BOTTOMLEFT] = {
+			x = -offsetValue,
+			y = offsetValue,
+		},
+		[LEFT] = {
+			x = -offsetValue,
+		},
+		[CENTER] = {},
+	}
+
+	return offsets[markerAnchor].x, offsets[markerAnchor].y
+end
+
 local function CreateMarkerControl(parent)
+	local anchorTarget = parent:GetNamedChild("Button")
+	if anchorTarget then
+		--inventory control
+		anchorTarget = anchorTarget:GetNamedChild("Icon")
+	end
+	if not anchorTarget then
+		--equipment control
+		anchorTarget = parent:GetNamedChild("Icon")
+	end
+	if not anchorTarget then return end
+
 	local control = parent:GetNamedChild("ItemSaver")
 	local bagId, slotIndex = GetInfoFromRowControl(parent)
 	local texturePath, r, g, b = ISSettings:GetMarkerInfo(bagId, slotIndex)
@@ -128,30 +176,34 @@ local function CreateMarkerControl(parent)
 	end
 
 	local markerAnchor = ISSettings:GetMarkerAnchor()
-	if parent:GetWidth() - parent:GetHeight() < 5 then
+	local offsetX, offsetY = GetMarkerControlAnchorOffsets(markerAnchor)
+	--[[if parent:GetWidth() - parent:GetHeight() < 5 then
 		if parent:GetNamedChild("SellPrice") then
 			parent:GetNamedChild("SellPrice"):SetHidden(true)
 		end--what?
-		control:SetDrawTier(DT_HIGH)
-		control:ClearAnchors()
-		control:SetAnchor(markerAnchor, parent, markerAnchor)
+
 	else
 		control:ClearAnchors()
-		control:SetAnchor(LEFT, parent, LEFT)
-	end
+		control:SetAnchor(LEFT, anchorTarget, LEFT)
+	end]]
+	control:SetDrawTier(DT_HIGH)
+	control:ClearAnchors()
+	control:SetAnchor(markerAnchor, anchorTarget, markerAnchor, offsetX, offsetY)
 
 	return control
 end
 
 local function CreateMarkerControlForEquipment(parent)
 	local control = CreateMarkerControl(parent)
-	control:ClearAnchors()
-	control:SetAnchor(ISSettings:GetMarkerAnchor(), parent, ISSettings:GetMarkerAnchor())
-	control:SetDimensions(20, 20)
-	control:SetDrawTier(1)
+	if not control then return end
+	--control:ClearAnchors()
+	--control:SetAnchor(ISSettings:GetMarkerAnchor(), parent, ISSettings:GetMarkerAnchor())
+	--control:SetDimensions(20, 20)
+	--control:SetDrawTier(1)
 end
 
 local function RefreshEquipmentControls()
+	d("refresh equipment controls")
 	for i = 1, ZO_Character:GetNumChildren() do
 		local child = ZO_Character:GetChild(i)
 		if child and child:GetName():find("ZO_CharacterEquipmentSlots") then
