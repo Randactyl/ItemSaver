@@ -2,24 +2,23 @@ This Add-on is not created by, affiliated with or sponsored by ZeniMax Media Inc
 
 ---
 
-
-
 This started as a simple mod that allowed you to place a little marker on your items so you could remember to not accidentally sell or deconstruct them.
 
 With Item Saver 2.0.0.0, that simple functionality is extended with some awesome new features:
  - Choose to filter marked items from any combination of vendors, the deconstruction list, the research list, the guild store tell tab, the send mail window, and the trading window.
- - Create as many different sets of markers as you would like, all with their own marker texture, color, and filtering rules.
+ - Create as many different sets of items as you like, all with their own marker texture, color, and filtering rules.
  - Add your own marker textures to use for Item Saver sets (details below).
 
 Full feature list:
  - Create a new item set with the "+ Create Set" context menu option.
  - Choose a set name, marker, color, and filters.
  - Choose your default save set.
- - Keybind for saving items to the default sets.
- - Choose marker position if using [Inventory Grid View](http://www.esoui.com/downloads/info65-InventoryGridView.html).
+ - Keybind for saving items to the default set.
+ - Choose marker position.
  - Item sets are listed in a submenu when right clicking an item.
  - The context submenu can be deferred until there are more than a specified number of sets created (1 - 5).
  - Edit created sets including the marker properties and which filters are active. These will update immediately without needing a UI reload.
+ - Quickly clear all items from a set.
  - Delete sets you no longer need.
 
 ---
@@ -42,6 +41,9 @@ function ItemSaver_GetFilters(setName)
 function ItemSaver_GetMarkerOptions()
 --returns array of the names of available markers.
 
+function ItemSaver_GetMarkerTextures()
+--returns table with key/value pairs of markerName/markerPath
+
 function ItemSaver_GetSaveSets()
 --returns an alphabetically sorted array of the names of available save sets.
 ```
@@ -54,6 +56,7 @@ There are code examples in the markertextures folder in this directory.
 
 You may submit your filters as plugins for Item Saver on ESOUI.
 Do this by:
+
 1. Go to http://www.esoui.com/downloads/info300-ItemSaver.html
 2. Click on "Other Files" between "Change Log" and "Comments"
 3. Click on "Upload Optional Addon"
@@ -69,7 +72,7 @@ Do this by:
 
 Remember to include all readme and disclaimer information required by ZOS.
 
-Your addon manifest must look similar to the following:
+Your addon manifest should look similar to the following:
 
     ## Title: Item Saver - My Marker Texture
     ## Author: Randactyl
