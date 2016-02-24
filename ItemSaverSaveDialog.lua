@@ -26,7 +26,7 @@ local function handleDialog(dialog)
 			setData.markerTexture = name
 		end
 	end
-    setData.markerColor = RGBToHex(COLOR_PICKER:GetColors())
+    setData.markerColor = RGBToHex(IS_COLOR_PICKER:GetColors())
 
     setData.filterStore = storeCheckbox.value
     setData.filterDeconstruction = deconstructionCheckbox.value
@@ -43,12 +43,12 @@ local function SetupDialog(dialog)
 	ItemSaverDialogEditbox:UpdateValue()
 	ItemSaverDialogIconpicker:UpdateValue()
 
-	--local colorpicker = ItemSaverDialogColorpickerContent
-	COLOR_PICKER.initialR = 1
-	COLOR_PICKER.initialG = 1
-	COLOR_PICKER.initialB = 0
-	COLOR_PICKER:SetColor(1, 1, 0)
-	COLOR_PICKER.previewInitialTexture:SetColor(1, 1, 0)
+	local colorpicker = ItemSaverDialogColorpickerContent
+	IS_COLOR_PICKER.initialR = 1
+	IS_COLOR_PICKER.initialG = 1
+	IS_COLOR_PICKER.initialB = 0
+	IS_COLOR_PICKER:SetColor(1, 1, 0)
+	IS_COLOR_PICKER.previewInitialTexture:SetColor(1, 1, 0)
 
 	ItemSaverDialogStoreCheckbox:UpdateValue()
 	ItemSaverDialogDeconstructionCheckbox:UpdateValue()
@@ -219,13 +219,13 @@ function ItemSaver_InitializeDialog()
 	tradeCheckbox:SetAnchor(TOPLEFT, mailCheckbox, TOPRIGHT, 16)
 
 	--prehook to change marker texture color
-	local oldOnColorSet = COLOR_PICKER.OnColorSet
-	COLOR_PICKER.OnColorSet = function(COLOR_PICKER, r, g, b)
+	local oldOnColorSet = IS_COLOR_PICKER.OnColorSet
+	IS_COLOR_PICKER.OnColorSet = function(IS_COLOR_PICKER, r, g, b)
 		iconpicker.icon.color.r = r
 		iconpicker.icon.color.g = g
 		iconpicker.icon.color.b = b
 		iconpicker:SetColor(iconpicker.icon.color)
 
-		oldOnColorSet(COLOR_PICKER, r, g, b)
+		oldOnColorSet(IS_COLOR_PICKER, r, g, b)
 	end
 end

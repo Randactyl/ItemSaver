@@ -2,10 +2,71 @@
 	<Controls>
 		<!--inherits="ZO_CustomDialogBase"-->
 		<Control name="IS_ColorPickerControl" virtual="true">
-            <Dimensions x="512" y="256" />
+            <Dimensions x="192" y="192" />
 
             <OnInitialized>
-                ZO_ColorPicker_OnInitialized(self)
+				local oldInit = ZO_ColorPicker.Initialize
+
+				ZO_ColorPicker.Initialize = function(self, control)
+					self.control = control
+					local content = self.control:GetNamedChild("Content")
+					self.content = content
+					self.colorSelect = content:GetNamedChild("ColorSelect")
+					self.colorSelectThumb = self.colorSelect:GetNamedChild("Thumb")
+
+					self.colorSelect:SetColorWheelThumbTextureControl(self.colorSelectThumb)
+
+					self.valueSlider = content:GetNamedChild("Value")
+					self.valueSlider:GetThumbTextureControl():SetDrawLayer(3)
+					self.valueTexture = self.valueSlider:GetNamedChild("Texture")
+
+					self.alphaLabel = content:GetNamedChild("AlphaLabel")
+					self.alphaSlider = content:GetNamedChild("Alpha")
+					self.alphaSlider:GetThumbTextureControl():SetDrawLayer(3)
+					self.alphaTexture = self.alphaSlider:GetNamedChild("Texture")
+
+					local preview = content:GetNamedChild("Preview")
+					self.previewInitialTexture = preview:GetNamedChild("TextureBottom")
+					self.previewCurrentTexture = preview:GetNamedChild("TextureTop")
+
+					local function SetColorFromSpinner(r, g, b, a)
+						if not self.isUpdatingColors then
+							self:SetColor(r, g, b, a)
+						end
+					end
+
+					local spinners = content:GetNamedChild("Spinners")
+					self.redSpinner = ZO_Spinner:New(spinners:GetNamedChild("Red"), 0, 255)
+					self.redSpinner:RegisterCallback("OnValueChanged", function(value)
+						local r, g, b, a = self:GetColors()
+						SetColorFromSpinner(value / 255, g, b, a)
+					end)
+					self.redSpinner:SetNormalColor(ZO_ColorDef:New(1, .2, .2, 1))
+
+					self.greenSpinner = ZO_Spinner:New(spinners:GetNamedChild("Green"), 0, 255)
+					self.greenSpinner:RegisterCallback("OnValueChanged", function(value)
+						local r, g, b, a = self:GetColors()
+						SetColorFromSpinner(r, value / 255, b, a)
+					end)
+					self.greenSpinner:SetNormalColor(ZO_ColorDef:New(.2, 1, .2, 1))
+
+					self.blueSpinner = ZO_Spinner:New(spinners:GetNamedChild("Blue"), 0, 255)
+					self.blueSpinner:RegisterCallback("OnValueChanged", function(value)
+						local r, g, b, a = self:GetColors()
+						SetColorFromSpinner(r, g, value / 255, a)
+					end)
+					self.blueSpinner:SetNormalColor(ZO_ColorDef:New(.2, .2, 1, 1))
+
+					self.alphaSpinner = ZO_Spinner:New(spinners:GetNamedChild("Alpha"), 0, 255)
+					self.alphaSpinner:RegisterCallback("OnValueChanged", function(value)
+						local r, g, b, a = self:GetColors()
+						SetColorFromSpinner(r, g, b, value / 255)
+					end)
+				end
+
+                IS_COLOR_PICKER = ZO_ColorPicker:New(self)
+
+				ZO_ColorPicker.Initialize = oldInit
             </OnInitialized>
             <Controls>
                 <Control name="$(parent)Content">
@@ -18,7 +79,7 @@
                             <Dimensions x="128" y="128" />
 
                             <OnColorSelected>
-                                COLOR_PICKER:OnColorSet(r, g, b)
+                                IS_COLOR_PICKER:OnColorSet(r, g, b)
                             </OnColorSelected>
 
                             <Controls>
@@ -61,7 +122,7 @@
 
                             <OnValueChanged>
                                 if eventReason == EVENT_REASON_HARDWARE then
-                                    COLOR_PICKER:OnValueSet(1 - value)
+                                    IS_COLOR_PICKER:OnValueSet(1 - value)
                                 end
                             </OnValueChanged>
                         </Slider>
@@ -70,7 +131,7 @@
                             <Anchor point="TOP" relativeTo="$(parent)ColorSelect" relativePoint="BOTTOM" offsetY="15" />
                             <OnValueChanged>
                                 if eventReason == EVENT_REASON_HARDWARE then
-                                    COLOR_PICKER:OnAlphaSet(value)
+                                    IS_COLOR_PICKER:OnAlphaSet(value)
                                 end
                             </OnValueChanged>
                         </Slider>
