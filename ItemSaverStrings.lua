@@ -1,14 +1,25 @@
 local strings = {
 	["de"] = {
         ["SI_ITEMSAVER_ADDON_NAME"] = "Item Saver",
+		["SI_ITEMSAVER_RELOAD_UI_WARNING"] = "UI wird neu geladen",
 
         ["SI_ITEMSAVER_GENERAL_OPTIONS_HEADER"] = "Allgemeine Optionen",
 
 		["SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_LABEL"] = "Default Set",
 		["SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_TOOLTIP"] = "This set will be used for the keybind, when deleting other sets, and when a set is not specified.",
-        ["SI_ITEMSAVER_RELOAD_UI_WARNING"] = "UI wird neu geladen",
+
         ["SI_ITEMSAVER_MARKER_ANCHOR_LABEL"] = "Markierungsposition",
         ["SI_ITEMSAVER_MARKER_ANCHOR_TOOLTIP"] = "Position der Markierung bei geschützten Gegenständen",
+		["SI_ITEMSAVER_ANCHOR_LABEL_TOPLEFT"] = "Top Left",
+		["SI_ITEMSAVER_ANCHOR_LABEL_TOP"] = "Top",
+		["SI_ITEMSAVER_ANCHOR_LABEL_TOPRIGHT"] = "Top Right",
+		["SI_ITEMSAVER_ANCHOR_LABEL_RIGHT"] = "Right",
+		["SI_ITEMSAVER_ANCHOR_LABEL_BOTTOMRIGHT"] = "Bottom Right",
+		["SI_ITEMSAVER_ANCHOR_LABEL_BOTTOM"] = "Bottom",
+		["SI_ITEMSAVER_ANCHOR_LABEL_BOTTOMLEFT"] = "Bottom Left",
+		["SI_ITEMSAVER_ANCHOR_LABEL_LEFT"] = "Left",
+		["SI_ITEMSAVER_ANCHOR_LABEL_CENTER"] = "Center",
+
 		["SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_LABEL"] = "Defer Submenu Creation",
 		["SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_TOOLTIP"] = "Only use a submenu if there are more than the specified number of sets.",
 		["SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_LABEL"] = "Number of Sets",
@@ -61,14 +72,25 @@ local strings = {
     },
 	["en"] = {
 		["SI_ITEMSAVER_ADDON_NAME"] = "Item Saver",
+		["SI_ITEMSAVER_RELOAD_UI_WARNING"] = "Will reload UI",
 
 		["SI_ITEMSAVER_GENERAL_OPTIONS_HEADER"] = "General Options",
 
 		["SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_LABEL"] = "Default Set",
 		["SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_TOOLTIP"] = "This set will be used for the keybind, when deleting other sets, and when a set is not specified.",
-		["SI_ITEMSAVER_RELOAD_UI_WARNING"] = "Will reload UI",
+
 		["SI_ITEMSAVER_MARKER_ANCHOR_LABEL"] = "Marker Position",
 		["SI_ITEMSAVER_MARKER_ANCHOR_TOOLTIP"] = "Position of the saved item marker.",
+		["SI_ITEMSAVER_ANCHOR_LABEL_TOPLEFT"] = "Top Left",
+		["SI_ITEMSAVER_ANCHOR_LABEL_TOP"] = "Top",
+		["SI_ITEMSAVER_ANCHOR_LABEL_TOPRIGHT"] = "Top Right",
+		["SI_ITEMSAVER_ANCHOR_LABEL_RIGHT"] = "Right",
+		["SI_ITEMSAVER_ANCHOR_LABEL_BOTTOMRIGHT"] = "Bottom Right",
+		["SI_ITEMSAVER_ANCHOR_LABEL_BOTTOM"] = "Bottom",
+		["SI_ITEMSAVER_ANCHOR_LABEL_BOTTOMLEFT"] = "Bottom Left",
+		["SI_ITEMSAVER_ANCHOR_LABEL_LEFT"] = "Left",
+		["SI_ITEMSAVER_ANCHOR_LABEL_CENTER"] = "Center",
+
 		["SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_LABEL"] = "Defer Submenu Creation",
 		["SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_TOOLTIP"] = "Only use a submenu if there are more than the specified number of sets.",
 		["SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_LABEL"] = "Number of Sets",

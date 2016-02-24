@@ -6,8 +6,17 @@ local libFilters = LibStub("libFilters")
 local MARKER_TEXTURES = {}
 local MARKER_OPTIONS = {}
 local TEXTURE_SIZE = 32
-local ANCHOR_OPTIONS = {"Top Left", "Top", "Top Right", "Right", "Bottom Right",
-  "Bottom", "Bottom Left", "Left", "Center"}
+local ANCHOR_OPTIONS = {
+	GetString(SI_ITEMSAVER_ANCHOR_LABEL_TOPLEFT),
+	GetString(SI_ITEMSAVER_ANCHOR_LABEL_TOP),
+	GetString(SI_ITEMSAVER_ANCHOR_LABEL_TOPRIGHT),
+	GetString(SI_ITEMSAVER_ANCHOR_LABEL_RIGHT),
+	GetString(SI_ITEMSAVER_ANCHOR_LABEL_BOTTOMRIGHT),
+	GetString(SI_ITEMSAVER_ANCHOR_LABEL_BOTTOM),
+	GetString(SI_ITEMSAVER_ANCHOR_LABEL_BOTTOMLEFT),
+	GetString(SI_ITEMSAVER_ANCHOR_LABEL_LEFT),
+	GetString(SI_ITEMSAVER_ANCHOR_LABEL_CENTER),
+}
 local SIGNED_INT_MAX = 2^32 / 2 - 1
 local INT_MAX = 2^32
 local DEFER_SUBMENU_OPTIONS = { "1", "2", "3", "4", "5", }
