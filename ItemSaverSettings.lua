@@ -305,19 +305,14 @@ function ItemSaverSettings:CreateOptionsMenu()
 			type = "dropdown",
 			name = GetString(SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_LABEL),
 			tooltip = GetString(SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_TOOLTIP),
-			warning = GetString(SI_ITEMSAVER_RELOAD_UI_WARNING),
 			choices = self.GetSaveSets(),
 			getFunc = function() return settings.defaultSet end,
 			setFunc = function(value)
-					--enable if/when my LibAddonMenu fix is out
-					--WINDOW_MANAGER:GetControlByName("IS_" .. settings.defaultSet .. "DeleteButton").data.disabled = false
-					--WINDOW_MANAGER:GetControlByName("IS_" .. value .. "DeleteButton").data.disabled = true
+				WINDOW_MANAGER:GetControlByName("IS_" .. settings.defaultSet .. "DeleteButton").data.disabled = false
+				WINDOW_MANAGER:GetControlByName("IS_" .. value .. "DeleteButton").data.disabled = true
 
-					settings.defaultSet = value
-
-					--remove this if/when my LibAddonMenu fix is out
-					ReloadUI()
-				end,
+				settings.defaultSet = value
+			end,
 		},
 		[3] = {
 			type = "dropdown",
@@ -433,7 +428,6 @@ function ItemSaverSettings:CreateOptionsMenu()
 							iconPicker:SetColor(iconPicker.icon.color)
 
 							setData.markerColor = RGBToHex(r, g, b)
-							--icon:SetColor(r, g, b, 1)
 						end,
 					width = "half",
 				},
