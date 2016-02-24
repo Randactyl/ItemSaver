@@ -13,7 +13,7 @@ local DEFER_SUBMENU_OPTIONS = { "1", "2", "3", "4", "5", }
 
 local settings = nil
 
-local addonVersion = "2.1.1.0"
+local addonVersion = "2.2.0.0"
 -----------------------------
 --UTIL FUNCTIONS
 -----------------------------
