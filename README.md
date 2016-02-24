@@ -11,10 +11,10 @@ With Item Saver 2.0.0.0, that simple functionality is extended with some awesome
 
 Full feature list:
  - Create a new item set with the "+ Create Set" context menu option.
- - Choose a set name, marker, color, and filters.
+ - Choose your set's name, marker, color, and filters.
  - Choose your default save set.
  - Keybind for saving items to the default set.
- - Choose marker position.
+ - Choose one of nine possible marker positions.
  - Item sets are listed in a submenu when right clicking an item.
  - The context submenu can be deferred until there are more than a specified number of sets created (1 - 5).
  - Edit created sets including the marker properties and which filters are active. These will update immediately without needing a UI reload.
