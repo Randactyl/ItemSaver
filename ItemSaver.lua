@@ -58,8 +58,8 @@ local function GetInfoFromRowControl(rowControl)
 	--case to handle list dialog, list dialog uses index instead of slotIndex
 	--and bag instead of badId...?
 	if dataEntry and not bagId and not slotIndex then
-		bagId = rowControl.dataEntry.data.bag
-		slotIndex = rowControl.dataEntry.data.index
+		bagId = dataEntry.data.bag
+		slotIndex = dataEntry.data.index
 	end
 
 	return bagId, slotIndex
