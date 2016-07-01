@@ -4,7 +4,7 @@
 
 
 --Register LAM with LibStub
-local MAJOR, MINOR = "LibAddonMenu-2.0", 20.1
+local MAJOR, MINOR = "LibAddonMenu-2.0", 20.2
 local lam, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 if not lam then return end	--the same or newer version of this lib is already loaded into memory
 
@@ -43,7 +43,7 @@ local addonToOptionsMap = {}
 local optionsCreated = {}
 lam.widgets = lam.widgets or {}
 local widgets = lam.widgets
-lam.util = {}
+lam.util = lam.util or {}
 local util = lam.util
 
 local function GetDefaultValue(default)
