@@ -1,9 +1,12 @@
-local BACKPACK = ZO_PlayerInventoryBackpack
+local BACKPACK = ZO_PlayerInventoryList
 local QUICKSLOT = ZO_QuickSlotList
 local BANK = ZO_PlayerBankBackpack
 local GUILD_BANK = ZO_GuildBankBackpack
+local CRAFTBAG = ZO_CraftBagList
 local DECONSTRUCTION = ZO_SmithingTopLevelDeconstructionPanelInventoryBackpack
+local IMPROVEMENT = ZO_SmithingTopLevelImprovementPanelInventoryBackpack
 local ENCHANTING = ZO_EnchantingTopLevelInventoryBackpack
+local ALCHEMY = ZO_AlchemyTopLevelInventoryBackpack
 local LIST_DIALOG = ZO_ListDialog1List
 
 local ISSettings = nil
@@ -199,8 +202,11 @@ local function RefreshAll()
 	ZO_ScrollList_RefreshVisible(QUICKSLOT)
 	ZO_ScrollList_RefreshVisible(BANK)
 	ZO_ScrollList_RefreshVisible(GUILD_BANK)
+	ZO_ScrollList_RefreshVisible(CRAFTBAG)
 	ZO_ScrollList_RefreshVisible(DECONSTRUCTION)
+	ZO_ScrollList_RefreshVisible(IMPROVEMENT)
 	ZO_ScrollList_RefreshVisible(ENCHANTING)
+	ZO_ScrollList_RefreshVisible(ALCHEMY)
 	ZO_ScrollList_RefreshVisible(LIST_DIALOG)
 	RefreshEquipmentControls()
 end
@@ -276,9 +282,23 @@ local function ItemSaver_Loaded(eventCode, addonName)
 		CreateMarkerControl(rowControl)
 	end
 
+	--improvement hook
+	local hookedFunctions = IMPROVEMENT.dataTypes[1].setupCallback
+	IMPROVEMENT.dataTypes[1].setupCallback = function(rowControl, slot)
+		hookedFunctions(rowControl, slot)
+		CreateMarkerControl(rowControl)
+	end
+
 	--enchanting hook
 	local hookedFunctions = ENCHANTING.dataTypes[1].setupCallback
 	ENCHANTING.dataTypes[1].setupCallback = function(rowControl, slot)
+		hookedFunctions(rowControl, slot)
+		CreateMarkerControl(rowControl)
+	end
+
+	--alchemy hook
+	local hookedFunctions = ALCHEMY.dataTypes[1].setupCallback
+	ALCHEMY.dataTypes[1].setupCallback = function(rowControl, slot)
 		hookedFunctions(rowControl, slot)
 		CreateMarkerControl(rowControl)
 	end
