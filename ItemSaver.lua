@@ -333,37 +333,19 @@ function ItemSaver_ToggleItemSave(setName, bagIdOrItemId, slotIndex)
 
 	if bagIdOrItemId == nil then --keybind
 		local mouseOverControl = WINDOW_MANAGER:GetMouseOverControl()
-		--if is a backpack row or child of one
-		if mouseOverControl:GetName():find("^ZO_%a+Backpack%dRow%d%d*") then
-			--check if the control IS the row
-			if mouseOverControl:GetName():find("^ZO_%a+Backpack%dRow%d%d*$") then
-				local bagId, slotIndex = GetInfoFromRowControl(mouseOverControl)
 
-				returnVal = ISSettings:ToggleItemSave(setName, bagId, slotIndex)
-				RefreshAll()
-				return returnVal
-			else
-				mouseOverControl = mouseOverControl:GetParent()
-				--this SHOULD be the row control - if it isn't then idk how to handle it without going iterating through parents
-				--that shouldn't happen unless someone is doing something weird
-				if mouseOverControl:GetName():find("^ZO_%a+Backpack%dRow%d%d*$") then
-					local bagId, slotIndex = GetInfoFromRowControl(mouseOverControl)
+		bagIdOrItemId, slotIndex = GetInfoFromRowControl(mouseOverControl)
 
-					returnVal = ISSettings:ToggleItemSave(setName, bagId, slotIndex)
-					RefreshAll()
-					return returnVal
-				end
-			end
-		elseif mouseOverControl:GetName():find("^ZO_CharacterEquipmentSlots.+$") then
-			local bagId, slotIndex = GetInfoFromRowControl(mouseOverControl)
-
-			returnVal = ISSettings:ToggleItemSave(setName, bagId, slotIndex)
-			RefreshAll()
-			return returnVal
+		if not bagIdOrItemId then
+			mouseOverControl = mouseOverControl:GetParent()
+			bagIdOrItemId, slotIndex = GetInfoFromRowControl(mouseOverControl)
 		end
-	else --called by other addon
+	end
+
+	if bagIdOrItemId then
 		returnVal = ISSettings:ToggleItemSave(setName, bagIdOrItemId, slotIndex)
 		RefreshAll()
+
 		return returnVal
 	end
 end
