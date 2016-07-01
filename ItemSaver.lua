@@ -76,7 +76,7 @@ local function AddContextMenuOption(rowControl)
 				SetupSubmenu(bagId, slotIndex)
 			else
 				for _, setName in pairs(setNames) do
-					AddMenuItem(GetString(SI_ITEMSAVER_SAVE_TO) .. " \"" .. setName .. "\"", function()
+					AddCustomMenuItem(GetString(SI_ITEMSAVER_SAVE_TO) .. " \"" .. setName .. "\"", function()
 						ItemSaver_ToggleItemSave(setName, bagId, slotIndex)
 					end, MENU_ADD_OPTION_LABEL)
 				end
@@ -85,12 +85,8 @@ local function AddContextMenuOption(rowControl)
 			SetupSubmenu(bagId, slotIndex)
 		end
 	else
-		AddMenuItem(GetString(SI_ITEMSAVER_UNSAVE_ITEM), function()
+		AddCustomMenuItem(GetString(SI_ITEMSAVER_UNSAVE_ITEM), function()
 				ItemSaver_ToggleItemSave(nil, bagId, slotIndex)
-
-				--[[if GetItemSaverControl(rowControl) then
-					GetItemSaverControl(rowControl):SetHidden(true)
-				end]]
 			end, MENU_ADD_OPTION_LABEL)
 	end
 	ShowMenu()
