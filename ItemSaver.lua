@@ -65,6 +65,13 @@ local function GetInfoFromRowControl(rowControl)
 	return bagId, slotIndex
 end
 
+local function ShouldAddContextMenu()
+	return not (BACKPACK:IsHidden() and QUICKSLOT:IsHidden() and BANK:IsHidden()
+	  and GUILD_BANK:IsHidden() and CRAFTBAG:IsHidden()
+	  and DECONSTRUCTION:IsHidden() and IMPROVEMENT:IsHidden()
+	  and ENCHANTING:IsHidden() and ALCHEMY:IsHidden())
+end
+
 local function AddContextMenuOption(rowControl)
 	local bagId, slotIndex = GetInfoFromRowControl(rowControl)
 
@@ -94,12 +101,12 @@ end
 
 local function AddContextMenuOptionSoon(rowControl)
 	if rowControl:GetOwningWindow() == ZO_TradingHouse then return end
-	if BACKPACK:IsHidden() and QUICKSLOT:IsHidden() and BANK:IsHidden()
-	  and GUILD_BANK:IsHidden() and DECONSTRUCTION:IsHidden()
-	  and ENCHANTING:IsHidden() then return end
+	if not ShouldAddContextMenu() then return end
 
-	if rowControl:GetParent() ~= ZO_Character then
-		zo_callLater(function() AddContextMenuOption(rowControl:GetParent()) end, 50)
+	local parent = rowControl:GetParent()
+
+	if parent ~= ZO_Character then
+		zo_callLater(function() AddContextMenuOption(parent) end, 50)
 	elseif rowControl.stackCount > 0 then
 		zo_callLater(function() AddContextMenuOption(rowControl) end, 50)
 	end
