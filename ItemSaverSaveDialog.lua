@@ -2,12 +2,12 @@ local function RGBToHex(r, g, b)
 	r = r <= 1 and r >= 0 and r or 0
 	g = g <= 1 and g >= 0 and g or 0
 	b = b <= 1 and b >= 0 and b or 0
+
 	return string.format("%02x%02x%02x", r * 255, g * 255, b * 255)
 end
 
 local function handleDialog(dialog)
-	local MARKER_TEXTURES = ItemSaver_GetMarkerTextures()
-
+	local markerTextures = ItemSaver_GetMarkerTextures()
     local editbox = ItemSaverDialogEditbox
     local iconpicker = ItemSaverDialogIconpicker
     local storeCheckbox = ItemSaverDialogStoreCheckbox
@@ -16,18 +16,17 @@ local function handleDialog(dialog)
     local guildStoreCheckbox = ItemSaverDialogGuildStoreCheckbox
     local mailCheckbox = ItemSaverDialogMailCheckbox
     local tradeCheckbox = ItemSaverDialogTradeCheckbox
-
 	local setName = editbox.editbox:GetText()
 	local setData = {}
-
 	local texturePath = iconpicker.icon:GetTextureFileName()
-	for name, path in pairs(MARKER_TEXTURES) do
+
+	for name, path in pairs(markerTextures) do
 		if path == texturePath then
 			setData.markerTexture = name
 		end
 	end
-    setData.markerColor = RGBToHex(IS_COLOR_PICKER:GetColors())
 
+    setData.markerColor = RGBToHex(IS_COLOR_PICKER:GetColors())
     setData.filterStore = storeCheckbox.value
     setData.filterDeconstruction = deconstructionCheckbox.value
     setData.filterResearch = researchCheckbox.value
@@ -72,6 +71,7 @@ function ItemSaver_SetupDialog(self)
                 callback = function(self)
 					local setName = ItemSaverDialogEditbox.editbox:GetText()
 					local setExists = ItemSaver_GetFilters(setName)
+
 					if setName == "" then
 						d(GetString(SI_ITEMSAVER_MISSING_NAME_WARNING))
 					elseif setExists then
@@ -92,7 +92,7 @@ function ItemSaver_SetupDialog(self)
 end
 
 function ItemSaver_InitializeDialog()
-	local MARKER_TEXTURES = ItemSaver_GetMarkerTextures()
+	local markerTextures = ItemSaver_GetMarkerTextures()
 	local function pairsByKeys(t)
 		local a = {}
 		for n in pairs(t) do table.insert(a, n) end
@@ -108,7 +108,7 @@ function ItemSaver_InitializeDialog()
 	end
 	local function getMarkerTextureArrays()
 		local arr1, arr2 = {}, {}
-		for name, path in pairsByKeys(MARKER_TEXTURES) do
+		for name, path in pairsByKeys(markerTextures) do
 			table.insert(arr1, path)
 			table.insert(arr2, name)
 		end

@@ -1,11 +1,9 @@
 ItemSaverSettings = ZO_Object:Subclass()
 
-local LAM = LibStub("LibAddonMenu-2.0")
-local libFilters = LibStub("libFilters")
-
-local MARKER_TEXTURES = {}
-local MARKER_OPTIONS = {}
 local TEXTURE_SIZE = 32
+local SIGNED_INT_MAX = 2^32 / 2 - 1
+local INT_MAX = 2^32
+local DEFER_SUBMENU_OPTIONS = {"1", "2", "3", "4", "5"}
 local ANCHOR_OPTIONS = {
 	GetString(SI_ITEMSAVER_ANCHOR_LABEL_TOPLEFT),
 	GetString(SI_ITEMSAVER_ANCHOR_LABEL_TOP),
@@ -17,13 +15,14 @@ local ANCHOR_OPTIONS = {
 	GetString(SI_ITEMSAVER_ANCHOR_LABEL_LEFT),
 	GetString(SI_ITEMSAVER_ANCHOR_LABEL_CENTER),
 }
-local SIGNED_INT_MAX = 2^32 / 2 - 1
-local INT_MAX = 2^32
-local DEFER_SUBMENU_OPTIONS = { "1", "2", "3", "4", "5", }
 
+local lam = LibStub("LibAddonMenu-2.0")
+local libFilters = LibStub("libFilters")
+local markerTextures = {}
+local markerOptions = {}
 local settings = nil
-
 local addonVersion = "2.4.0.0"
+
 -----------------------------
 --UTIL FUNCTIONS
 -----------------------------
@@ -31,11 +30,13 @@ local function RGBToHex(r, g, b)
 	r = r <= 1 and r >= 0 and r or 0
 	g = g <= 1 and g >= 0 and g or 0
 	b = b <= 1 and b >= 0 and b or 0
+
 	return string.format("%02x%02x%02x", r * 255, g * 255, b * 255)
 end
 
 local function HexToRGB(hex)
     local rhex, ghex, bhex = string.sub(hex, 1, 2), string.sub(hex, 3, 4), string.sub(hex, 5, 6)
+	
     return tonumber(rhex, 16)/255, tonumber(ghex, 16)/255, tonumber(bhex, 16)/255
 end
 
@@ -43,11 +44,11 @@ local function SignItemId(itemId)
 	if itemId and itemId > SIGNED_INT_MAX then
 		itemId = itemId - INT_MAX
 	end
+
 	return itemId
 end
 
 local function GetInfoFromRowControl(rowControl)
-	--gotta do this in case deconstruction...
 	local dataEntry = rowControl.dataEntry
 	local bagId, slotIndex
 
@@ -63,8 +64,8 @@ local function GetInfoFromRowControl(rowControl)
 	--case to handle list dialog, list dialog uses index instead of slotIndex
 	--and bag instead of badId...?
 	if dataEntry and not bagId and not slotIndex then
-		bagId = rowControl.dataEntry.data.bag
-		slotIndex = rowControl.dataEntry.data.index
+		bagId = dataEntry.data.bag
+		slotIndex = dataEntry.data.index
 	end
 
 	return bagId, slotIndex
@@ -72,8 +73,11 @@ end
 
 local function pairsByKeys(t)
 	local a = {}
+
 	for n in pairs(t) do table.insert(a, n) end
+
 	table.sort(a)
+
 	local i = 0
 	local iter = function()
 		i = i + 1
@@ -81,167 +85,37 @@ local function pairsByKeys(t)
 		else return a[i], t[a[i]]
 		end
 	end
+
 	return iter
 end
 
-local function FilterSavedItemsForStore(slotOrBagId, slotIndex)
-	local bagId, saved, filtered
+local function ToggleFilter(setName, filterTagSuffix, filterType)
+	local filterTag = "ItemSaver_"..setName..filterTagSuffix
+	local isRegistered = libFilters:IsFilterRegistered(filterTag, filterType)
 
-	if slotIndex == nil then
-		bagId, slotIndex = GetInfoFromRowControl(slotOrBagId)
-	else
-		bagId = slotOrBagId
-	end
+	local function filterCallback(setName)
+		return function(slot)
+			local bagId, slotIndex = GetInfoFromRowControl(slot)
+			local _, savedSet = ItemSaver_IsItemSaved(bagId, slotIndex)
 
-	--will be set name if saved
-	saved = settings.savedItems[SignItemId(GetItemInstanceId(bagId, slotIndex))]
-
-	if saved then
-		filtered = settings.savedSetInfo[saved].filterStore
-		if filtered == true then
-			return false
+			return not (savedSet == setName)
 		end
 	end
-	return true
-end
 
-local function FilterSavedItemsForDeconstruction(slotOrBagId, slotIndex)
-	local bagId, saved, filtered
-
-	if slotIndex == nil then
-		bagId, slotIndex = GetInfoFromRowControl(slotOrBagId)
+	if not isRegistered then
+		libFilters:RegisterFilter(filterTag, filterType, filterCallback)
 	else
-		bagId = slotOrBagId
-	end
-
-	--will be set name if saved
-	saved = settings.savedItems[SignItemId(GetItemInstanceId(bagId, slotIndex))]
-
-	if saved then
-		filtered = settings.savedSetInfo[saved].filterDeconstruction
-		if filtered == true then
-			return false
-		end
-	end
-	return true
-end
-
-local function FilterSavedItemsForGuildStore(slotOrBagId, slotIndex)
-	local bagId, saved, filtered
-
-	if slotIndex == nil then
-		bagId, slotIndex = GetInfoFromRowControl(slotOrBagId)
-	else
-		bagId = slotOrBagId
-	end
-
-	--will be set name if saved
-	saved = settings.savedItems[SignItemId(GetItemInstanceId(bagId, slotIndex))]
-
-	if saved then
-		filtered = settings.savedSetInfo[saved].filterGuildStore
-		if filtered == true then
-			return false
-		end
-	end
-	return true
-end
-
-local function FilterSavedItemsForMail(slotOrBagId, slotIndex)
-	local bagId, saved, filtered
-
-	if slotIndex == nil then
-		bagId, slotIndex = GetInfoFromRowControl(slotOrBagId)
-	else
-		bagId = slotOrBagId
-	end
-
-	--will be set name if saved
-	saved = settings.savedItems[SignItemId(GetItemInstanceId(bagId, slotIndex))]
-
-	if saved then
-		filtered = settings.savedSetInfo[saved].filterMail
-		if filtered == true then
-			return false
-		end
-	end
-	return true
-end
-
-local function FilterSavedItemsForTrade(slotOrBagId, slotIndex)
-	local bagId, saved, filtered
-
-	if slotIndex == nil then
-		bagId, slotIndex = GetInfoFromRowControl(slotOrBagId)
-	else
-		bagId = slotOrBagId
-	end
-
-	--will be set name if saved
-	saved = settings.savedItems[SignItemId(GetItemInstanceId(bagId, slotIndex))]
-
-	if saved then
-		filtered = settings.savedSetInfo[saved].filterTrade
-		if filtered == true then
-			return false
-		end
-	end
-	return true
-end
-
-local function ToggleStoreFilter(setName)
-	local isRegistered = libFilters:IsFilterRegistered("ItemSaver_"..setName.."_Store", LAF_STORE)
-
-	if settings.savedSetInfo[setName].filterStore == true and not isRegistered then
-		libFilters:RegisterFilter("ItemSaver_"..setName.."_Store", LAF_STORE, FilterSavedItemsForStore)
-	else
-		libFilters:UnregisterFilter("ItemSaver_"..setName.."_Store", LAF_STORE)
+		libFilters:UnregisterFilter(filterTag, filterType)
 	end
 end
 
-local function ToggleDeconstructionFilter(setName)
-	local isRegistered = libFilters:IsFilterRegistered("ItemSaver_"..setName.."_Deconstruction", LAF_DECONSTRUCTION)
-	if settings.savedSetInfo[setName].filterDeconstruction == true and not isRegistered then
-		libFilters:RegisterFilter("ItemSaver_"..setName.."_Deconstruction", LAF_DECONSTRUCTION, FilterSavedItemsForDeconstruction)
-	else
-		libFilters:UnregisterFilter("ItemSaver_"..setName.."_Deconstruction", LAF_DECONSTRUCTION)
-	end
-end
-
-local function ToggleGuildStoreFilter(setName)
-	local isRegistered = libFilters:IsFilterRegistered("ItemSaver_"..setName.."_GuildStore", LAF_GUILDSTORE)
-	if settings.savedSetInfo[setName].filterGuildStore == true and not isRegistered then
-		libFilters:RegisterFilter("ItemSaver_"..setName.."_GuildStore", LAF_GUILDSTORE, FilterSavedItemsForGuildStore)
-	else
-		libFilters:UnregisterFilter("ItemSaver_"..setName.."_GuildStore", LAF_GUILDSTORE)
-	end
-end
-
-local function ToggleMailFilter(setName)
-	local isRegistered = libFilters:IsFilterRegistered("ItemSaver_"..setName.."_Mail", LAF_MAIL)
-	if settings.savedSetInfo[setName].filterMail == true and not isRegistered then
-		libFilters:RegisterFilter("ItemSaver_"..setName.."_Mail", LAF_MAIL, FilterSavedItemsForMail)
-	else
-		libFilters:UnregisterFilter("ItemSaver_"..setName.."_Mail", LAF_MAIL)
-	end
-end
-
-local function ToggleTradeFilter(setName)
-	local isRegistered = libFilters:IsFilterRegistered("ItemSaver_"..setName.."_Trade", LAF_TRADE)
-	if settings.savedSetInfo[setName].filterTrade == true and not isRegistered then
-		libFilters:RegisterFilter("ItemSaver_"..setName.."_Trade", LAF_TRADE, FilterSavedItemsForTrade)
-	else
-		libFilters:UnregisterFilter("ItemSaver_"..setName.."_Trade", LAF_TRADE)
-	end
-end
-
-local function ToggleAllFilters()
-	for setName,_ in pairs(settings.savedSetInfo) do
-		ToggleStoreFilter(setName)
-		ToggleDeconstructionFilter(setName)
-		ToggleGuildStoreFilter(setName)
-		ToggleMailFilter(setName)
-		ToggleTradeFilter(setName)
+local function ToggleFilters()
+	for setName, setInfo in pairs(settings.savedSetInfo) do
+		if setInfo.filterStore then ToggleFilter(setName, "_Store", LAF_STORE) end
+		if setInfo.filterDeconstruction then ToggleFilter(setName, "_Deconstruction", LAF_DECONSTRUCTION) end
+		if setInfo.filterGuildStore then ToggleFilter(setName, "_GuildStore", LAF_GUILDSTORE) end
+		if setInfo.filterMail then ToggleFilter(setName, "_Mail", LAF_MAIL) end
+		if setInfo.filterTrade then ToggleFilter(setName, "_Trade", LAF_TRADE) end
 	end
 end
 
@@ -281,22 +155,12 @@ function ItemSaverSettings:Initialize()
 		settings.shouldCreateDefault = false
 	end
 
-	ToggleAllFilters()
+	ToggleFilters()
 
     self:CreateOptionsMenu()
 end
 
 function ItemSaverSettings:CreateOptionsMenu()
-	local function getMarkerTextureArrays()
-		local arr1, arr2 = {}, {}
-		for name, path in pairsByKeys(MARKER_TEXTURES) do
-			table.insert(arr1, path)
-			table.insert(arr2, name)
-		end
-
-		return arr1, arr2
-	end
-
 	local panel = {
 		type = "panel",
 		name = "Item Saver",
@@ -330,28 +194,28 @@ function ItemSaverSettings:CreateOptionsMenu()
 			tooltip = GetString(SI_ITEMSAVER_MARKER_ANCHOR_TOOLTIP),
 			choices = ANCHOR_OPTIONS,
 			getFunc = function()
-					local anchor = settings.markerAnchor
-					if anchor == TOPLEFT then return ANCHOR_OPTIONS[1] end
-					if anchor == TOP then return ANCHOR_OPTIONS[2] end
-					if anchor == TOPRIGHT then return ANCHOR_OPTIONS[3] end
-					if anchor == RIGHT then return ANCHOR_OPTIONS[4] end
-					if anchor == BOTTOMRIGHT then return ANCHOR_OPTIONS[5] end
-					if anchor == BOTTOM then return ANCHOR_OPTIONS[6] end
-					if anchor == BOTTOMLEFT then return ANCHOR_OPTIONS[7] end
-					if anchor == LEFT then return ANCHOR_OPTIONS[8] end
-					if anchor == CENTER then return ANCHOR_OPTIONS[9] end
-				end,
+				local anchor = settings.markerAnchor
+				if anchor == TOPLEFT then return ANCHOR_OPTIONS[1] end
+				if anchor == TOP then return ANCHOR_OPTIONS[2] end
+				if anchor == TOPRIGHT then return ANCHOR_OPTIONS[3] end
+				if anchor == RIGHT then return ANCHOR_OPTIONS[4] end
+				if anchor == BOTTOMRIGHT then return ANCHOR_OPTIONS[5] end
+				if anchor == BOTTOM then return ANCHOR_OPTIONS[6] end
+				if anchor == BOTTOMLEFT then return ANCHOR_OPTIONS[7] end
+				if anchor == LEFT then return ANCHOR_OPTIONS[8] end
+				if anchor == CENTER then return ANCHOR_OPTIONS[9] end
+			end,
 			setFunc = function(value)
-					if value == ANCHOR_OPTIONS[1] then settings.markerAnchor = TOPLEFT end
-					if value == ANCHOR_OPTIONS[2] then settings.markerAnchor = TOP end
-					if value == ANCHOR_OPTIONS[3] then settings.markerAnchor = TOPRIGHT end
-					if value == ANCHOR_OPTIONS[4] then settings.markerAnchor = RIGHT end
-					if value == ANCHOR_OPTIONS[5] then settings.markerAnchor = BOTTOMRIGHT end
-					if value == ANCHOR_OPTIONS[6] then settings.markerAnchor = BOTTOM end
-					if value == ANCHOR_OPTIONS[7] then settings.markerAnchor = BOTTOMLEFT end
-					if value == ANCHOR_OPTIONS[8] then settings.markerAnchor = LEFT end
-					if value == ANCHOR_OPTIONS[9] then settings.markerAnchor = CENTER end
-				end,
+				if value == ANCHOR_OPTIONS[1] then settings.markerAnchor = TOPLEFT end
+				if value == ANCHOR_OPTIONS[2] then settings.markerAnchor = TOP end
+				if value == ANCHOR_OPTIONS[3] then settings.markerAnchor = TOPRIGHT end
+				if value == ANCHOR_OPTIONS[4] then settings.markerAnchor = RIGHT end
+				if value == ANCHOR_OPTIONS[5] then settings.markerAnchor = BOTTOMRIGHT end
+				if value == ANCHOR_OPTIONS[6] then settings.markerAnchor = BOTTOM end
+				if value == ANCHOR_OPTIONS[7] then settings.markerAnchor = BOTTOMLEFT end
+				if value == ANCHOR_OPTIONS[8] then settings.markerAnchor = LEFT end
+				if value == ANCHOR_OPTIONS[9] then settings.markerAnchor = CENTER end
+			end,
 		},
 		[4] = {
 			type = "checkbox",
@@ -371,20 +235,20 @@ function ItemSaverSettings:CreateOptionsMenu()
 			tooltip = GetString(SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_TOOLTIP),
 			choices = DEFER_SUBMENU_OPTIONS,
 			getFunc = function()
-					local num = settings.deferSubmenuNum
-					if num == 1 then return DEFER_SUBMENU_OPTIONS[1] end
-					if num == 2 then return DEFER_SUBMENU_OPTIONS[2] end
-					if num == 3 then return DEFER_SUBMENU_OPTIONS[3] end
-					if num == 4 then return DEFER_SUBMENU_OPTIONS[4] end
-					if num == 5 then return DEFER_SUBMENU_OPTIONS[5] end
-				end,
+				local num = settings.deferSubmenuNum
+				if num == 1 then return DEFER_SUBMENU_OPTIONS[1] end
+				if num == 2 then return DEFER_SUBMENU_OPTIONS[2] end
+				if num == 3 then return DEFER_SUBMENU_OPTIONS[3] end
+				if num == 4 then return DEFER_SUBMENU_OPTIONS[4] end
+				if num == 5 then return DEFER_SUBMENU_OPTIONS[5] end
+			end,
 			setFunc = function(value)
-					if value == DEFER_SUBMENU_OPTIONS[1] then settings.deferSubmenuNum = 1 end
-					if value == DEFER_SUBMENU_OPTIONS[2] then settings.deferSubmenuNum = 2 end
-					if value == DEFER_SUBMENU_OPTIONS[3] then settings.deferSubmenuNum = 3 end
-					if value == DEFER_SUBMENU_OPTIONS[4] then settings.deferSubmenuNum = 4 end
-					if value == DEFER_SUBMENU_OPTIONS[5] then settings.deferSubmenuNum = 5 end
-				end,
+				if value == DEFER_SUBMENU_OPTIONS[1] then settings.deferSubmenuNum = 1 end
+				if value == DEFER_SUBMENU_OPTIONS[2] then settings.deferSubmenuNum = 2 end
+				if value == DEFER_SUBMENU_OPTIONS[3] then settings.deferSubmenuNum = 3 end
+				if value == DEFER_SUBMENU_OPTIONS[4] then settings.deferSubmenuNum = 4 end
+				if value == DEFER_SUBMENU_OPTIONS[5] then settings.deferSubmenuNum = 5 end
+			end,
 			width = "half",
 			disabled = not settings.deferSubmenu,
 			reference = "IS_DeferSubmenuDropdown",
@@ -394,6 +258,17 @@ function ItemSaverSettings:CreateOptionsMenu()
 			name = GetString(SI_ITEMSAVER_SET_DATA_HEADER),
 		},
 	}
+
+	local function getMarkerTextureArrays()
+		local arr1, arr2 = {}, {}
+		for name, path in pairsByKeys(markerTextures) do
+			table.insert(arr1, path)
+			table.insert(arr2, name)
+		end
+
+		return arr1, arr2
+	end
+
 	for setName, setData in pairsByKeys(settings.savedSetInfo) do
 		local markerTexturePaths, markerTextureNames = getMarkerTextureArrays()
 
@@ -436,18 +311,18 @@ function ItemSaverSettings:CreateOptionsMenu()
 					name = GetString(SI_ITEMSAVER_TEXTURE_COLOR_LABEL),
 					tooltip = GetString(SI_ITEMSAVER_TEXTURE_COLOR_TOOLTIP),
 					getFunc = function()
-							local r, g, b = HexToRGB(setData.markerColor)
-							return r, g, b
-						end,
+						local r, g, b = HexToRGB(setData.markerColor)
+						return r, g, b
+					end,
 					setFunc = function(r, g, b)
-							local iconPicker = WINDOW_MANAGER:GetControlByName("IS_"..setName.."IconPicker")
-							iconPicker.icon.color.r = r
-							iconPicker.icon.color.g = g
-							iconPicker.icon.color.b = b
-							iconPicker:SetColor(iconPicker.icon.color)
+						local iconPicker = WINDOW_MANAGER:GetControlByName("IS_"..setName.."IconPicker")
+						iconPicker.icon.color.r = r
+						iconPicker.icon.color.g = g
+						iconPicker.icon.color.b = b
+						iconPicker:SetColor(iconPicker.icon.color)
 
-							setData.markerColor = RGBToHex(r, g, b)
-						end,
+						setData.markerColor = RGBToHex(r, g, b)
+					end,
 					width = "half",
 				},
 				[3] = {
@@ -456,9 +331,9 @@ function ItemSaverSettings:CreateOptionsMenu()
 					tooltip = GetString(SI_ITEMSAVER_FILTERS_STORE_TOOLTIP),
 					getFunc = function() return setData.filterStore end,
 					setFunc = function(value)
-							setData.filterStore = value
-							ToggleStoreFilter(setName)
-						end,
+						setData.filterStore = value
+						ToggleFilter(setName, "_Store", LAF_STORE)
+					end,
 					width = "half",
 				},
 				[4] = {
@@ -467,9 +342,9 @@ function ItemSaverSettings:CreateOptionsMenu()
 					tooltip = GetString(SI_ITEMSAVER_FILTERS_DECONSTRUCTION_TOOLTIP),
 					getFunc = function() return setData.filterDeconstruction end,
 					setFunc = function(value)
-							setData.filterDeconstruction = value
-							ToggleDeconstructionFilter(setName)
-						end,
+						setData.filterDeconstruction = value
+						ToggleFilter(setName, "_Deconstruction", LAF_DECONSTRUCTION)
+					end,
 					width = "half",
 				},
 				[5] = {
@@ -478,8 +353,8 @@ function ItemSaverSettings:CreateOptionsMenu()
 					tooltip = GetString(SI_ITEMSAVER_FILTERS_RESEARCH_TOOLTIP),
 					getFunc = function() return setData.filterResearch end,
 					setFunc = function(value)
-							setData.filterResearch = value
-						end,
+						setData.filterResearch = value
+					end,
 					width = "half",
 				},
 				[6] = {
@@ -488,9 +363,9 @@ function ItemSaverSettings:CreateOptionsMenu()
 					tooltip = GetString(SI_ITEMSAVER_FILTERS_GUILDSTORE_TOOLTIP),
 					getFunc = function() return setData.filterGuildStore end,
 					setFunc = function(value)
-							setData.filterGuildStore = value
-							ToggleGuildStoreFilter(setName)
-						end,
+						setData.filterGuildStore = value
+						ToggleFilter(setName, "_GuildStore", LAF_GUILDSTORE)
+					end,
 					width = "half",
 				},
 				[7] = {
@@ -499,9 +374,9 @@ function ItemSaverSettings:CreateOptionsMenu()
 					tooltip = GetString(SI_ITEMSAVER_FILTERS_MAIL_TOOLTIP),
 					getFunc = function() return setData.filterMail end,
 					setFunc = function(value)
-							setData.filterMail = value
-							ToggleMailFilter(setName)
-						end,
+						setData.filterMail = value
+						ToggleFilter(setName, "_Mail", LAF_MAIL)
+					end,
 					width = "half",
 				},
 				[8] = {
@@ -510,9 +385,9 @@ function ItemSaverSettings:CreateOptionsMenu()
 					tooltip = GetString(SI_ITEMSAVER_FILTERS_TRADE_TOOLTIP),
 					getFunc = function() return setData.filterTrade end,
 					setFunc = function(value)
-							setData.filterTrade = value
-							ToggleTradeFilter(setName)
-						end,
+						setData.filterTrade = value
+						ToggleFilter(setName, "_Trade", LAF_TRADE)
+					end,
 					width = "half",
 				},
 				[9] = {
@@ -557,8 +432,8 @@ function ItemSaverSettings:CreateOptionsMenu()
 		table.insert(optionsData, submenuData)
 	end
 
-	LAM:RegisterAddonPanel("ItemSaverSettingsPanel", panel)
-	LAM:RegisterOptionControls("ItemSaverSettingsPanel", optionsData)
+	lam:RegisterAddonPanel("ItemSaverSettingsPanel", panel)
+	lam:RegisterOptionControls("ItemSaverSettingsPanel", optionsData)
 end
 
 function ItemSaverSettings:GetMarkerAnchor()
@@ -566,12 +441,15 @@ function ItemSaverSettings:GetMarkerAnchor()
 end
 
 function ItemSaverSettings:GetMarkerInfo(bagId, slotIndex)
-	if self:IsItemSaved(bagId, slotIndex) then
-		local signedId = SignItemId(GetItemInstanceId(bagId, slotIndex))
-		local savedSet = settings.savedSetInfo[settings.savedItems[signedId]]
+	local signedId = SignItemId(GetItemInstanceId(bagId, slotIndex))
+	local setName = settings.savedItems[signedId]
 
-		return MARKER_TEXTURES[savedSet.markerTexture], HexToRGB(savedSet.markerColor)
+	if setName then
+		local savedSet = settings.savedSetInfo[setName]
+
+		return markerTextures[savedSet.markerTexture], HexToRGB(savedSet.markerColor)
 	end
+
 	return nil
 end
 
@@ -587,11 +465,13 @@ function ItemSaverSettings:IsItemSaved(bagIdOrItemId, slotIndex)
 	if settings.savedItems[signedId] then
 		return true, settings.savedItems[signedId]
 	end
+
 	return false
 end
 
 function ItemSaverSettings:ToggleItemSave(setName, bagIdOrItemId, slotIndex)
 	if not setName then setName = settings.defaultSet end
+
 	local signedId
 
 	if not slotIndex then --itemId
@@ -613,6 +493,7 @@ end
 
 function ItemSaverSettings:GetFilters(setName)
 	local setData = settings.savedSetInfo[setName]
+
 	if setData then
 		return {
 			store = setData.filterStore,
@@ -622,15 +503,15 @@ function ItemSaverSettings:GetFilters(setName)
 			mail = setData.filterMail,
 			trade = setData.filterTrade,
 		}
-	else return nil end
+	end
 end
 
 function ItemSaverSettings:GetMarkerOptions()
-	return MARKER_OPTIONS
+	return markerOptions
 end
 
 function ItemSaverSettings:GetMarkerTextures()
-	return MARKER_TEXTURES
+	return markerTextures
 end
 
 function ItemSaverSettings:GetSaveSets()
@@ -649,6 +530,7 @@ function ItemSaverSettings:GetSubmenuDeferredStatus()
 	if settings.deferSubmenu then
 		return settings.deferSubmenu, settings.deferSubmenuNum
 	end
+
 	return settings.deferSubmenu
 end
 
@@ -658,23 +540,25 @@ function ItemSaverSettings:AddSet(setName, setData)
 	end
 
 	settings.savedSetInfo[setName] = setData
-	ToggleStoreFilter(setName)
-	ToggleDeconstructionFilter(setName)
-	ToggleGuildStoreFilter(setName)
-	ToggleMailFilter(setName)
-	ToggleTradeFilter(setName)
+	ToggleFilter(setName, "_Store", LAF_STORE)
+	ToggleFilter(setName, "_Deconstruction", LAF_DECONSTRUCTION)
+	ToggleFilter(setName, "_GuildStore", LAF_GUILDSTORE)
+	ToggleFilter(setName, "_Mail", LAF_MAIL)
+	ToggleFilter(setName, "_Trade", LAF_TRADE)
 
 	return true
 end
 
 --returns true if the marker was successfully registered, false if it was not.
 function ItemSaver_RegisterMarker(markerInformation)
-	if MARKER_TEXTURES[markerInformation.markerName] then
+	local markerName = markerInformation.markerName
+
+	if markerTextures[markerName] then
 		return false
 	end
 
-	MARKER_TEXTURES[markerInformation.markerName] = markerInformation.texturePath
-	table.insert(MARKER_OPTIONS, markerInformation.markerName)
+	markerTextures[markerName] = markerInformation.texturePath
+	table.insert(markerOptions, markerName)
 
 	return true
 end
