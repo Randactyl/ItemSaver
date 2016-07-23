@@ -1,7 +1,7 @@
 ## Title: Item Saver
 ## Author: Randactyl, ingeniousclown
-## Version: 2.4.0.0
-## APIVersion: 100014
+## Version: 2.5.0.0
+## APIVersion: 100015 100016
 ## SavedVariables: ItemSaver_Settings
 
 lib\LibStub\LibStub.lua

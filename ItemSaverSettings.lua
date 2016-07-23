@@ -18,7 +18,7 @@ local libFilters = LibStub("libFilters")
 local markerTextures = {}
 local markerOptions = {}
 local settings = nil
-local addonVersion = "2.4.0.0"
+local addonVersion = "2.5.0.0"
 
 -----------------------------
 --UTIL FUNCTIONS
