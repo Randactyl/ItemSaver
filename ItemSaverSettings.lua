@@ -82,8 +82,17 @@ local function ToggleFilter(setName, filterTagSuffix, filterType)
 	local filterTag = "ItemSaver_"..setName..filterTagSuffix
 	local isRegistered = libFilters:IsFilterRegistered(filterTag, filterType)
 
-	local function filterCallback(slot)
-        local bagId, slotIndex = GetInfoFromRowControl(slot)
+	local function filterCallback(slotOrBagId, slotIndex)
+		local bagId
+
+		if type(slotOrBagId) == "number" then
+			if not slotIndex then return false end
+
+			bagId = slotOrBagId
+		else
+			bagId, slotIndex = GetInfoFromRowControl(slotOrBagId)
+		end
+
         local _, savedSet = ItemSaver_IsItemSaved(bagId, slotIndex)
 
         return not (savedSet == setName)
