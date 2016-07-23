@@ -108,7 +108,7 @@ local function ToggleFilter(setName, filterTagSuffix, filterType)
 end
 
 local function ToggleFilters()
-	for setName, setInfo in pairs(settings.savedSetInfo) do
+	for setName, _ in pairs(settings.savedSetInfo) do
 		if setInfo.filterStore then ToggleFilter(setName, "_Store", LAF_STORE) end
 		if setInfo.filterDeconstruction then ToggleFilter(setName, "_Deconstruction", LAF_DECONSTRUCTION) end
 		if setInfo.filterGuildStore then ToggleFilter(setName, "_GuildStore", LAF_GUILDSTORE) end
