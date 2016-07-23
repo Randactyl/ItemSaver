@@ -1,8 +1,5 @@
 ItemSaverSettings = ZO_Object:Subclass()
 
-local TEXTURE_SIZE = 32
-local SIGNED_INT_MAX = 2^32 / 2 - 1
-local INT_MAX = 2^32
 local DEFER_SUBMENU_OPTIONS = {"1", "2", "3", "4", "5"}
 local ANCHOR_OPTIONS = {
 	GetString(SI_ITEMSAVER_ANCHOR_LABEL_TOPLEFT),
@@ -38,14 +35,6 @@ local function HexToRGB(hex)
     local rhex, ghex, bhex = string.sub(hex, 1, 2), string.sub(hex, 3, 4), string.sub(hex, 5, 6)
 
     return tonumber(rhex, 16)/255, tonumber(ghex, 16)/255, tonumber(bhex, 16)/255
-end
-
-local function SignItemId(itemId)
-	if itemId and itemId > SIGNED_INT_MAX then
-		itemId = itemId - INT_MAX
-	end
-
-	return itemId
 end
 
 local function GetInfoFromRowControl(rowControl)
