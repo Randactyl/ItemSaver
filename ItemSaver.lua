@@ -315,28 +315,28 @@ EVENT_MANAGER:RegisterForEvent("ItemSaverEquipChange", EVENT_INVENTORY_SINGLE_SL
 --[[GLOBAL FUNCTIONS]]----------------------------------------------------------
 --returns true and the string set name if the item is saved. Returns false if
 --the item is not saved.
-function ItemSaver_IsItemSaved(bagIdOrItemId, slotIndex)
-	return ISSettings:IsItemSaved(bagIdOrItemId, slotIndex)
+function ItemSaver_IsItemSaved(bagIdOrUniqueId, slotIndex)
+	return ISSettings:IsItemSaved(bagIdOrUniqueId, slotIndex)
 end
 
 --returns true if item was saved successfully. Returns false if item was unsaved.
 --if setName is nil, the default set will be used.
-function ItemSaver_ToggleItemSave(setName, bagIdOrItemId, slotIndex)
+function ItemSaver_ToggleItemSave(setName, bagIdOrUniqueId, slotIndex)
 	local returnVal
 
-	if bagIdOrItemId == nil then --keybind
+	if bagIdOrUniqueId == nil then --keybind
 		local mouseOverControl = WINDOW_MANAGER:GetMouseOverControl()
 
-		bagIdOrItemId, slotIndex = GetInfoFromRowControl(mouseOverControl)
+		bagIdOrUniqueId, slotIndex = GetInfoFromRowControl(mouseOverControl)
 
-		if not bagIdOrItemId then
+		if not bagIdOrUniqueId then
 			mouseOverControl = mouseOverControl:GetParent()
-			bagIdOrItemId, slotIndex = GetInfoFromRowControl(mouseOverControl)
+			bagIdOrUniqueId, slotIndex = GetInfoFromRowControl(mouseOverControl)
 		end
 	end
 
-	if bagIdOrItemId then
-		returnVal = ISSettings:ToggleItemSave(setName, bagIdOrItemId, slotIndex)
+	if bagIdOrUniqueId then
+		returnVal = ISSettings:ToggleItemSave(setName, bagIdOrUniqueId, slotIndex)
 		RefreshAll()
 
 		return returnVal

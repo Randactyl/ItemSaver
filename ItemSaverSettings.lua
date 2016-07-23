@@ -36,7 +36,7 @@ end
 
 local function HexToRGB(hex)
     local rhex, ghex, bhex = string.sub(hex, 1, 2), string.sub(hex, 3, 4), string.sub(hex, 5, 6)
-	
+
     return tonumber(rhex, 16)/255, tonumber(ghex, 16)/255, tonumber(bhex, 16)/255
 end
 
@@ -108,7 +108,7 @@ local function ToggleFilter(setName, filterTagSuffix, filterType)
 end
 
 local function ToggleFilters()
-	for setName, _ in pairs(settings.savedSetInfo) do
+	for setName, setInfo in pairs(settings.savedSetInfo) do
 		if setInfo.filterStore then ToggleFilter(setName, "_Store", LAF_STORE) end
 		if setInfo.filterDeconstruction then ToggleFilter(setName, "_Deconstruction", LAF_DECONSTRUCTION) end
 		if setInfo.filterGuildStore then ToggleFilter(setName, "_GuildStore", LAF_GUILDSTORE) end
@@ -439,8 +439,8 @@ function ItemSaverSettings:GetMarkerAnchor()
 end
 
 function ItemSaverSettings:GetMarkerInfo(bagId, slotIndex)
-	local signedId = SignItemId(GetItemInstanceId(bagId, slotIndex))
-	local setName = settings.savedItems[signedId]
+	local uIdString = Id64ToString(GetItemUniqueId(bagId, slotIndex))
+	local setName = settings.savedItems[uIdString]
 
 	if setName then
 		local savedSet = settings.savedSetInfo[setName]
@@ -451,39 +451,39 @@ function ItemSaverSettings:GetMarkerInfo(bagId, slotIndex)
 	return nil
 end
 
-function ItemSaverSettings:IsItemSaved(bagIdOrItemId, slotIndex)
-	local signedId
+function ItemSaverSettings:IsItemSaved(bagIdOrUniqueId, slotIndex)
+	local uIdString
 
-	if not slotIndex then --itemId
-		signedId = SignItemId(bagIdOrItemId)
+	if not slotIndex then --uniqueId
+		uIdString = Id64ToString(bagIdOrUniqueId)
 	else --bagId
-		signedId = SignItemId(GetItemInstanceId(bagIdOrItemId, slotIndex))
+		uIdString = Id64ToString(GetItemUniqueId(bagIdOrUniqueId, slotIndex))
 	end
 
-	if settings.savedItems[signedId] then
-		return true, settings.savedItems[signedId]
+	if settings.savedItems[uIdString] then
+		return true, settings.savedItems[uIdString]
 	end
 
 	return false
 end
 
-function ItemSaverSettings:ToggleItemSave(setName, bagIdOrItemId, slotIndex)
+function ItemSaverSettings:ToggleItemSave(setName, bagIdOrUniqueId, slotIndex)
 	if not setName then setName = settings.defaultSet end
 
-	local signedId
+	local uIdString
 
-	if not slotIndex then --itemId
-		signedId = SignItemId(bagIdOrItemId)
+	if not slotIndex then --uniqueId
+		uIdString = Id64ToString(bagIdOrUniqueId)
 	else --bagId
-		signedId = SignItemId(GetItemInstanceId(bagIdOrItemId, slotIndex))
+		uIdString = Id64ToString(GetItemUniqueId(bagIdOrUniqueId, slotIndex))
 	end
 
-	if settings.savedItems[signedId] then
-		settings.savedItems[signedId] = nil
+	if settings.savedItems[uIdString] then
+		settings.savedItems[uIdString] = nil
 
 		return false
 	else
-		settings.savedItems[signedId] = setName
+		settings.savedItems[uIdString] = setName
 
 		return true
 	end
