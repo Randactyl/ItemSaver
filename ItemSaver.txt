@@ -1,6 +1,6 @@
 ## Title: Item Saver
 ## Author: Randactyl, ingeniousclown
-## Version: 3.0.0.0
+## Version: 3.0.1.0
 ## APIVersion: 100015 100016
 ## SavedVariables: ItemSaver_Settings
 
