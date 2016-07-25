@@ -20,8 +20,6 @@ util.libFilters:InitializeLibFilters()
 util.markerTextures = {}
 util.markerOptions = {}
 
-local settings = IS.settings
-
 function util.SignItemInstanceId(itemInstanceId)
     local SIGNED_INT_MAX = 2^32 / 2 - 1
     local INT_MAX = 2^32
