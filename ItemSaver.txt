@@ -1,6 +1,6 @@
 ## Title: Item Saver
 ## Author: Randactyl, ingeniousclown
-## Version: 2.5.1.0
+## Version: 3.0.0.0
 ## APIVersion: 100015 100016
 ## SavedVariables: ItemSaver_Settings
 
@@ -23,11 +23,13 @@ lib\LibAddonMenu-2.0\controls\texture.lua
 lib\LibAddonMenu-2.0\controls\iconpicker.lua
 lib\LibCustomTitles\LibCustomTitles.lua
 
-ItemSaverStrings.lua
-ItemSaverSettings.lua
-ItemSaverSaveDialog.lua
-ItemSaverSaveDialog.xml
-ItemSaver.lua
+strings.lua
+main.lua
+util.lua
+settings.lua
+dialog.lua
+dialog.xml
+API.lua
 
 bindings.xml
 

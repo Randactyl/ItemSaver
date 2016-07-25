@@ -1,66 +1,89 @@
-local function RGBToHex(r, g, b)
-	r = r <= 1 and r >= 0 and r or 0
-	g = g <= 1 and g >= 0 and g or 0
-	b = b <= 1 and b >= 0 and b or 0
+local IS = ItemSaver
+IS.dialog = {}
 
-	return string.format("%02x%02x%02x", r * 255, g * 255, b * 255)
-end
+local util = IS.util
+local dialog = IS.dialog
 
-local function handleDialog(dialog)
-	local markerTextures = ItemSaver_GetMarkerTextures()
-    local editbox = ItemSaverDialogEditbox
-    local iconpicker = ItemSaverDialogIconpicker
-    local storeCheckbox = ItemSaverDialogStoreCheckbox
-    local deconstructionCheckbox = ItemSaverDialogDeconstructionCheckbox
-    local researchCheckbox = ItemSaverDialogResearchCheckbox
-    local guildStoreCheckbox = ItemSaverDialogGuildStoreCheckbox
-    local mailCheckbox = ItemSaverDialogMailCheckbox
-    local tradeCheckbox = ItemSaverDialogTradeCheckbox
-	local setName = editbox.editbox:GetText()
-	local setData = {}
-	local texturePath = iconpicker.icon:GetTextureFileName()
+function dialog.SetupDialog(self)
+	local function acceptCallback()
+		local function handleDialog(dialog)
+			local markerTextures = ItemSaver_GetMarkerTextures()
+			local editbox = ItemSaverDialogEditbox
+			local saveTypeDropdown = ItemSaverDialogSaveTypeDropdown
+			local iconpicker = ItemSaverDialogIconpicker
+			local storeCheckbox = ItemSaverDialogStoreCheckbox
+			local deconstructionCheckbox = ItemSaverDialogDeconstructionCheckbox
+			local researchCheckbox = ItemSaverDialogResearchCheckbox
+			local guildStoreCheckbox = ItemSaverDialogGuildStoreCheckbox
+			local mailCheckbox = ItemSaverDialogMailCheckbox
+			local tradeCheckbox = ItemSaverDialogTradeCheckbox
+			local setName = editbox.editbox:GetText()
+			local texturePath = iconpicker.icon:GetTextureFileName()
+			local setData = {}
 
-	for name, path in pairs(markerTextures) do
-		if path == texturePath then
-			setData.markerTexture = name
+			local generalString = GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_GENERAL)
+			local dropdownSelection = saveTypeDropdown.dropdown.m_selectedItemText:GetText()
+			if dropdownSelection == generalString then
+				setData.areItemsUnique = false
+			else
+				setData.areItemsUnique = true
+			end
+
+			for name, path in pairs(markerTextures) do
+				if path == texturePath then
+					setData.markerTexture = name
+					break
+				end
+			end
+
+			setData.markerColor = util.RGBToHex(IS_COLOR_PICKER:GetColors())
+			setData.filterStore = storeCheckbox.value
+			setData.filterDeconstruction = deconstructionCheckbox.value
+			setData.filterResearch = researchCheckbox.value
+			setData.filterGuildStore = guildStoreCheckbox.value
+			setData.filterMail = mailCheckbox.value
+			setData.filterTrade = tradeCheckbox.value
+
+			if ItemSaver_AddSet(setName, setData) then
+				ItemSaver_ToggleItemSave(setName, dialog.data[1], dialog.data[2])
+			end
+		end
+
+		local setName = ItemSaverDialogEditbox.editbox:GetText()
+		local setExists = ItemSaver_GetFilters(setName)
+
+		if setName == "" then
+			d(GetString(SI_ITEMSAVER_MISSING_NAME_WARNING))
+		elseif setExists then
+			d(GetString(SI_ITEMSAVER_USED_NAME_WARNING))
+		else
+			handleDialog(self)
 		end
 	end
 
-    setData.markerColor = RGBToHex(IS_COLOR_PICKER:GetColors())
-    setData.filterStore = storeCheckbox.value
-    setData.filterDeconstruction = deconstructionCheckbox.value
-    setData.filterResearch = researchCheckbox.value
-	setData.filterGuildStore = guildStoreCheckbox.value
-	setData.filterMail = mailCheckbox.value
-	setData.filterTrade = tradeCheckbox.value
+	local function setupDialog(dialog)
+		ItemSaverDialogEditbox:UpdateValue()
+		ItemSaverDialogSaveTypeDropdown:UpdateValue()
+		ItemSaverDialogIconpicker:UpdateValue()
 
-    ItemSaver_AddSet(setName, setData)
-	ItemSaver_ToggleItemSave(setName, dialog.data[1], dialog.data[2])
-end
+		local colorpicker = ItemSaverDialogColorpickerContent
+		IS_COLOR_PICKER.initialR = 1
+		IS_COLOR_PICKER.initialG = 1
+		IS_COLOR_PICKER.initialB = 0
+		IS_COLOR_PICKER:SetColor(1, 1, 0)
+		IS_COLOR_PICKER.previewInitialTexture:SetColor(1, 1, 0)
 
-local function SetupDialog(dialog)
-	ItemSaverDialogEditbox:UpdateValue()
-	ItemSaverDialogIconpicker:UpdateValue()
+		ItemSaverDialogStoreCheckbox:UpdateValue()
+		ItemSaverDialogDeconstructionCheckbox:UpdateValue()
+		ItemSaverDialogResearchCheckbox:UpdateValue()
+		ItemSaverDialogGuildStoreCheckbox:UpdateValue()
+		ItemSaverDialogMailCheckbox:UpdateValue()
+		ItemSaverDialogTradeCheckbox:UpdateValue()
+	end
 
-	local colorpicker = ItemSaverDialogColorpickerContent
-	IS_COLOR_PICKER.initialR = 1
-	IS_COLOR_PICKER.initialG = 1
-	IS_COLOR_PICKER.initialB = 0
-	IS_COLOR_PICKER:SetColor(1, 1, 0)
-	IS_COLOR_PICKER.previewInitialTexture:SetColor(1, 1, 0)
-
-	ItemSaverDialogStoreCheckbox:UpdateValue()
-	ItemSaverDialogDeconstructionCheckbox:UpdateValue()
-	ItemSaverDialogResearchCheckbox:UpdateValue()
-	ItemSaverDialogGuildStoreCheckbox:UpdateValue()
-	ItemSaverDialogMailCheckbox:UpdateValue()
-	ItemSaverDialogTradeCheckbox:UpdateValue()
-end
-
-function ItemSaver_SetupDialog(self)
-    local info = {
+	local info = {
         customControl = self,
-        setup = SetupDialog,
+        setup = setupDialog,
         title = {
             text = SI_ITEMSAVER_ADDON_NAME,
         },
@@ -68,18 +91,7 @@ function ItemSaver_SetupDialog(self)
             [1] = {
                 control = GetControl(self, "Create"),
                 text = SI_DIALOG_ACCEPT,
-                callback = function(self)
-					local setName = ItemSaverDialogEditbox.editbox:GetText()
-					local setExists = ItemSaver_GetFilters(setName)
-
-					if setName == "" then
-						d(GetString(SI_ITEMSAVER_MISSING_NAME_WARNING))
-					elseif setExists then
-						d(GetString(SI_ITEMSAVER_USED_NAME_WARNING))
-					else
-						handleDialog(self)
-					end
-                end,
+                callback = acceptCallback,
             },
             [2] = {
                 control = GetControl(self, "Cancel"),
@@ -91,31 +103,8 @@ function ItemSaver_SetupDialog(self)
     ZO_Dialogs_RegisterCustomDialog("ITEMSAVER_SAVE", info)
 end
 
-function ItemSaver_InitializeDialog()
-	local markerTextures = ItemSaver_GetMarkerTextures()
-	local function pairsByKeys(t)
-		local a = {}
-		for n in pairs(t) do table.insert(a, n) end
-		table.sort(a)
-		local i = 0
-		local iter = function()
-			i = i + 1
-			if a[i] == nil then return nil
-			else return a[i], t[a[i]]
-			end
-		end
-		return iter
-	end
-	local function getMarkerTextureArrays()
-		local arr1, arr2 = {}, {}
-		for name, path in pairsByKeys(markerTextures) do
-			table.insert(arr1, path)
-			table.insert(arr2, name)
-		end
-
-		return arr1, arr2
-	end
-	local markerTexturePaths, markerTextureNames = getMarkerTextureArrays()
+function dialog.InitializeDialog()
+	local markerTexturePaths, markerTextureNames = util.GetMarkerTextureArrays()
 
 	local controlData = {
 		["editbox"] = {
@@ -125,6 +114,18 @@ function ItemSaver_InitializeDialog()
 			getFunc = function() end,
 			setFunc = function(text) end,
 			isMultiline = false,
+			width = "full",
+		},
+		["saveTypeDropdown"] = {
+			type = "dropdown",
+			name = GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_LABEL),
+			tooltip = GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_TOOLTIP),
+			choices = {GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_GENERAL),
+			  GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_UNIQUE)},
+			getFunc = function()
+				return GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_GENERAL)
+			end,
+			setFunc = function(value) end,
 			width = "full",
 		},
 		["iconpicker"] = {
@@ -197,6 +198,7 @@ function ItemSaver_InitializeDialog()
 	parent.data.registerForDefaults = false
 
 	local editbox = LAMCreateControl["editbox"](parent, controlData.editbox, "ItemSaverDialogEditbox")
+	local saveTypeDropdown = LAMCreateControl["dropdown"](parent, controlData.saveTypeDropdown, "ItemSaverDialogSaveTypeDropdown")
 	local iconpicker = LAMCreateControl["iconpicker"](parent, controlData.iconpicker, "ItemSaverDialogIconpicker")
 	local colorpicker = WINDOW_MANAGER:CreateControlFromVirtual("ItemSaverDialogColorpicker", parent, "IS_ColorPickerControl"):GetNamedChild("Content")
 	local header = LAMCreateControl["header"](parent, controlData.header, "ItemSaverDialogHeader")
@@ -208,7 +210,8 @@ function ItemSaver_InitializeDialog()
 	local tradeCheckbox = LAMCreateControl["checkbox"](parent, GetCheckboxData("trade"), "ItemSaverDialogTradeCheckbox")
 
 	editbox:SetAnchor(TOPLEFT, ItemSaverDialogDivider, LEFT, 75, 16)
-	iconpicker:SetAnchor(TOPLEFT, editbox, BOTTOMLEFT, 0, 16)
+	saveTypeDropdown:SetAnchor(TOPLEFT, editbox, BOTTOMLEFT, 0, 16)
+	iconpicker:SetAnchor(TOPLEFT, saveTypeDropdown, BOTTOMLEFT, 0, 16)
 	colorpicker:SetAnchor(TOP, iconpicker, BOTTOM, 0, 16)
 	header:SetAnchor(TOPLEFT, iconpicker, BOTTOMLEFT, 0, 240)
 	storeCheckbox:SetAnchor(TOPLEFT, header, BOTTOMLEFT, 0, 16)

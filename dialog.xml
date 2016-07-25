@@ -166,7 +166,7 @@
 
 		<TopLevelControl name="ItemSaverDialog" inherits="ZO_CustomDialogBase">
 			<OnInitialized>
-				ItemSaver_SetupDialog(self)
+				ItemSaver.dialog.SetupDialog(self)
 			</OnInitialized>
 
 			<Controls>
