@@ -8,6 +8,11 @@ function ItemSaver_AddSet(setName, setData)
 	return settings.AddSet(setName, setData)
 end
 
+--returns the default set name
+function ItemSaver_GetDefaultSet()
+	return settings.GetDefaultSet()
+end
+
 --if the given set exists, returns a table with the following keys: store,
 --deconstruction, research, guildStore, mail, trade.
 --each will have a value of true if they are filtered or false if they are not.
@@ -40,6 +45,12 @@ end
 --returns an alphabetically sorted array of the names of available save sets.
 function ItemSaver_GetSaveSets()
 	return settings.GetSaveSets()
+end
+
+--returns a table with the full info of the provided set name.
+--returns nil if the set doesn't exist.
+function ItemSaver_GetSetData(setName)
+	return settings.GetSetData(setName)
 end
 
 --returns true and the string set name if the item is saved. Returns false if

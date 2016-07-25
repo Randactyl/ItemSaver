@@ -388,7 +388,7 @@ function settings.InitializeSettings()
 end
 
 function settings.AddSet(setName, setData)
-	if setName == "" or vars.savedSetInfo[setName] then
+	if setName == "" or ItemSaver_GetSetData(setName) then
 		return false
 	end
 
@@ -402,8 +402,12 @@ function settings.AddSet(setName, setData)
 	return true
 end
 
+function settings.GetDefaultSet()
+	return vars.defaultSet
+end
+
 function settings.GetFilters(setName)
-	local setData = vars.savedSetInfo[setName]
+	local setData = ItemSaver_GetSetData(setName)
 
 	if setData then
 		return {
@@ -427,7 +431,7 @@ function settings.GetMarkerInfo(bagId, slotIndex)
 	local _, setName = ItemSaver_IsItemSaved(bagId, slotIndex)
 
 	if setName then
-		local savedSet = vars.savedSetInfo[setName]
+		local savedSet = ItemSaver_GetSetData(setName)
 
 		return util.markerTextures[savedSet.markerTexture], util.HexToRGB(savedSet.markerColor)
 	end
@@ -447,18 +451,22 @@ function settings.GetSaveSets()
 	return setNames
 end
 
+function settings.GetSetData(setName)
+	return vars.savedSetInfo[setName]
+end
+
 function settings.IsItemSaved(bagId, slotIndex)
 	local uIdString = Id64ToString(GetItemUniqueId(bagId, slotIndex))
 	local signedInstanceId = util.SignItemInstanceId(GetItemInstanceId(bagId, slotIndex))
 
 	if vars.savedItems[signedInstanceId] then
-		local setData = vars.savedSetInfo[vars.savedItems[signedInstanceId]]
+		local setData = ItemSaver_GetSetData(vars.savedItems[signedInstanceId])
 
 		if not setData.areItemsUnique then
 			return true, vars.savedItems[signedInstanceId]
 		end
 	elseif vars.savedItems[uIdString] then
-		local setData = vars.savedSetInfo[vars.savedItems[uIdString]]
+		local setData = ItemSaver_GetSetData(vars.savedItems[uIdString])
 		
 		if setData.areItemsUnique then
 			return true, vars.savedItems[uIdString]
@@ -481,10 +489,10 @@ function settings.ToggleItemSave(setName, bagId, slotIndex)
 		local isSaved
 		isSaved, setName = ItemSaver_IsItemSaved(bagId, slotIndex)
 
-		if not isSaved then setName = vars.defaultSet end
+		if not isSaved then setName = ItemSaver_GetDefaultSet() end
 	end
 
-	local areItemsUnique = vars.savedSetInfo[setName].areItemsUnique or false
+	local areItemsUnique = ItemSaver_GetSetData(setName).areItemsUnique or false
 	local id
 
 	if areItemsUnique then
