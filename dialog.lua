@@ -9,6 +9,7 @@ function dialog.SetupDialog(self)
 		local function handleDialog(dialog)
 			local markerTextures = ItemSaver_GetMarkerTextures()
 			local editbox = ItemSaverDialogEditbox
+			local saveTypeDropdown = ItemSaverDialogSaveTypeDropdown
 			local iconpicker = ItemSaverDialogIconpicker
 			local storeCheckbox = ItemSaverDialogStoreCheckbox
 			local deconstructionCheckbox = ItemSaverDialogDeconstructionCheckbox
@@ -19,6 +20,14 @@ function dialog.SetupDialog(self)
 			local setName = editbox.editbox:GetText()
 			local texturePath = iconpicker.icon:GetTextureFileName()
 			local setData = {}
+
+			local generalString = GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_GENERAL)
+			local dropdownSelection = saveTypeDropdown.dropdown.m_selectedItemText:GetText()
+			if dropdownSelection == generalString then
+				setData.areItemsUnique = false
+			else
+				setData.areItemsUnique = true
+			end
 
 			for name, path in pairs(markerTextures) do
 				if path == texturePath then
@@ -35,8 +44,9 @@ function dialog.SetupDialog(self)
 			setData.filterMail = mailCheckbox.value
 			setData.filterTrade = tradeCheckbox.value
 
-			ItemSaver_AddSet(setName, setData)
-			ItemSaver_ToggleItemSave(setName, dialog.data[1], dialog.data[2])
+			if ItemSaver_AddSet(setName, setData) then
+				ItemSaver_ToggleItemSave(setName, dialog.data[1], dialog.data[2])
+			end
 		end
 
 		local setName = ItemSaverDialogEditbox.editbox:GetText()
@@ -53,6 +63,7 @@ function dialog.SetupDialog(self)
 
 	local function setupDialog(dialog)
 		ItemSaverDialogEditbox:UpdateValue()
+		ItemSaverDialogSaveTypeDropdown:UpdateValue()
 		ItemSaverDialogIconpicker:UpdateValue()
 
 		local colorpicker = ItemSaverDialogColorpickerContent
@@ -103,6 +114,18 @@ function dialog.InitializeDialog()
 			getFunc = function() end,
 			setFunc = function(text) end,
 			isMultiline = false,
+			width = "full",
+		},
+		["saveTypeDropdown"] = {
+			type = "dropdown",
+			name = GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_LABEL),
+			tooltip = GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_TOOLTIP),
+			choices = {GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_GENERAL),
+			  GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_UNIQUE)},
+			getFunc = function()
+				return GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_GENERAL)
+			end,
+			setFunc = function(value) end,
 			width = "full",
 		},
 		["iconpicker"] = {
@@ -175,6 +198,7 @@ function dialog.InitializeDialog()
 	parent.data.registerForDefaults = false
 
 	local editbox = LAMCreateControl["editbox"](parent, controlData.editbox, "ItemSaverDialogEditbox")
+	local saveTypeDropdown = LAMCreateControl["dropdown"](parent, controlData.saveTypeDropdown, "ItemSaverDialogSaveTypeDropdown")
 	local iconpicker = LAMCreateControl["iconpicker"](parent, controlData.iconpicker, "ItemSaverDialogIconpicker")
 	local colorpicker = WINDOW_MANAGER:CreateControlFromVirtual("ItemSaverDialogColorpicker", parent, "IS_ColorPickerControl"):GetNamedChild("Content")
 	local header = LAMCreateControl["header"](parent, controlData.header, "ItemSaverDialogHeader")
@@ -186,7 +210,8 @@ function dialog.InitializeDialog()
 	local tradeCheckbox = LAMCreateControl["checkbox"](parent, GetCheckboxData("trade"), "ItemSaverDialogTradeCheckbox")
 
 	editbox:SetAnchor(TOPLEFT, ItemSaverDialogDivider, LEFT, 75, 16)
-	iconpicker:SetAnchor(TOPLEFT, editbox, BOTTOMLEFT, 0, 16)
+	saveTypeDropdown:SetAnchor(TOPLEFT, editbox, BOTTOMLEFT, 0, 16)
+	iconpicker:SetAnchor(TOPLEFT, saveTypeDropdown, BOTTOMLEFT, 0, 16)
 	colorpicker:SetAnchor(TOP, iconpicker, BOTTOM, 0, 16)
 	header:SetAnchor(TOPLEFT, iconpicker, BOTTOMLEFT, 0, 240)
 	storeCheckbox:SetAnchor(TOPLEFT, header, BOTTOMLEFT, 0, 16)

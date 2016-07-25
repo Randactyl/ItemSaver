@@ -48,7 +48,9 @@ local function addContextMenuOptionSoon(rowControl)
             AddCustomSubMenuItem(GetString(SI_ITEMSAVER_ADDON_NAME), entries)
         end
 
-        if not ItemSaver_IsItemSaved(bagId, slotIndex) then
+        local isSaved, setName = ItemSaver_IsItemSaved(bagId, slotIndex)
+
+        if not isSaved then
             local deferSubmenu, deferSubmenuNum = ItemSaver_IsSubmenuDeferred()
 
             if deferSubmenu then
@@ -66,7 +68,7 @@ local function addContextMenuOptionSoon(rowControl)
             end
         else
             AddCustomMenuItem(GetString(SI_ITEMSAVER_UNSAVE_ITEM), function()
-                ItemSaver_ToggleItemSave(nil, bagId, slotIndex)
+                ItemSaver_ToggleItemSave(setName, bagId, slotIndex)
             end, MENU_ADD_OPTION_LABEL)
         end
 

@@ -140,7 +140,7 @@ function util.CreateMarkerControl(parent)
         control:SetDrawTier(DT_HIGH)
     end
 
-    local bagId, slotIndex = util.GetInfoFromRowControl(parent) --
+    local bagId, slotIndex = util.GetInfoFromRowControl(parent)
     local texturePath, r, g, b = ItemSaver_GetMarkerInfo(bagId, slotIndex)
 
     --item isn't saved, don't continue

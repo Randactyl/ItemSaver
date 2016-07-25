@@ -44,6 +44,16 @@ end
 
 function settings.InitializeSettings()
 	local function createOptionsMenu()
+		local function clearSet(setName)
+			for savedItem, name in pairs(vars.savedItems) do
+				if name == setName then
+					vars.savedItems[savedItem] = nil
+				end
+			end
+
+			d(GetString(SI_ITEMSAVER_CLEAR_SET_CONFIRMATION) .. " " .. setName)
+		end
+
 		local ANCHOR_OPTIONS = {
 			GetString(SI_ITEMSAVER_ANCHOR_LABEL_TOPLEFT),
 			GetString(SI_ITEMSAVER_ANCHOR_LABEL_TOP),
@@ -56,6 +66,8 @@ function settings.InitializeSettings()
 			GetString(SI_ITEMSAVER_ANCHOR_LABEL_CENTER),
 		}
 		local DEFER_SUBMENU_OPTIONS = {"1", "2", "3", "4", "5"}
+		local SAVE_TYPE_OPTIONS = {GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_GENERAL),
+		  GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_UNIQUE)}
 
 		local panel = {
 			type = "panel",
@@ -164,6 +176,37 @@ function settings.InitializeSettings()
 				tooltip = nil,
 				controls = {
 					[1] = {
+						type = "dropdown",
+						name = GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_LABEL),
+						tooltip = GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_TOOLTIP),
+						choices = SAVE_TYPE_OPTIONS,
+						getFunc = function()
+							local areItemsUnique = setData.areItemsUnique or false
+
+							if areItemsUnique then return SAVE_TYPE_OPTIONS[2] end
+
+							return SAVE_TYPE_OPTIONS[1]
+						end,
+						setFunc = function(value)
+							--get new selection
+							local newSelection
+							if value == SAVE_TYPE_OPTIONS[1] then
+								newSelection = false
+							else
+								newSelection = true
+							end
+
+							--only clear the set if the user has set this before (migration)
+							if setData.areItemsUnique ~= nil then clearSet(setName) end
+
+							--set selection
+							setData.areItemsUnique = newSelection
+						end,
+						width = "full",
+						warning = GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_WARNING),
+						reference = "IS_" .. setName .. "SaveTypeDropdown",
+					},
+					[2] = {
 						type = "iconpicker",
 						name = GetString(SI_ITEMSAVER_MARKER_LABEL),
 						tooltip = GetString(SI_ITEMSAVER_MARKER_TOOLTIP),
@@ -192,7 +235,7 @@ function settings.InitializeSettings()
 						width = "half",
 						reference = "IS_" .. setName .. "IconPicker",
 					},
-					[2] = {
+					[3] = {
 						type = "colorpicker",
 						name = GetString(SI_ITEMSAVER_TEXTURE_COLOR_LABEL),
 						tooltip = GetString(SI_ITEMSAVER_TEXTURE_COLOR_TOOLTIP),
@@ -210,7 +253,7 @@ function settings.InitializeSettings()
 						end,
 						width = "half",
 					},
-					[3] = {
+					[4] = {
 						type = "checkbox",
 						name = GetString(SI_ITEMSAVER_FILTERS_STORE_LABEL),
 						tooltip = GetString(SI_ITEMSAVER_FILTERS_STORE_TOOLTIP),
@@ -221,7 +264,7 @@ function settings.InitializeSettings()
 						end,
 						width = "half",
 					},
-					[4] = {
+					[5] = {
 						type = "checkbox",
 						name = GetString(SI_ITEMSAVER_FILTERS_DECONSTRUCTION_LABEL),
 						tooltip = GetString(SI_ITEMSAVER_FILTERS_DECONSTRUCTION_TOOLTIP),
@@ -232,7 +275,7 @@ function settings.InitializeSettings()
 						end,
 						width = "half",
 					},
-					[5] = {
+					[6] = {
 						type = "checkbox",
 						name = GetString(SI_ITEMSAVER_FILTERS_RESEARCH_LABEL),
 						tooltip = GetString(SI_ITEMSAVER_FILTERS_RESEARCH_TOOLTIP),
@@ -242,7 +285,7 @@ function settings.InitializeSettings()
 						end,
 						width = "half",
 					},
-					[6] = {
+					[7] = {
 						type = "checkbox",
 						name = GetString(SI_ITEMSAVER_FILTERS_GUILDSTORE_LABEL),
 						tooltip = GetString(SI_ITEMSAVER_FILTERS_GUILDSTORE_TOOLTIP),
@@ -253,7 +296,7 @@ function settings.InitializeSettings()
 						end,
 						width = "half",
 					},
-					[7] = {
+					[8] = {
 						type = "checkbox",
 						name = GetString(SI_ITEMSAVER_FILTERS_MAIL_LABEL),
 						tooltip = GetString(SI_ITEMSAVER_FILTERS_MAIL_TOOLTIP),
@@ -264,7 +307,7 @@ function settings.InitializeSettings()
 						end,
 						width = "half",
 					},
-					[8] = {
+					[9] = {
 						type = "checkbox",
 						name = GetString(SI_ITEMSAVER_FILTERS_TRADE_LABEL),
 						tooltip = GetString(SI_ITEMSAVER_FILTERS_TRADE_TOOLTIP),
@@ -275,21 +318,13 @@ function settings.InitializeSettings()
 						end,
 						width = "half",
 					},
-					[9] = {
+					[10] = {
 						type = "button",
 						name = GetString(SI_ITEMSAVER_CLEAR_SET_BUTTON),
 						tooltip = GetString(SI_ITEMSAVER_CLEAR_SET_TOOLTIP),
-						func = function()
-							for savedItem, name in pairs(vars.savedItems) do
-								if name == setName then
-									vars.savedItems[savedItem] = nil
-								end
-							end
-
-							d(GetString(SI_ITEMSAVER_CLEAR_SET_CONFIRMATION) .. " " .. setName)
-						end,
+						func = function() clearSet(setName) end,
 					},
-					[10] = {
+					[11] = {
 						type = "button",
 						name = GetString(SI_ITEMSAVER_DELETE_SET_BUTTON),
 						tooltip = GetString(SI_ITEMSAVER_DELETE_SET_TOOLTIP),
@@ -388,7 +423,8 @@ end
 
 function settings.GetMarkerInfo(bagId, slotIndex)
 	local uIdString = Id64ToString(GetItemUniqueId(bagId, slotIndex))
-	local setName = vars.savedItems[uIdString]
+	local signedInstanceId = util.SignItemInstanceId(GetItemInstanceId(bagId, slotIndex))
+	local _, setName = ItemSaver_IsItemSaved(bagId, slotIndex)
 
 	if setName then
 		local savedSet = vars.savedSetInfo[setName]
@@ -411,17 +447,22 @@ function settings.GetSaveSets()
 	return setNames
 end
 
-function settings.IsItemSaved(bagIdOrUniqueId, slotIndex)
-	local uIdString
+function settings.IsItemSaved(bagId, slotIndex)
+	local uIdString = Id64ToString(GetItemUniqueId(bagId, slotIndex))
+	local signedInstanceId = util.SignItemInstanceId(GetItemInstanceId(bagId, slotIndex))
 
-	if not slotIndex then --uniqueId
-		uIdString = Id64ToString(bagIdOrUniqueId)
-	else --bagId
-		uIdString = Id64ToString(GetItemUniqueId(bagIdOrUniqueId, slotIndex))
-	end
+	if vars.savedItems[signedInstanceId] then
+		local setData = vars.savedSetInfo[vars.savedItems[signedInstanceId]]
 
-	if vars.savedItems[uIdString] then
-		return true, vars.savedItems[uIdString]
+		if not setData.areItemsUnique then
+			return true, vars.savedItems[signedInstanceId]
+		end
+	elseif vars.savedItems[uIdString] then
+		local setData = vars.savedSetInfo[vars.savedItems[uIdString]]
+		
+		if setData.areItemsUnique then
+			return true, vars.savedItems[uIdString]
+		end
 	end
 
 	return false
@@ -435,23 +476,29 @@ function settings.IsSubmenuDeferred()
 	return vars.deferSubmenu
 end
 
-function settings.ToggleItemSave(setName, bagIdOrUniqueId, slotIndex)
-	if not setName then setName = vars.defaultSet end
+function settings.ToggleItemSave(setName, bagId, slotIndex)
+	if not setName then
+		local isSaved
+		isSaved, setName = ItemSaver_IsItemSaved(bagId, slotIndex)
 
-	local uIdString
-
-	if not slotIndex then --uniqueId
-		uIdString = Id64ToString(bagIdOrUniqueId)
-	else --bagId
-		uIdString = Id64ToString(GetItemUniqueId(bagIdOrUniqueId, slotIndex))
+		if not isSaved then setName = vars.defaultSet end
 	end
 
-	if vars.savedItems[uIdString] then
-		vars.savedItems[uIdString] = nil
+	local areItemsUnique = vars.savedSetInfo[setName].areItemsUnique or false
+	local id
+
+	if areItemsUnique then
+		id = Id64ToString(GetItemUniqueId(bagId, slotIndex))
+	else
+		id = util.SignItemInstanceId(GetItemInstanceId(bagId, slotIndex))
+	end
+
+	if vars.savedItems[id] then
+		vars.savedItems[id] = nil
 
 		return false
 	else
-		vars.savedItems[uIdString] = setName
+		vars.savedItems[id] = setName
 
 		return true
 	end

@@ -98,6 +98,12 @@ local strings = {
 
 		["SI_ITEMSAVER_SET_DATA_HEADER"] = "Set Data",
 
+		["SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_LABEL"] = "Save Type",
+		["SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_TOOLTIP"] = "Changes the way items are saved to this set. General will mark all stacks of an item. Unique will mark only the selected stack and will persist if that item undergoes a change such as enchantment or improvement.",
+		["SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_WARNING"] = "Changing this option will clear all items in this set.",
+		["SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_GENERAL"] = "General",
+		["SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_UNIQUE"] = "Unique",
+
 		["SI_ITEMSAVER_MARKER_LABEL"] = "Marker Texture",
 		["SI_ITEMSAVER_MARKER_TOOLTIP"] = "Texture to use for the marker.",
 

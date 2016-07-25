@@ -44,8 +44,8 @@ end
 
 --returns true and the string set name if the item is saved. Returns false if
 --the item is not saved.
-function ItemSaver_IsItemSaved(bagIdOrUniqueId, slotIndex)
-	return settings.IsItemSaved(bagIdOrUniqueId, slotIndex)
+function ItemSaver_IsItemSaved(bagId, slotIndex)
+	return settings.IsItemSaved(bagId, slotIndex)
 end
 
 --returns true and the maximum number of sets that will be shown without a submenu
@@ -71,22 +71,22 @@ end
 
 --returns true if item was saved successfully. Returns false if item was unsaved.
 --if setName is nil, the default set will be used.
-function ItemSaver_ToggleItemSave(setName, bagIdOrUniqueId, slotIndex)
+function ItemSaver_ToggleItemSave(setName, bagId, slotIndex)
 	local returnVal
 
-	if bagIdOrUniqueId == nil then --keybind
+	if bagId == nil then --keybind
 		local mouseOverControl = WINDOW_MANAGER:GetMouseOverControl()
 
-		bagIdOrUniqueId, slotIndex = util.GetInfoFromRowControl(mouseOverControl)
+		bagId, slotIndex = util.GetInfoFromRowControl(mouseOverControl)
 
-		if not bagIdOrUniqueId then
+		if not bagId then
 			mouseOverControl = mouseOverControl:GetParent()
-			bagIdOrUniqueId, slotIndex = util.GetInfoFromRowControl(mouseOverControl)
+			bagId, slotIndex = util.GetInfoFromRowControl(mouseOverControl)
 		end
 	end
 
-	if bagIdOrUniqueId then
-		returnVal = settings.ToggleItemSave(setName, bagIdOrUniqueId, slotIndex)
+	if bagId then
+		returnVal = settings.ToggleItemSave(setName, bagId, slotIndex)
 		util.RefreshAll()
 
 		return returnVal
