@@ -122,19 +122,17 @@ local function initializeHooks()
 	end
 	local function newSetupCallbackForResearch(rowControl, slot)
 		newSetupCallback(rowControl, slot)
-
-		local data = rowControl.dataEntry.data
-		local isSoulGem = false
+        
 		local bagId, slotIndex = util.GetInfoFromRowControl(rowControl)
+        local isSaved, setName = ItemSaver_IsItemSaved(bagId, slotIndex)
 
-		if data and GetSoulGemItemInfo(data.bag, data.index) > 0 then
-			isSoulGem = true
+		if not isSaved or GetSoulGemItemInfo(bagId, slotIndex) > 0 then
+			return
 		end
 
-		local isSaved, setName = ItemSaver_IsItemSaved(bagId, slotIndex)
         local isFiltered = ItemSaver_GetFilters(setName).research
 
-		if not isSoulGem and isSaved and isFiltered then
+		if isFiltered then
 			rowControl:SetMouseEnabled(false)
 			rowControl:GetNamedChild("Name"):SetColor(.75, 0, 0)
 		else
