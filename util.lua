@@ -71,6 +71,8 @@ function util.GetMarkerTextureArrays()
 end
 
 function util.GetInfoFromRowControl(rowControl)
+    if not rowControl then return end
+    
     local dataEntry = rowControl.dataEntry
 	local bagId, slotIndex
 
