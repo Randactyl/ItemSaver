@@ -1,6 +1,6 @@
 ItemSaver = {}
 local IS = ItemSaver
-IS.addonVersion = "3.0.1.0"
+IS.addonVersion = "3.0.2.0"
 
 local util, settings
 
@@ -122,7 +122,7 @@ local function initializeHooks()
 	end
 	local function newSetupCallbackForResearch(rowControl, slot)
 		newSetupCallback(rowControl, slot)
-        
+
 		local bagId, slotIndex = util.GetInfoFromRowControl(rowControl)
         local isSaved, setName = ItemSaver_IsItemSaved(bagId, slotIndex)
 
