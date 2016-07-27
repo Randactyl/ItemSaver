@@ -15,8 +15,8 @@ util.LISTS = {
     LIST_DIALOG = ZO_ListDialog1List,
 }
 util.lam = LibStub("LibAddonMenu-2.0")
-util.libFilters = LibStub("libFilters")
-util.libFilters:InitializeLibFilters()
+util.LibFilters = LibStub("LibFilters-2.0")
+util.LibFilters:InitializeLibFilters()
 util.markerTextures = {}
 util.markerOptions = {}
 

@@ -39,11 +39,11 @@ local strings = {
         ["SI_ITEMSAVER_TEXTURE_COLOR_LABEL"] = "Markierungsfarbe",
         ["SI_ITEMSAVER_TEXTURE_COLOR_TOOLTIP"] = "Die Farbe die für die Markierung verwendet wird",
 
-        ["SI_ITEMSAVER_FILTERS_STORE_LABEL"] = "Händler filtern?",
-        ["SI_ITEMSAVER_FILTERS_STORE_TOOLTIP"] = "Sollen die geschützten Gegenstände beim NPC Händler verborgen werden?",
+        ["SI_ITEMSAVER_FILTERS_VENDORSELL_LABEL"] = "Händler filtern?",
+        ["SI_ITEMSAVER_FILTERS_VENDORSELL_TOOLTIP"] = "Sollen die geschützten Gegenstände beim NPC Händler verborgen werden?",
 
-        ["SI_ITEMSAVER_FILTERS_DECONSTRUCTION_LABEL"] = "Verwertung filtern?",
-		["SI_ITEMSAVER_FILTERS_DECONSTRUCTION_TOOLTIP"] = "Sollen die geschützten Gegenstände beim Verwerten an der Handwerksstation verborgen werden?",
+        ["SI_ITEMSAVER_FILTERS_DECONSTRUCT_LABEL"] = "Verwertung filtern?",
+		["SI_ITEMSAVER_FILTERS_DECONSTRUCT_TOOLTIP"] = "Sollen die geschützten Gegenstände beim Verwerten an der Handwerksstation verborgen werden?",
 
         ["SI_ITEMSAVER_FILTERS_RESEARCH_LABEL"] = "Analyse filtern?",
         ["SI_ITEMSAVER_FILTERS_RESEARCH_TOOLTIP"] = "Sollen die geschützten Gegenstände beim Analysieren an der Handwerksstation verborgen werden?",
@@ -116,11 +116,11 @@ local strings = {
 		["SI_ITEMSAVER_TEXTURE_COLOR_LABEL"] = "Texture Color",
 		["SI_ITEMSAVER_TEXTURE_COLOR_TOOLTIP"] = "Color to use for the marker's texture.",
 
-		["SI_ITEMSAVER_FILTERS_STORE_LABEL"] = "Filter Store?",
-		["SI_ITEMSAVER_FILTERS_STORE_TOOLTIP"] = "Should saved items be removed from the vendor sell list?",
+		["SI_ITEMSAVER_FILTERS_VENDORSELL_LABEL"] = "Filter Store?",
+		["SI_ITEMSAVER_FILTERS_VENDORSELL_TOOLTIP"] = "Should saved items be removed from the vendor sell list?",
 
-		["SI_ITEMSAVER_FILTERS_DECONSTRUCTION_LABEL"] = "Filter Deconstruction?",
-		["SI_ITEMSAVER_FILTERS_DECONSTRUCTION_TOOLTIP"] = "Should saved items be removed from the deconstruction list?",
+		["SI_ITEMSAVER_FILTERS_DECONSTRUCT_LABEL"] = "Filter Deconstruction?",
+		["SI_ITEMSAVER_FILTERS_DECONSTRUCT_TOOLTIP"] = "Should saved items be removed from the deconstruction list?",
 
 		["SI_ITEMSAVER_FILTERS_RESEARCH_LABEL"] = "Filter Research?",
 		["SI_ITEMSAVER_FILTERS_RESEARCH_TOOLTIP"] = "Should saved items be removed from the research list?",

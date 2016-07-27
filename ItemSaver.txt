@@ -3,9 +3,11 @@
 ## Version: 3.0.2.0
 ## APIVersion: 100015 100016
 ## SavedVariables: ItemSaver_Settings
+## OptionalDependsOn: LibFilters-2.0
 
 lib\LibStub\LibStub.lua
-lib\libFilters\libFilters.lua
+lib\LibFilters-2.0\LibFilters-2.0.lua
+lib\LibFilters-2.0\helper.lua
 lib\LibCustomMenu\LibCustomMenu.lua
 lib\LibAddonMenu-2.0\LibAddonMenu-2.0.lua
 lib\LibAddonMenu-2.0\controls\panel.lua

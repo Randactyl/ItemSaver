@@ -7,7 +7,7 @@ local vars
 
 local function toggleFilter(setName, filterTagSuffix, filterType)
 	local filterTag = "ItemSaver_"..setName..filterTagSuffix
-	local isRegistered = util.libFilters:IsFilterRegistered(filterTag, filterType)
+	local isRegistered = util.LibFilters:IsFilterRegistered(filterTag, filterType)
 
 	local function filterCallback(slotOrBagId, slotIndex)
 		local bagId
@@ -26,19 +26,19 @@ local function toggleFilter(setName, filterTagSuffix, filterType)
 	end
 
 	if not isRegistered then
-		util.libFilters:RegisterFilter(filterTag, filterType, filterCallback)
+		util.LibFilters:RegisterFilter(filterTag, filterType, filterCallback)
 	else
-		util.libFilters:UnregisterFilter(filterTag, filterType)
+		util.LibFilters:UnregisterFilter(filterTag, filterType)
 	end
 end
 
 local function toggleFilters()
 	for setName, setInfo in pairs(vars.savedSetInfo) do
-		if setInfo.filterStore then toggleFilter(setName, "_Store", LAF_STORE) end
-		if setInfo.filterDeconstruction then toggleFilter(setName, "_Deconstruction", LAF_DECONSTRUCTION) end
-		if setInfo.filterGuildStore then toggleFilter(setName, "_GuildStore", LAF_GUILDSTORE) end
-		if setInfo.filterMail then toggleFilter(setName, "_Mail", LAF_MAIL) end
-		if setInfo.filterTrade then toggleFilter(setName, "_Trade", LAF_TRADE) end
+		if setInfo.filterStore then toggleFilter(setName, "_VendorSell", LF_VENDOR_SELL) end
+		if setInfo.filterDeconstruction then toggleFilter(setName, "_Deconstruct", LF_SMITHING_DECONSTRUCT) end
+		if setInfo.filterGuildStore then toggleFilter(setName, "_GuildStoreSell", LF_GUILDSTORE_SELL) end
+		if setInfo.filterMail then toggleFilter(setName, "_MailSend", LF_MAIL_SEND) end
+		if setInfo.filterTrade then toggleFilter(setName, "_Trade", LF_TRADE) end
 	end
 end
 
@@ -255,23 +255,23 @@ function settings.InitializeSettings()
 					},
 					[4] = {
 						type = "checkbox",
-						name = GetString(SI_ITEMSAVER_FILTERS_STORE_LABEL),
-						tooltip = GetString(SI_ITEMSAVER_FILTERS_STORE_TOOLTIP),
+						name = GetString(SI_ITEMSAVER_FILTERS_VENDORSELL_LABEL),
+						tooltip = GetString(SI_ITEMSAVER_FILTERS_VENDORSELL_TOOLTIP),
 						getFunc = function() return setData.filterStore end,
 						setFunc = function(value)
 							setData.filterStore = value
-							toggleFilter(setName, "_Store", LAF_STORE)
+							toggleFilter(setName, "_VendorSell", LF_VENDOR_SELL)
 						end,
 						width = "half",
 					},
 					[5] = {
 						type = "checkbox",
-						name = GetString(SI_ITEMSAVER_FILTERS_DECONSTRUCTION_LABEL),
-						tooltip = GetString(SI_ITEMSAVER_FILTERS_DECONSTRUCTION_TOOLTIP),
+						name = GetString(SI_ITEMSAVER_FILTERS_DECONSTRUCT_LABEL),
+						tooltip = GetString(SI_ITEMSAVER_FILTERS_DECONSTRUCT_TOOLTIP),
 						getFunc = function() return setData.filterDeconstruction end,
 						setFunc = function(value)
 							setData.filterDeconstruction = value
-							toggleFilter(setName, "_Deconstruction", LAF_DECONSTRUCTION)
+							toggleFilter(setName, "_Deconstruct", LF_SMITHING_DECONSTRUCT)
 						end,
 						width = "half",
 					},
@@ -292,7 +292,7 @@ function settings.InitializeSettings()
 						getFunc = function() return setData.filterGuildStore end,
 						setFunc = function(value)
 							setData.filterGuildStore = value
-							toggleFilter(setName, "_GuildStore", LAF_GUILDSTORE)
+							toggleFilter(setName, "_GuildStoreSell", LF_GUILDSTORE_SELL)
 						end,
 						width = "half",
 					},
@@ -303,7 +303,7 @@ function settings.InitializeSettings()
 						getFunc = function() return setData.filterMail end,
 						setFunc = function(value)
 							setData.filterMail = value
-							toggleFilter(setName, "_Mail", LAF_MAIL)
+							toggleFilter(setName, "_MailSend", LF_MAIL_SEND)
 						end,
 						width = "half",
 					},
@@ -314,7 +314,7 @@ function settings.InitializeSettings()
 						getFunc = function() return setData.filterTrade end,
 						setFunc = function(value)
 							setData.filterTrade = value
-							toggleFilter(setName, "_Trade", LAF_TRADE)
+							toggleFilter(setName, "_Trade", LF_TRADE)
 						end,
 						width = "half",
 					},
@@ -393,11 +393,11 @@ function settings.AddSet(setName, setData)
 	end
 
 	vars.savedSetInfo[setName] = setData
-	toggleFilter(setName, "_Store", LAF_STORE)
-	toggleFilter(setName, "_Deconstruction", LAF_DECONSTRUCTION)
-	toggleFilter(setName, "_GuildStore", LAF_GUILDSTORE)
-	toggleFilter(setName, "_Mail", LAF_MAIL)
-	toggleFilter(setName, "_Trade", LAF_TRADE)
+	toggleFilter(setName, "_VendorSell", LF_VENDOR_SELL)
+	toggleFilter(setName, "_Deconstruct", LF_SMITHING_DECONSTRUCT)
+	toggleFilter(setName, "_GuildStoreSell", LF_GUILDSTORE_SELL)
+	toggleFilter(setName, "_MailSend", LF_MAIL_SEND)
+	toggleFilter(setName, "_Trade", LF_TRADE)
 
 	return true
 end
