@@ -83,8 +83,6 @@ end
 --returns true if item was saved successfully. Returns false if item was unsaved.
 --if setName is nil, the default set will be used.
 function ItemSaver_ToggleItemSave(setName, bagId, slotIndex)
-	local returnVal
-
 	if bagId == nil then --keybind
 		local mouseOverControl = WINDOW_MANAGER:GetMouseOverControl()
 
@@ -97,7 +95,7 @@ function ItemSaver_ToggleItemSave(setName, bagId, slotIndex)
 	end
 
 	if bagId then
-		returnVal = settings.ToggleItemSave(setName, bagId, slotIndex)
+		local returnVal = settings.ToggleItemSave(setName, bagId, slotIndex)
 		util.RefreshAll()
 
 		return returnVal

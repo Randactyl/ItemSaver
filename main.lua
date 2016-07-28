@@ -95,30 +95,6 @@ local function addContextMenuOptionSoon(rowControl)
 end
 
 local function initializeHooks()
-    local LISTS = util.LISTS
-
-    --hook each control to force a refresh and pick up filtered results
-	local function hookFragment(fragment, control)
-		local function onFragmentShowing()
-			ZO_ScrollList_RefreshVisible(control)
-			util.RefreshEquipmentControls()
-		end
-
-		local function onFragmentStateChange(oldState, newState)
-			if newState == SCENE_FRAGMENT_SHOWING then
-				onFragmentShowing()
-			end
-		end
-
-		fragment:RegisterCallback("StateChange", onFragmentStateChange)
-	end
-	hookFragment(INVENTORY_FRAGMENT, LISTS.BACKPACK)
-	hookFragment(QUICKSLOT_FRAGMENT, LISTS.QUICKSLOT)
-	hookFragment(BANK_FRAGMENT, LISTS.BANK)
-	hookFragment(GUILD_BANK_FRAGMENT, LISTS.GUILD_BANK)
-	hookFragment(SMITHING_FRAGMENT, LISTS.DECONSTRUCTION)
-	hookFragment(ENCHANTING_FRAGMENT, LISTS.ENCHANTING)
-
     --add marker initialization to slot setup callbacks
 	local hookedSetupFunctions = {}
 	local function newSetupCallback(rowControl, slot)
