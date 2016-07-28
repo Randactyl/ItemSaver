@@ -42,17 +42,17 @@ local strings = {
         ["SI_ITEMSAVER_FILTERS_VENDORSELL_LABEL"] = "Händler filtern?",
         ["SI_ITEMSAVER_FILTERS_VENDORSELL_TOOLTIP"] = "Sollen die geschützten Gegenstände beim NPC Händler verborgen werden?",
 
-        ["SI_ITEMSAVER_FILTERS_DECONSTRUCT_LABEL"] = "Verwertung filtern?",
-		["SI_ITEMSAVER_FILTERS_DECONSTRUCT_TOOLTIP"] = "Sollen die geschützten Gegenstände beim Verwerten an der Handwerksstation verborgen werden?",
+        ["SI_ITEMSAVER_FILTERS_SMITHINGDECONSTRUCT_LABEL"] = "Verwertung filtern?",
+		["SI_ITEMSAVER_FILTERS_SMITHINGDECONSTRUCT_TOOLTIP"] = "Sollen die geschützten Gegenstände beim Verwerten an der Handwerksstation verborgen werden?",
 
-        ["SI_ITEMSAVER_FILTERS_RESEARCH_LABEL"] = "Analyse filtern?",
-        ["SI_ITEMSAVER_FILTERS_RESEARCH_TOOLTIP"] = "Sollen die geschützten Gegenstände beim Analysieren an der Handwerksstation verborgen werden?",
+        ["SI_ITEMSAVER_FILTERS_SMITHINGRESEARCH_LABEL"] = "Analyse filtern?",
+        ["SI_ITEMSAVER_FILTERS_SMITHINGRESEARCH_TOOLTIP"] = "Sollen die geschützten Gegenstände beim Analysieren an der Handwerksstation verborgen werden?",
 
-        ["SI_ITEMSAVER_FILTERS_GUILDSTORE_LABEL"] = "Gildenladen filtern?",
-        ["SI_ITEMSAVER_FILTERS_GUILDSTORE_TOOLTIP"] = "Sollen die geschützten Gegenstände im Gildenladenverkaufsfenster verborgen werden?",
+        ["SI_ITEMSAVER_FILTERS_GUILDSTORESELL_LABEL"] = "Gildenladen filtern?",
+        ["SI_ITEMSAVER_FILTERS_GUILDSTORESELL_TOOLTIP"] = "Sollen die geschützten Gegenstände im Gildenladenverkaufsfenster verborgen werden?",
 
-        ["SI_ITEMSAVER_FILTERS_MAIL_LABEL"] = "Post filtern?",
-        ["SI_ITEMSAVER_FILTERS_MAIL_TOOLTIP"] = "Sollen die geschützten Gegenstände im Postanhangfenster verborgen werden?",
+        ["SI_ITEMSAVER_FILTERS_MAILSEND_LABEL"] = "Post filtern?",
+        ["SI_ITEMSAVER_FILTERS_MAILSEND_TOOLTIP"] = "Sollen die geschützten Gegenstände im Postanhangfenster verborgen werden?",
 
         ["SI_ITEMSAVER_FILTERS_TRADE_LABEL"] = "Handel filtern?",
         ["SI_ITEMSAVER_FILTERS_TRADE_TOOLTIP"] = "Sollen die geschützten Gegenstände beim Handel mit anderen Spielern verborgen werden?",
@@ -119,17 +119,17 @@ local strings = {
 		["SI_ITEMSAVER_FILTERS_VENDORSELL_LABEL"] = "Filter Store?",
 		["SI_ITEMSAVER_FILTERS_VENDORSELL_TOOLTIP"] = "Should saved items be removed from the vendor sell list?",
 
-		["SI_ITEMSAVER_FILTERS_DECONSTRUCT_LABEL"] = "Filter Deconstruction?",
-		["SI_ITEMSAVER_FILTERS_DECONSTRUCT_TOOLTIP"] = "Should saved items be removed from the deconstruction list?",
+		["SI_ITEMSAVER_FILTERS_SMITHINGDECONSTRUCT_LABEL"] = "Filter Deconstruction?",
+		["SI_ITEMSAVER_FILTERS_SMITHINGDECONSTRUCT_TOOLTIP"] = "Should saved items be removed from the deconstruction list?",
 
-		["SI_ITEMSAVER_FILTERS_RESEARCH_LABEL"] = "Filter Research?",
-		["SI_ITEMSAVER_FILTERS_RESEARCH_TOOLTIP"] = "Should saved items be removed from the research list?",
+		["SI_ITEMSAVER_FILTERS_SMITHINGRESEARCH_LABEL"] = "Filter Research?",
+		["SI_ITEMSAVER_FILTERS_SMITHINGRESEARCH_TOOLTIP"] = "Should saved items be removed from the research list?",
 
-		["SI_ITEMSAVER_FILTERS_GUILDSTORE_LABEL"] = "Filter Guild Store?",
-		["SI_ITEMSAVER_FILTERS_GUILDSTORE_TOOLTIP"] = "Should saved items be removed from the guild store sell tab?",
+		["SI_ITEMSAVER_FILTERS_GUILDSTORESELL_LABEL"] = "Filter Guild Store?",
+		["SI_ITEMSAVER_FILTERS_GUILDSTORESELL_TOOLTIP"] = "Should saved items be removed from the guild store sell tab?",
 
-		["SI_ITEMSAVER_FILTERS_MAIL_LABEL"] = "Filter Mail?",
-		["SI_ITEMSAVER_FILTERS_MAIL_TOOLTIP"] = "Should saved items be removed from the mail attachment list?",
+		["SI_ITEMSAVER_FILTERS_MAILSEND_LABEL"] = "Filter Mail?",
+		["SI_ITEMSAVER_FILTERS_MAILSEND_TOOLTIP"] = "Should saved items be removed from the mail attachment list?",
 
 		["SI_ITEMSAVER_FILTERS_TRADE_LABEL"] = "Filter Trade?",
 		["SI_ITEMSAVER_FILTERS_TRADE_TOOLTIP"] = "Should saved items be removed from the trade list?",

@@ -2,18 +2,6 @@ local IS = ItemSaver
 IS.util = {}
 
 local util = IS.util
-util.LISTS = {
-    BACKPACK = ZO_PlayerInventoryList,
-    QUICKSLOT = ZO_QuickSlotList,
-    BANK = ZO_PlayerBankBackpack,
-    GUILD_BANK = ZO_GuildBankBackpack,
-    CRAFTBAG = ZO_CraftBagList,
-    DECONSTRUCTION = ZO_SmithingTopLevelDeconstructionPanelInventoryBackpack,
-    IMPROVEMENT = ZO_SmithingTopLevelImprovementPanelInventoryBackpack,
-    ENCHANTING = ZO_EnchantingTopLevelInventoryBackpack,
-    ALCHEMY = ZO_AlchemyTopLevelInventoryBackpack,
-    LIST_DIALOG = ZO_ListDialog1List,
-}
 util.lam = LibStub("LibAddonMenu-2.0")
 util.LibFilters = LibStub("LibFilters-2.0")
 util.LibFilters:InitializeLibFilters()
@@ -181,10 +169,19 @@ function util.RefreshEquipmentControls()
 	end
 end
 
-function util.RefreshAll()
-    for _, list in pairs(util.LISTS) do
-        ZO_ScrollList_RefreshVisible(list)
+function util.RequestUpdate(filterTypes)
+    for _, filterType in pairs(filterTypes) do
+        util.LibFilters:RequestUpdate(filterType)
     end
+end
 
+function util.RefreshAll()
+    local filterTypes = {
+        LF_INVENTORY, LF_BANK_WITHDRAW, LF_BANK_DEPOSIT, LF_GUILDBANK_WITHDRAW,
+        LF_GUILDBANK_DEPOSIT, LF_SMITHING_DECONSTRUCT, LF_SMITHING_IMPROVEMENT,
+        LF_ENCHANTING_CREATION, LF_ENCHANTING_EXTRACTION,
+    }
+
+    util.RequestUpdate(filterTypes)
 	util.RefreshEquipmentControls()
 end

@@ -3,15 +3,25 @@ local IS = ItemSaver
 IS.addonVersion = "3.0.2.0"
 
 local util, settings
+local LISTS = {
+    BACKPACK = ZO_PlayerInventoryList,
+    QUICKSLOT = ZO_QuickSlotList,
+    BANK = ZO_PlayerBankBackpack,
+    GUILD_BANK = ZO_GuildBankBackpack,
+    CRAFTBAG = ZO_CraftBagList,
+    DECONSTRUCTION = ZO_SmithingTopLevelDeconstructionPanelInventoryBackpack,
+    IMPROVEMENT = ZO_SmithingTopLevelImprovementPanelInventoryBackpack,
+    ENCHANTING = ZO_EnchantingTopLevelInventoryBackpack,
+    ALCHEMY = ZO_AlchemyTopLevelInventoryBackpack,
+    LIST_DIALOG = ZO_ListDialog1List,
+}
 
 local function addContextMenuOptionSoon(rowControl)
 	if rowControl:GetOwningWindow() == ZO_TradingHouse then return end
 
     local function shouldAddContextMenu()
-        local LISTS = util.LISTS
-
         for _, list in pairs(LISTS) do
-            if not list:IsHidden() and list ~= LISTS.LIST_DIALOG then
+            if not list:IsHidden() then
                 return true
             end
         end
@@ -120,35 +130,12 @@ local function initializeHooks()
 
 		util.CreateMarkerControl(rowControl)
 	end
-	local function newSetupCallbackForResearch(rowControl, slot)
-		newSetupCallback(rowControl, slot)
 
-		local bagId, slotIndex = util.GetInfoFromRowControl(rowControl)
-        local isSaved, setName = ItemSaver_IsItemSaved(bagId, slotIndex)
-
-		if not isSaved or GetSoulGemItemInfo(bagId, slotIndex) > 0 then
-			return
-		end
-
-        local isFiltered = ItemSaver_GetFilters(setName).research
-
-		if isFiltered then
-			rowControl:SetMouseEnabled(false)
-			rowControl:GetNamedChild("Name"):SetColor(.75, 0, 0)
-		else
-			rowControl:SetMouseEnabled(true)
-		end
-	end
     --list hooks
     for _, list in pairs(LISTS) do
-        if list ~= LISTS.LIST_DIALOG then 
-            hookedSetupFunctions[list:GetName()] = list.dataTypes[1].setupCallback
-		    list.dataTypes[1].setupCallback = newSetupCallback
-        end
+        hookedSetupFunctions[list:GetName()] = list.dataTypes[1].setupCallback
+	    list.dataTypes[1].setupCallback = newSetupCallback
     end
-	--research list hook
-	hookedSetupFunctions[LISTS.LIST_DIALOG:GetName()] = LISTS.LIST_DIALOG.dataTypes[1].setupCallback
-	LISTS.LIST_DIALOG.dataTypes[1].setupCallback = newSetupCallbackForResearch
 
     --setup context menu entry
     ZO_PreHook("ZO_InventorySlot_ShowContextMenu", addContextMenuOptionSoon)

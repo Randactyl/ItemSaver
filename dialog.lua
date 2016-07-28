@@ -159,24 +159,24 @@ function dialog.InitializeDialog()
 	local function GetCheckboxData(str)
 		local lookup = {
 			["store"] = {
-				name = GetString(SI_ITEMSAVER_FILTERS_STORE_LABEL),
-				tooltip = GetString(SI_ITEMSAVER_FILTERS_STORE_TOOLTIP),
+				name = GetString(SI_ITEMSAVER_FILTERS_VENDORSELL_LABEL),
+				tooltip = GetString(SI_ITEMSAVER_FILTERS_VENDORSELL_TOOLTIP),
 			},
 			["deconstruction"] = {
-				name = GetString(SI_ITEMSAVER_FILTERS_DECONSTRUCTION_LABEL),
-				tooltip = GetString(SI_ITEMSAVER_FILTERS_DECONSTRUCTION_TOOLTIP),
+				name = GetString(SI_ITEMSAVER_FILTERS_SMITHINGDECONSTRUCT_LABEL),
+				tooltip = GetString(SI_ITEMSAVER_FILTERS_SMITHINGDECONSTRUCT_TOOLTIP),
 			},
 			["research"] = {
-				name = GetString(SI_ITEMSAVER_FILTERS_RESEARCH_LABEL),
-				tooltip = GetString(SI_ITEMSAVER_FILTERS_RESEARCH_TOOLTIP),
+				name = GetString(SI_ITEMSAVER_FILTERS_SMITHINGRESEARCH_LABEL),
+				tooltip = GetString(SI_ITEMSAVER_FILTERS_SMITHINGRESEARCH_TOOLTIP),
 			},
 			["guildStore"] = {
-				name = GetString(SI_ITEMSAVER_FILTERS_GUILDSTORE_LABEL),
-				tooltip = GetString(SI_ITEMSAVER_FILTERS_GUILDSTORE_TOOLTIP),
+				name = GetString(SI_ITEMSAVER_FILTERS_GUILDSTORESELL_LABEL),
+				tooltip = GetString(SI_ITEMSAVER_FILTERS_GUILDSTORESELL_TOOLTIP),
 			},
 			["mail"] = {
-				name = GetString(SI_ITEMSAVER_FILTERS_MAIL_LABEL),
-				tooltip = GetString(SI_ITEMSAVER_FILTERS_MAIL_TOOLTIP),
+				name = GetString(SI_ITEMSAVER_FILTERS_MAILSEND_LABEL),
+				tooltip = GetString(SI_ITEMSAVER_FILTERS_MAILSEND_TOOLTIP),
 			},
 			["trade"] = {
 				name = GetString(SI_ITEMSAVER_FILTERS_TRADE_LABEL),
