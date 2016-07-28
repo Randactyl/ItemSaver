@@ -327,6 +327,7 @@ function settings.InitializeSettings()
 						name = GetString(SI_ITEMSAVER_CLEAR_SET_BUTTON),
 						tooltip = GetString(SI_ITEMSAVER_CLEAR_SET_TOOLTIP),
 						func = function() clearSet(setName) end,
+						isDangerous = true,
 					},
 					[11] = {
 						type = "button",
@@ -349,6 +350,7 @@ function settings.InitializeSettings()
 							ReloadUI()
 						end,
 						disabled = setName == vars.defaultSet,
+						isDangerous = true,
 						reference = "IS_" .. setName .. "DeleteButton",
 					},
 				},
