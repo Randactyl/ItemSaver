@@ -1,7 +1,7 @@
 --[[
 Author: Ayantir
 Filename: LibCustomTitles.lua
-Version: 11
+Version: 12
 ]]--
 
 --[[
@@ -30,7 +30,7 @@ http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 ]]--
 
 local libLoaded
-local LIB_NAME, VERSION = "LibCustomTitles", 11
+local LIB_NAME, VERSION = "LibCustomTitles", 12
 local LibCustomTitles, oldminor = LibStub:NewLibrary(LIB_NAME, VERSION)
 if not LibCustomTitles then return end
 
@@ -128,12 +128,18 @@ function LibCustomTitles:Init()
 			en = "Fancy Man of Cornwood",
 		},
 		
-		["@manavortex"] = { -- EU v10
+		["@manavortex"] = { -- EU v10 (v12 changes)
 			["Vivicah Telvanni"] = {
 				ov = {en = "Master Wizard", fr = "Maître mage", de = "Meisterin der Zauberei"},
 				en = "Archmagister",
 				fr = "Archimage",
 				de = "Erzmagister",
+			},
+			["Sugar-Paws Underfoot"] = {
+				ov = true,
+				en = "Favorite Apprentice",
+				fr = "Apprenti préféré",
+				de = "Lieblingslehrling",
 			},
 		},
 		
@@ -146,7 +152,7 @@ function LibCustomTitles:Init()
 			},
 		},
 		
-		["@manorin"] = { -- EU v10
+		["@Manorin"] = { -- EU v10 (v12 fix)
 			["Foryn Telvanni"] = {
 				ov = {en = "Pact Hero", fr = "Héros du Pacte", de = "Held des Paktes"},
 				en = "Hero",
@@ -212,7 +218,65 @@ function LibCustomTitles:Init()
 				fr = "L'égaré",
 				de = "Der Verschollene",
 			},
-		},	
+		},
+		
+		["@Haunted1994"] = { -- v12
+			["Jah'rakal"] = {
+				ov = {en = "Veteran", fr = "Vétéran", de = "Veteran"},
+				en = "Troll Warlord",
+				fr = "Troll Warlord",
+				de = "Troll Warlord",
+			},
+		},
+		
+		["@Vortexman11"] = { -- v12
+			["Ålaunus"] = {
+				ov = true,
+				en = "The Silent",
+				fr = "Le Discret",
+				de = "Die Stille",
+			},
+		},
+
+		["@Domardal"] = { -- v12
+			ov = true,
+			en = "Coco",
+			fr = "Coco",
+			de = "Coco",
+		},
+
+		["@RaddyBK"] = { -- v12
+			["Radolfus"] = {
+				ov = {en = "Major", fr = "Major", de = "Major"},
+				en = "The Elder Dragon",
+				fr = "Le Vieux Dragon",
+				de = "The Elder Dragon",
+			},
+			["RADOLFUS II"] = {
+				ov = {en = "Executioner", fr = "Exécuteur", de = "Henker"},
+				en = "The Elder Dragon",
+				fr = "Le Vieux Dragon",
+				de = "The Elder Dragon",
+			},
+		},
+		
+		["@Dolgubon"] = { -- v12
+			["Relthion"] = {
+				ov = true,
+				en = "Undying",
+				fr = "L'immortel",
+				de = "Undying",
+			},
+		},
+		
+		["@Sethize"] = { -- EU v12
+			["Nelvan Telvanni"] = {
+				ov = {en = "Master Wizard", fr = "Maître mage", de = "Meister der Zauberei"},
+				en = "Master",
+				fr = "Maître",
+				de = "Meister",
+			},
+		},
 		
 	}
 	
