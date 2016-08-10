@@ -130,6 +130,9 @@ local function ItemSaver_Loaded(eventCode, addonName)
     --setup hooks
     initializeHooks()
 
+    --create equipment markers
+    util.RefreshEquipmentControls()
+
     --finish create set dialog initialization
     IS.dialog.InitializeDialog()
 end
