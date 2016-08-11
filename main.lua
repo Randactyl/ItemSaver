@@ -1,6 +1,6 @@
 ItemSaver = {}
 local IS = ItemSaver
-IS.addonVersion = "3.1.0.0"
+IS.addonVersion = "3.2.0.0"
 
 local util, settings
 local LISTS = {
