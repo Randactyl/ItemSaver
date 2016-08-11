@@ -5,7 +5,7 @@ local strings = {
     ["SI_ITEMSAVER_GENERAL_OPTIONS_HEADER"] = "General Options",
 
     ["SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_LABEL"] = "Default Set",
-    ["SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_TOOLTIP"] = "This set will be used for the keybind, when deleting other sets, and when a set is not specified.",
+    ["SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_TOOLTIP"] = "This set will be used for the keybind.",
 
     ["SI_ITEMSAVER_MARKER_ANCHOR_LABEL"] = "Marker Position",
     ["SI_ITEMSAVER_MARKER_ANCHOR_TOOLTIP"] = "Position of the saved item marker.",
@@ -21,14 +21,19 @@ local strings = {
 
     ["SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_LABEL"] = "Defer Submenu Creation",
     ["SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_TOOLTIP"] = "Only use a submenu if there are more than the specified number of sets.",
+    
     ["SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_LABEL"] = "Number of Sets",
     ["SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_TOOLTIP"] = "A submenu will be used if there are more than this number of sets.",
 
     ["SI_ITEMSAVER_SET_DATA_HEADER"] = "Set Data",
 
+    ["SI_ITEMSAVER_EDIT_SET_DROPDOWN_LABEL"] = "Edit Set",
+    ["SI_ITEMSAVER_EDIT_SET_DROPDOWN_TOOLTIP"] = "This set can be edited with the options below.",
+
     ["SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_LABEL"] = "Save Type",
     ["SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_TOOLTIP"] = "Changes the way items are saved to this set. General will mark all stacks of an item. Unique will mark only the selected stack and will persist if that item undergoes a change such as enchantment or improvement.",
     ["SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_WARNING"] = "Changing this option will clear all items in this set.",
+
     ["SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_GENERAL"] = "General",
     ["SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_UNIQUE"] = "Unique",
 
@@ -61,7 +66,7 @@ local strings = {
     ["SI_ITEMSAVER_CLEAR_SET_CONFIRMATION"] = "Removed all items from set:",
 
     ["SI_ITEMSAVER_DELETE_SET_BUTTON"] = "Delete Set",
-    ["SI_ITEMSAVER_DELETE_SET_TOOLTIP"] = "Removes the set and changes any items in the set to the default set.",
+    ["SI_ITEMSAVER_DELETE_SET_TOOLTIP"] = "Unsaves any items currently in this set and removes this set.",
 
     ["SI_ITEMSAVER_CREATE_SAVE_SET"] = "+ Create Set",
     ["SI_ITEMSAVER_UNSAVE_ITEM"] = "Unsave item",

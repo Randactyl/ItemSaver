@@ -5,6 +5,16 @@ local util = IS.util
 local settings = IS.settings
 local vars
 
+local function refreshSettingsPanelSetChoices()
+	local def = WINDOW_MANAGER:GetControlByName("IS_DefaultSetDropdown")
+	local edit = WINDOW_MANAGER:GetControlByName("IS_EditSetDropdown")
+	
+	if not def then return end
+
+	def:UpdateValue()
+	edit:UpdateValue()
+end
+
 local function toggleFilter(setName, filterTagSuffix, filterType)
 	local filterTag = "ItemSaver_"..setName..filterTagSuffix
 	local isRegistered = util.LibFilters:IsFilterRegistered(filterTag, filterType)
@@ -56,6 +66,19 @@ function settings.InitializeSettings()
 
 			d(GetString(SI_ITEMSAVER_CLEAR_SET_CONFIRMATION) .. " " .. setName)
 		end
+		local function updateEditSetSettings(setName)
+			local setData = ItemSaver_GetSetData(setName)
+
+			WINDOW_MANAGER:GetControlByName("IS_EditSetHeader").data.name = GetString(SI_ITEMSAVER_SET_DATA_HEADER) .. " - " .. setName
+			WINDOW_MANAGER:GetControlByName("IS_DeleteButton").data.disabled = vars.defaultSet == setName
+			local iconPicker = WINDOW_MANAGER:GetControlByName("IS_IconPicker")
+			local r, g, b = util.HexToRGB(setData.markerColor)
+
+			iconPicker.icon.color.r = r
+			iconPicker.icon.color.g = g
+			iconPicker.icon.color.b = b
+			iconPicker:SetColor(iconPicker.icon.color)
+		end
 
 		local ANCHOR_OPTIONS = {
 			GetString(SI_ITEMSAVER_ANCHOR_LABEL_TOPLEFT),
@@ -72,11 +95,16 @@ function settings.InitializeSettings()
 		local SAVE_TYPE_OPTIONS = {GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_GENERAL),
 		  GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_UNIQUE)}
 
+		local markerTexturePaths, markerTextureNames = util.GetMarkerTextureArrays()
+		local editSetName = vars.defaultSet
+		local editSetData = ItemSaver_GetSetData(editSetName)
+
 		local panel = {
 			type = "panel",
-			name = "Item Saver",
-			author = "Randactyl, ingeniousclown",
+			name = SI_ITEMSAVER_ADDON_NAME,
+			author = "Randactyl",
 			version = IS.addonVersion,
+			website = "http://www.esoui.com/downloads/info300-ItemSaver.html",
 			slashCommand = "/itemsaver",
 			registerForRefresh = true,
 		}
@@ -84,25 +112,30 @@ function settings.InitializeSettings()
 		local optionsData = {
 			[1] = {
 				type = "header",
-				name = GetString(SI_ITEMSAVER_GENERAL_OPTIONS_HEADER),
+				name = SI_ITEMSAVER_GENERAL_OPTIONS_HEADER,
 			},
 			[2] = {
 				type = "dropdown",
-				name = GetString(SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_LABEL),
-				tooltip = GetString(SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_TOOLTIP),
+				name = SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_LABEL,
+				tooltip = SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_TOOLTIP,
 				choices = ItemSaver_GetSaveSets(),
-				getFunc = function() return vars.defaultSet end,
+				getFunc = function()
+					this = WINDOW_MANAGER:GetControlByName("IS_DefaultSetDropdown")
+					this:UpdateChoices(ItemSaver_GetSaveSets())
+
+					return vars.defaultSet
+				end,
 				setFunc = function(value)
-					WINDOW_MANAGER:GetControlByName("IS_" .. vars.defaultSet .. "DeleteButton").data.disabled = false
-					WINDOW_MANAGER:GetControlByName("IS_" .. value .. "DeleteButton").data.disabled = true
+					WINDOW_MANAGER:GetControlByName("IS_DeleteButton").data.disabled = value == editSetName
 
 					vars.defaultSet = value
 				end,
+				reference = "IS_DefaultSetDropdown",
 			},
 			[3] = {
 				type = "dropdown",
-				name = GetString(SI_ITEMSAVER_MARKER_ANCHOR_LABEL),
-				tooltip = GetString(SI_ITEMSAVER_MARKER_ANCHOR_TOOLTIP),
+				name = SI_ITEMSAVER_MARKER_ANCHOR_LABEL,
+				tooltip = SI_ITEMSAVER_MARKER_ANCHOR_TOOLTIP,
 				choices = ANCHOR_OPTIONS,
 				getFunc = function()
 					local anchor = vars.markerAnchor
@@ -130,8 +163,8 @@ function settings.InitializeSettings()
 			},
 			[4] = {
 				type = "checkbox",
-				name = GetString(SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_LABEL),
-				tooltip = GetString(SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_TOOLTIP),
+				name = SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_LABEL,
+				tooltip = SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_TOOLTIP,
 				getFunc = function() return vars.deferSubmenu end,
 				setFunc = function(value)
 					vars.deferSubmenu = value
@@ -142,8 +175,8 @@ function settings.InitializeSettings()
 			},
 			[5] = {
 				type = "dropdown",
-				name = GetString(SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_LABEL),
-				tooltip = GetString(SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_TOOLTIP),
+				name = SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_LABEL,
+				tooltip = SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_TOOLTIP,
 				choices = DEFER_SUBMENU_OPTIONS,
 				getFunc = function()
 					local num = vars.deferSubmenuNum
@@ -165,198 +198,206 @@ function settings.InitializeSettings()
 				reference = "IS_DeferSubmenuDropdown",
 			},
 			[6] = {
+				type = "dropdown",
+				name = SI_ITEMSAVER_EDIT_SET_DROPDOWN_LABEL,
+				choices = ItemSaver_GetSaveSets(),
+				getFunc = function()
+					this = WINDOW_MANAGER:GetControlByName("IS_EditSetDropdown")
+					this:UpdateChoices(ItemSaver_GetSaveSets())
+
+					return editSetName
+				end,
+				setFunc = function(setName)
+					editSetName = setName
+					editSetData = ItemSaver_GetSetData(setName)
+
+					updateEditSetSettings(setName)
+				end,
+				tooltip = SI_ITEMSAVER_EDIT_SET_DROPDOWN_TOOLTIP,
+				reference = "IS_EditSetDropdown",
+			},
+			[7] = {
 				type = "header",
-				name = GetString(SI_ITEMSAVER_SET_DATA_HEADER),
+				name = GetString(SI_ITEMSAVER_SET_DATA_HEADER) .. " - " .. editSetName,
+				reference = "IS_EditSetHeader",
+			},
+			[8] = {
+				type = "dropdown",
+                name = SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_LABEL,
+                tooltip = SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_TOOLTIP,
+                choices = SAVE_TYPE_OPTIONS,
+                getFunc = function()
+                    local areItemsUnique = editSetData.areItemsUnique or false
+
+                    if areItemsUnique then return SAVE_TYPE_OPTIONS[2] end
+
+                    return SAVE_TYPE_OPTIONS[1]
+                end,
+                setFunc = function(value)
+                    --get new selection
+                    local newSelection = true
+
+                    if value == SAVE_TYPE_OPTIONS[1] then
+                        newSelection = false
+                    end
+
+                    --clear the set if the user has set this before (migration)
+                    if editSetData.areItemsUnique ~= nil then
+						clearSet(editSetName)
+					end
+
+                    --set selection
+                    editSetData.areItemsUnique = newSelection
+                end,
+                warning = SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_WARNING,
+                reference = "IS_SaveTypeDropdown",
+			},
+			[9] = {
+				type = "iconpicker",
+				name = SI_ITEMSAVER_MARKER_LABEL,
+				tooltip = SI_ITEMSAVER_MARKER_TOOLTIP,
+				choices = markerTexturePaths,
+				choicesTooltips = markerTextureNames,
+				getFunc = function()
+					local markerTextureName = editSetData.markerTexture
+
+					for i, name in ipairs(markerTextureNames) do
+						if name == markerTextureName then
+							return markerTexturePaths[i]
+						end
+					end
+				end,
+				setFunc = function(markerTexturePath)
+					for i, path in ipairs(markerTexturePaths) do
+						if path == markerTexturePath then
+							editSetData.markerTexture = markerTextureNames[i]
+						end
+					end
+				end,
+				maxColumns = 5,
+				visibleRows = zo_min(zo_max(zo_floor(#markerTexturePaths/5), 1), 4.5),
+				iconSize = 32,
+				defaultColor = ZO_ColorDef:New(util.HexToRGB(editSetData.markerColor)),
+				width = "half",
+				reference = "IS_IconPicker",
+			},
+			[10] = {
+				type = "colorpicker",
+				name = SI_ITEMSAVER_TEXTURE_COLOR_LABEL,
+				tooltip = SI_ITEMSAVER_TEXTURE_COLOR_TOOLTIP,
+				getFunc = function()
+					return util.HexToRGB(editSetData.markerColor)
+				end,
+				setFunc = function(r, g, b)
+					local iconPicker = WINDOW_MANAGER:GetControlByName("IS_IconPicker")
+
+					iconPicker.icon.color.r = r
+					iconPicker.icon.color.g = g
+					iconPicker.icon.color.b = b
+					iconPicker:SetColor(iconPicker.icon.color)
+
+					editSetData.markerColor = util.RGBToHex(r, g, b)
+				end,
+				width = "half",
+			},
+			[11] = {
+				type = "checkbox",
+				name = SI_ITEMSAVER_FILTERS_VENDORSELL_LABEL,
+				tooltip = SI_ITEMSAVER_FILTERS_VENDORSELL_TOOLTIP,
+				getFunc = function() return editSetData.filterStore end,
+				setFunc = function(value)
+					editSetData.filterStore = value
+					toggleFilter(editSetName, "_VendorSell", LF_VENDOR_SELL)
+				end,
+				width = "half",
+			},
+			[12] = {
+				type = "checkbox",
+				name = SI_ITEMSAVER_FILTERS_SMITHINGDECONSTRUCT_LABEL,
+				tooltip = SI_ITEMSAVER_FILTERS_SMITHINGDECONSTRUCT_TOOLTIP,
+				getFunc = function() return editSetData.filterDeconstruction end,
+				setFunc = function(value)
+					editSetData.filterDeconstruction = value
+					toggleFilter(editSetName, "_Deconstruct", LF_SMITHING_DECONSTRUCT)
+				end,
+				width = "half",
+			},
+			[13] = {
+				type = "checkbox",
+				name = SI_ITEMSAVER_FILTERS_SMITHINGRESEARCH_LABEL,
+				tooltip = SI_ITEMSAVER_FILTERS_SMITHINGRESEARCH_TOOLTIP,
+				getFunc = function() return editSetData.filterResearch end,
+				setFunc = function(value)
+					editSetData.filterResearch = value
+					toggleFilter(editSetName, "_Research", LF_RESEARCH)
+				end,
+				width = "half",
+			},
+			[14] = {
+				type = "checkbox",
+				name = SI_ITEMSAVER_FILTERS_GUILDSTORESELL_LABEL,
+				tooltip = SI_ITEMSAVER_FILTERS_GUILDSTORESELL_TOOLTIP,
+				getFunc = function() return editSetData.filterGuildStore end,
+				setFunc = function(value)
+					editSetData.filterGuildStore = value
+					toggleFilter(editSetName, "_GuildStoreSell", LF_GUILDSTORE_SELL)
+				end,
+				width = "half",
+			},
+			[15] = {
+				type = "checkbox",
+				name = SI_ITEMSAVER_FILTERS_MAILSEND_LABEL,
+				tooltip = SI_ITEMSAVER_FILTERS_MAILSEND_TOOLTIP,
+				getFunc = function() return editSetData.filterMail end,
+				setFunc = function(value)
+					editSetData.filterMail = value
+					toggleFilter(editSetName, "_MailSend", LF_MAIL_SEND)
+				end,
+				width = "half",
+			},
+			[16] = {
+				type = "checkbox",
+				name = SI_ITEMSAVER_FILTERS_TRADE_LABEL,
+				tooltip = SI_ITEMSAVER_FILTERS_TRADE_TOOLTIP,
+				getFunc = function() return editSetData.filterTrade end,
+				setFunc = function(value)
+					editSetData.filterTrade = value
+					toggleFilter(editSetName, "_Trade", LF_TRADE)
+				end,
+				width = "half",
+			},
+			[17] = {
+				type = "button",
+				name = SI_ITEMSAVER_CLEAR_SET_BUTTON,
+				tooltip = SI_ITEMSAVER_CLEAR_SET_TOOLTIP,
+				func = function() clearSet(editSetName) end,
+				isDangerous = true,
+			},
+			[18] = {
+				type = "button",
+				name = SI_ITEMSAVER_DELETE_SET_BUTTON,
+				tooltip = SI_ITEMSAVER_DELETE_SET_TOOLTIP,
+				func = function()
+					vars.savedSetInfo[editSetName] = nil
+
+					clearSet(editSetName)
+
+					if setName == "Default" then
+						vars.shouldCreateDefault = false
+					end
+
+					editSetName = vars.defaultSet
+					editSetData = ItemSaver_GetSetData(vars.defaultSet)
+
+					WINDOW_MANAGER:GetControlByName("IS_DefaultSetDropdown"):UpdateValue()
+					WINDOW_MANAGER:GetControlByName("IS_EditSetDropdown"):UpdateValue()
+					updateEditSetSettings(vars.defaultSet)
+				end,
+				disabled = editSetName == vars.defaultSet,
+				isDangerous = true,
+				reference = "IS_DeleteButton",
 			},
 		}
-
-		local markerTexturePaths, markerTextureNames = util.GetMarkerTextureArrays()
-
-		for setName, setData in util.PairsByKeys(vars.savedSetInfo) do
-			local submenuData = {
-				type = "submenu",
-				name = setName,
-				tooltip = nil,
-				controls = {
-					[1] = {
-						type = "dropdown",
-						name = GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_LABEL),
-						tooltip = GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_TOOLTIP),
-						choices = SAVE_TYPE_OPTIONS,
-						getFunc = function()
-							local areItemsUnique = setData.areItemsUnique or false
-
-							if areItemsUnique then return SAVE_TYPE_OPTIONS[2] end
-
-							return SAVE_TYPE_OPTIONS[1]
-						end,
-						setFunc = function(value)
-							--get new selection
-							local newSelection
-							if value == SAVE_TYPE_OPTIONS[1] then
-								newSelection = false
-							else
-								newSelection = true
-							end
-
-							--only clear the set if the user has set this before (migration)
-							if setData.areItemsUnique ~= nil then clearSet(setName) end
-
-							--set selection
-							setData.areItemsUnique = newSelection
-						end,
-						width = "full",
-						warning = GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_WARNING),
-						reference = "IS_" .. setName .. "SaveTypeDropdown",
-					},
-					[2] = {
-						type = "iconpicker",
-						name = GetString(SI_ITEMSAVER_MARKER_LABEL),
-						tooltip = GetString(SI_ITEMSAVER_MARKER_TOOLTIP),
-						choices = markerTexturePaths,
-						choicesTooltips = markerTextureNames,
-						getFunc = function()
-							local markerTextureName = setData.markerTexture
-
-							for i, name in ipairs(markerTextureNames) do
-								if name == markerTextureName then
-									return markerTexturePaths[i]
-								end
-							end
-						end,
-						setFunc = function(markerTexturePath)
-							for i, path in ipairs(markerTexturePaths) do
-								if path == markerTexturePath then
-									setData.markerTexture = markerTextureNames[i]
-								end
-							end
-						end,
-						maxColumns = 5,
-						visibleRows = zo_min(zo_max(zo_floor(#markerTexturePaths/5), 1), 4.5),
-						iconSize = 32,
-						defaultColor = ZO_ColorDef:New(util.HexToRGB(setData.markerColor)),
-						width = "half",
-						reference = "IS_" .. setName .. "IconPicker",
-					},
-					[3] = {
-						type = "colorpicker",
-						name = GetString(SI_ITEMSAVER_TEXTURE_COLOR_LABEL),
-						tooltip = GetString(SI_ITEMSAVER_TEXTURE_COLOR_TOOLTIP),
-						getFunc = function()
-							return util.HexToRGB(setData.markerColor)
-						end,
-						setFunc = function(r, g, b)
-							local iconPicker = WINDOW_MANAGER:GetControlByName("IS_"..setName.."IconPicker")
-							iconPicker.icon.color.r = r
-							iconPicker.icon.color.g = g
-							iconPicker.icon.color.b = b
-							iconPicker:SetColor(iconPicker.icon.color)
-
-							setData.markerColor = util.RGBToHex(r, g, b)
-						end,
-						width = "half",
-					},
-					[4] = {
-						type = "checkbox",
-						name = GetString(SI_ITEMSAVER_FILTERS_VENDORSELL_LABEL),
-						tooltip = GetString(SI_ITEMSAVER_FILTERS_VENDORSELL_TOOLTIP),
-						getFunc = function() return setData.filterStore end,
-						setFunc = function(value)
-							setData.filterStore = value
-							toggleFilter(setName, "_VendorSell", LF_VENDOR_SELL)
-						end,
-						width = "half",
-					},
-					[5] = {
-						type = "checkbox",
-						name = GetString(SI_ITEMSAVER_FILTERS_SMITHINGDECONSTRUCT_LABEL),
-						tooltip = GetString(SI_ITEMSAVER_FILTERS_SMITHINGDECONSTRUCT_TOOLTIP),
-						getFunc = function() return setData.filterDeconstruction end,
-						setFunc = function(value)
-							setData.filterDeconstruction = value
-							toggleFilter(setName, "_Deconstruct", LF_SMITHING_DECONSTRUCT)
-						end,
-						width = "half",
-					},
-					[6] = {
-						type = "checkbox",
-						name = GetString(SI_ITEMSAVER_FILTERS_SMITHINGRESEARCH_LABEL),
-						tooltip = GetString(SI_ITEMSAVER_FILTERS_SMITHINGRESEARCH_TOOLTIP),
-						getFunc = function() return setData.filterResearch end,
-						setFunc = function(value)
-							setData.filterResearch = value
-							toggleFilter(setName, "_Research", LF_RESEARCH)
-						end,
-						width = "half",
-					},
-					[7] = {
-						type = "checkbox",
-						name = GetString(SI_ITEMSAVER_FILTERS_GUILDSTORESELL_LABEL),
-						tooltip = GetString(SI_ITEMSAVER_FILTERS_GUILDSTORESELL_TOOLTIP),
-						getFunc = function() return setData.filterGuildStore end,
-						setFunc = function(value)
-							setData.filterGuildStore = value
-							toggleFilter(setName, "_GuildStoreSell", LF_GUILDSTORE_SELL)
-						end,
-						width = "half",
-					},
-					[8] = {
-						type = "checkbox",
-						name = GetString(SI_ITEMSAVER_FILTERS_MAILSEND_LABEL),
-						tooltip = GetString(SI_ITEMSAVER_FILTERS_MAILSEND_TOOLTIP),
-						getFunc = function() return setData.filterMail end,
-						setFunc = function(value)
-							setData.filterMail = value
-							toggleFilter(setName, "_MailSend", LF_MAIL_SEND)
-						end,
-						width = "half",
-					},
-					[9] = {
-						type = "checkbox",
-						name = GetString(SI_ITEMSAVER_FILTERS_TRADE_LABEL),
-						tooltip = GetString(SI_ITEMSAVER_FILTERS_TRADE_TOOLTIP),
-						getFunc = function() return setData.filterTrade end,
-						setFunc = function(value)
-							setData.filterTrade = value
-							toggleFilter(setName, "_Trade", LF_TRADE)
-						end,
-						width = "half",
-					},
-					[10] = {
-						type = "button",
-						name = GetString(SI_ITEMSAVER_CLEAR_SET_BUTTON),
-						tooltip = GetString(SI_ITEMSAVER_CLEAR_SET_TOOLTIP),
-						func = function() clearSet(setName) end,
-						isDangerous = true,
-					},
-					[11] = {
-						type = "button",
-						name = GetString(SI_ITEMSAVER_DELETE_SET_BUTTON),
-						tooltip = GetString(SI_ITEMSAVER_DELETE_SET_TOOLTIP),
-						warning = GetString(SI_ITEMSAVER_RELOAD_UI_WARNING),
-						func = function()
-							vars.savedSetInfo[setName] = nil
-
-							for savedItem, name in pairs(vars.savedItems) do
-								if name == setName then
-									vars.savedItems[savedItem] = vars.defaultSet
-								end
-							end
-
-							if setName == "Default" then
-								vars.shouldCreateDefault = false
-							end
-
-							ReloadUI()
-						end,
-						disabled = setName == vars.defaultSet,
-						isDangerous = true,
-						reference = "IS_" .. setName .. "DeleteButton",
-					},
-				},
-			}
-			table.insert(optionsData, submenuData)
-		end
 
 		util.lam:RegisterAddonPanel("ItemSaverSettingsPanel", panel)
 		util.lam:RegisterOptionControls("ItemSaverSettingsPanel", optionsData)
@@ -404,6 +445,8 @@ function settings.AddSet(setName, setData)
 	toggleFilter(setName, "_GuildStoreSell", LF_GUILDSTORE_SELL)
 	toggleFilter(setName, "_MailSend", LF_MAIL_SEND)
 	toggleFilter(setName, "_Trade", LF_TRADE)
+
+	refreshSettingsPanelSetChoices()
 
 	return true
 end
