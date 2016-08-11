@@ -101,7 +101,7 @@ function settings.InitializeSettings()
 
 		local panel = {
 			type = "panel",
-			name = SI_ITEMSAVER_ADDON_NAME,
+			name = GetString(SI_ITEMSAVER_ADDON_NAME),
 			author = "Randactyl",
 			version = IS.addonVersion,
 			website = "http://www.esoui.com/downloads/info300-ItemSaver.html",
