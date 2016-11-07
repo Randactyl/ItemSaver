@@ -92,8 +92,10 @@ function settings.InitializeSettings()
 			GetString(SI_ITEMSAVER_ANCHOR_LABEL_CENTER),
 		}
 		local DEFER_SUBMENU_OPTIONS = {"1", "2", "3", "4", "5"}
-		local SAVE_TYPE_OPTIONS = {GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_GENERAL),
-		  GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_UNIQUE)}
+		local SAVE_TYPE_OPTIONS = {
+			GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_GENERAL),
+		  	GetString(SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_UNIQUE),
+		}
 
 		local markerTexturePaths, markerTextureNames = util.GetMarkerTextureArrays()
 		local editSetName = vars.defaultSet
