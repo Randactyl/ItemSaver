@@ -1,4 +1,4 @@
-local MAJOR, MINOR = "LibFilters-2.0", 2.2
+local MAJOR, MINOR = "LibFilters-2.0", 2.3
 local LibFilters, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 if not LibFilters then return end
 
@@ -93,16 +93,15 @@ local filterTypeToUpdaterName = {
 	[LF_QUICKSLOT] = "QUICKSLOT",
 }
 
+--if the mouse is enabled, cycle its state to refresh the integrity of the control beneath it
 local function SafeUpdateList(object, ...)
-	local args = {...}
+	local isMouseVisible = SCENE_MANAGER:IsInUIMode()
 
-	object:UpdateList(unpack(args))
+	if isMouseVisible then HideMouse() end
 
-	--if the mouse is enabled, cycle its state to refresh the integrity of the control beneath it
-	if SCENE_MANAGER:IsInUIMode() then
-		HideMouse()
-		ShowMouse()
-	end
+	object:UpdateList(...)
+	
+	if isMouseVisible then ShowMouse() end
 end
 
 local inventoryUpdaters = {
