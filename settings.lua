@@ -331,7 +331,7 @@ function settings.InitializeSettings()
 				getFunc = function() return editSetData.filterResearch end,
 				setFunc = function(value)
 					editSetData.filterResearch = value
-					toggleFilter(editSetName, "_Research", LF_RESEARCH)
+					toggleFilter(editSetName, "_Research", LF_SMITHING_RESEARCH)
 				end,
 				width = "half",
 			},
