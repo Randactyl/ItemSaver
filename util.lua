@@ -4,7 +4,6 @@ IS.util = {}
 local util = IS.util
 util.lam = LibStub("LibAddonMenu-2.0")
 util.LibFilters = LibStub("LibFilters-2.0")
-util.LibFilters:InitializeLibFilters()
 util.markerTextures = {}
 util.markerOptions = {}
 

@@ -124,6 +124,9 @@ local function ItemSaver_Loaded(eventCode, addonName)
     util = IS.util
     settings = IS.settings
 
+    --initialize LibFilters
+    util.LibFilters:InitializeLibFilters()
+
     --initialize settings
     settings.InitializeSettings()
 
