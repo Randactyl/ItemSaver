@@ -21,7 +21,7 @@ local strings = {
 
     ["SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_LABEL"] = "Defer Submenu Creation",
     ["SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_TOOLTIP"] = "Only use a submenu if there are more than the specified number of sets.",
-    
+
     ["SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_LABEL"] = "Number of Sets",
     ["SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_TOOLTIP"] = "A submenu will be used if there are more than this number of sets.",
 
@@ -83,5 +83,5 @@ local strings = {
 
 for stringId, stringValue in pairs(strings) do
     ZO_CreateStringId(stringId, stringValue)
-	SafeAddVersion(stringId, 1)
+    SafeAddVersion(stringId, 1)
 end
