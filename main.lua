@@ -17,7 +17,7 @@ local LISTS = {
 }
 
 local function addContextMenuOptionSoon(rowControl)
-	if rowControl:GetOwningWindow() == ZO_TradingHouse then return end
+    if rowControl:GetOwningWindow() == ZO_TradingHouse then return end
 
     local function shouldAddContextMenu()
         for _, list in pairs(LISTS) do
@@ -26,7 +26,7 @@ local function addContextMenuOptionSoon(rowControl)
             end
         end
     end
-	if not shouldAddContextMenu() then return end
+    if not shouldAddContextMenu() then return end
 
     local function addContextMenuOption(rowControl)
         local bagId, slotIndex = util.GetInfoFromRowControl(rowControl)
@@ -85,32 +85,32 @@ local function addContextMenuOptionSoon(rowControl)
         ShowMenu()
     end
 
-	local parent = rowControl:GetParent()
+    local parent = rowControl:GetParent()
 
-	if parent ~= ZO_Character then
-		zo_callLater(function() addContextMenuOption(parent) end, 50)
-	elseif rowControl.stackCount > 0 then
-		zo_callLater(function() addContextMenuOption(rowControl) end, 50)
-	end
+    if parent ~= ZO_Character then
+        zo_callLater(function() addContextMenuOption(parent) end, 50)
+    elseif rowControl.stackCount > 0 then
+        zo_callLater(function() addContextMenuOption(rowControl) end, 50)
+    end
 end
 
 local function initializeHooks()
     --add marker initialization to slot setup callbacks
-	local hookedSetupFunctions = {}
-	local function newSetupCallback(rowControl, slot)
-		local listViewName = rowControl:GetParent():GetParent():GetName()
+    local hookedSetupFunctions = {}
+    local function newSetupCallback(rowControl, slot)
+        local listViewName = rowControl:GetParent():GetParent():GetName()
 
-		if hookedSetupFunctions[listViewName] then
-			hookedSetupFunctions[listViewName](rowControl, slot)
-		end
+        if hookedSetupFunctions[listViewName] then
+            hookedSetupFunctions[listViewName](rowControl, slot)
+        end
 
-		util.CreateMarkerControl(rowControl)
-	end
+        util.CreateMarkerControl(rowControl)
+    end
 
     --list hooks
     for _, list in pairs(LISTS) do
         hookedSetupFunctions[list:GetName()] = list.dataTypes[1].setupCallback
-	    list.dataTypes[1].setupCallback = newSetupCallback
+        list.dataTypes[1].setupCallback = newSetupCallback
     end
 
     --setup context menu entry
@@ -146,7 +146,7 @@ local function handleEquipmentChange(eventCode, bagId, slotIndex, isNewItem,
   itemSoundCategory, inventoryUpdateReason)
     if bagId ~= BAG_WORN or isNewItem or inventoryUpdateReason ~= 0 then return end
 
-	util.RefreshEquipmentControls()
+    util.RefreshEquipmentControls()
 end
 EVENT_MANAGER:RegisterForEvent("ItemSaverEquipChange", EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
   handleEquipmentChange)

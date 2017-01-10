@@ -1,77 +1,77 @@
 <GuiXml>
-	<Controls>
-		<!--inherits="ZO_CustomDialogBase"-->
-		<Control name="IS_ColorPickerControl" virtual="true">
+    <Controls>
+        <!--inherits="ZO_CustomDialogBase"-->
+        <Control name="IS_ColorPickerControl" virtual="true">
             <Dimensions x="192" y="192" />
 
             <OnInitialized>
-				local oldInit = ZO_ColorPicker.Initialize
+                local oldInit = ZO_ColorPicker.Initialize
 
-				ZO_ColorPicker.Initialize = function(self, control)
-					self.control = control
-					local content = self.control:GetNamedChild("Content")
-					self.content = content
-					self.colorSelect = content:GetNamedChild("ColorSelect")
-					self.colorSelectThumb = self.colorSelect:GetNamedChild("Thumb")
+                ZO_ColorPicker.Initialize = function(self, control)
+                    self.control = control
+                    local content = self.control:GetNamedChild("Content")
+                    self.content = content
+                    self.colorSelect = content:GetNamedChild("ColorSelect")
+                    self.colorSelectThumb = self.colorSelect:GetNamedChild("Thumb")
 
-					self.colorSelect:SetColorWheelThumbTextureControl(self.colorSelectThumb)
+                    self.colorSelect:SetColorWheelThumbTextureControl(self.colorSelectThumb)
 
-					self.valueSlider = content:GetNamedChild("Value")
-					self.valueSlider:GetThumbTextureControl():SetDrawLayer(3)
-					self.valueTexture = self.valueSlider:GetNamedChild("Texture")
+                    self.valueSlider = content:GetNamedChild("Value")
+                    self.valueSlider:GetThumbTextureControl():SetDrawLayer(3)
+                    self.valueTexture = self.valueSlider:GetNamedChild("Texture")
 
-					self.alphaLabel = content:GetNamedChild("AlphaLabel")
-					self.alphaSlider = content:GetNamedChild("Alpha")
-					self.alphaSlider:GetThumbTextureControl():SetDrawLayer(3)
-					self.alphaTexture = self.alphaSlider:GetNamedChild("Texture")
+                    self.alphaLabel = content:GetNamedChild("AlphaLabel")
+                    self.alphaSlider = content:GetNamedChild("Alpha")
+                    self.alphaSlider:GetThumbTextureControl():SetDrawLayer(3)
+                    self.alphaTexture = self.alphaSlider:GetNamedChild("Texture")
 
-					local preview = content:GetNamedChild("Preview")
-					self.previewInitialTexture = preview:GetNamedChild("TextureBottom")
-					self.previewCurrentTexture = preview:GetNamedChild("TextureTop")
+                    local preview = content:GetNamedChild("Preview")
+                    self.previewInitialTexture = preview:GetNamedChild("TextureBottom")
+                    self.previewCurrentTexture = preview:GetNamedChild("TextureTop")
 
-					local function SetColorFromSpinner(r, g, b, a)
-						if not self.isUpdatingColors then
-							self:SetColor(r, g, b, a)
-						end
-					end
+                    local function SetColorFromSpinner(r, g, b, a)
+                        if not self.isUpdatingColors then
+                            self:SetColor(r, g, b, a)
+                        end
+                    end
 
-					local spinners = content:GetNamedChild("Spinners")
-					self.redSpinner = ZO_Spinner:New(spinners:GetNamedChild("Red"), 0, 255)
-					self.redSpinner:RegisterCallback("OnValueChanged", function(value)
-						local r, g, b, a = self:GetColors()
-						SetColorFromSpinner(value / 255, g, b, a)
-					end)
-					self.redSpinner:SetNormalColor(ZO_ColorDef:New(1, .2, .2, 1))
+                    local spinners = content:GetNamedChild("Spinners")
+                    self.redSpinner = ZO_Spinner:New(spinners:GetNamedChild("Red"), 0, 255)
+                    self.redSpinner:RegisterCallback("OnValueChanged", function(value)
+                        local r, g, b, a = self:GetColors()
+                        SetColorFromSpinner(value / 255, g, b, a)
+                    end)
+                    self.redSpinner:SetNormalColor(ZO_ColorDef:New(1, .2, .2, 1))
 
-					self.greenSpinner = ZO_Spinner:New(spinners:GetNamedChild("Green"), 0, 255)
-					self.greenSpinner:RegisterCallback("OnValueChanged", function(value)
-						local r, g, b, a = self:GetColors()
-						SetColorFromSpinner(r, value / 255, b, a)
-					end)
-					self.greenSpinner:SetNormalColor(ZO_ColorDef:New(.2, 1, .2, 1))
+                    self.greenSpinner = ZO_Spinner:New(spinners:GetNamedChild("Green"), 0, 255)
+                    self.greenSpinner:RegisterCallback("OnValueChanged", function(value)
+                        local r, g, b, a = self:GetColors()
+                        SetColorFromSpinner(r, value / 255, b, a)
+                    end)
+                    self.greenSpinner:SetNormalColor(ZO_ColorDef:New(.2, 1, .2, 1))
 
-					self.blueSpinner = ZO_Spinner:New(spinners:GetNamedChild("Blue"), 0, 255)
-					self.blueSpinner:RegisterCallback("OnValueChanged", function(value)
-						local r, g, b, a = self:GetColors()
-						SetColorFromSpinner(r, g, value / 255, a)
-					end)
-					self.blueSpinner:SetNormalColor(ZO_ColorDef:New(.2, .2, 1, 1))
+                    self.blueSpinner = ZO_Spinner:New(spinners:GetNamedChild("Blue"), 0, 255)
+                    self.blueSpinner:RegisterCallback("OnValueChanged", function(value)
+                        local r, g, b, a = self:GetColors()
+                        SetColorFromSpinner(r, g, value / 255, a)
+                    end)
+                    self.blueSpinner:SetNormalColor(ZO_ColorDef:New(.2, .2, 1, 1))
 
-					self.alphaSpinner = ZO_Spinner:New(spinners:GetNamedChild("Alpha"), 0, 255)
-					self.alphaSpinner:RegisterCallback("OnValueChanged", function(value)
-						local r, g, b, a = self:GetColors()
-						SetColorFromSpinner(r, g, b, value / 255)
-					end)
-				end
+                    self.alphaSpinner = ZO_Spinner:New(spinners:GetNamedChild("Alpha"), 0, 255)
+                    self.alphaSpinner:RegisterCallback("OnValueChanged", function(value)
+                        local r, g, b, a = self:GetColors()
+                        SetColorFromSpinner(r, g, b, value / 255)
+                    end)
+                end
 
                 IS_COLOR_PICKER = ZO_ColorPicker:New(self)
 
-				ZO_ColorPicker.Initialize = oldInit
+                ZO_ColorPicker.Initialize = oldInit
             </OnInitialized>
             <Controls>
                 <Control name="$(parent)Content">
-					<Anchor point="TOP" relativeTo="$(parent)" relativePoint="TOP" />
-					<Dimensions x="192" y="192" />
+                    <Anchor point="TOP" relativeTo="$(parent)" relativePoint="TOP" />
+                    <Dimensions x="192" y="192" />
 
                     <Controls>
                         <ColorSelect name="$(parent)ColorSelect" mouseEnabled="true">
@@ -137,7 +137,7 @@
                         </Slider>
                         <Label name="$(parent)AlphaLabel" font="ZoFontWinH4" color="INTERFACE_COLOR_TYPE_TEXT_COLORS:INTERFACE_TEXT_COLOR_SELECTED" horizontalAlignment="RIGHT" modifyTextType="UPPERCASE" text="SI_COLOR_PICKER_ALPHA" hidden="true">
                             <Anchor point="TOPRIGHT" relativeTo="$(parent)Alpha" relativePoint="TOPLEFT" offsetX="-10" />
-						</Label>
+                        </Label>
 
                         <Control name="$(parent)Spinners" resizeToFitDescendents="true">
                             <Anchor point="BOTTOM" relativeTo="$(parent)" relativePoint="BOTTOM"/>
@@ -156,7 +156,7 @@
 
                                 <Control name="$(parent)Alpha" inherits="ZO_EditSpinner" hidden="true">
                                     <Anchor point="LEFT" relativeTo="$(parent)Blue" relativePoint="RIGHT" offsetX="10" />
-								</Control>
+                                </Control>
                             </Controls>
                         </Control>
                     </Controls>
@@ -164,15 +164,15 @@
             </Controls>
         </Control>
 
-		<TopLevelControl name="ItemSaverDialog" inherits="ZO_CustomDialogBase">
-			<OnInitialized>
-				ItemSaver.dialog.SetupDialog(self)
-			</OnInitialized>
+        <TopLevelControl name="ItemSaverDialog" inherits="ZO_CustomDialogBase">
+            <OnInitialized>
+                ItemSaver.dialog.SetupDialog(self)
+            </OnInitialized>
 
-			<Controls>
-				<Control name="$(parent)Cancel" inherits="ZO_CustomDialogButton" />
-				<Control name="$(parent)Create" inherits="ZO_CustomDialogButton" />
-			</Controls>
-		</TopLevelControl>
-	</Controls>
+            <Controls>
+                <Control name="$(parent)Cancel" inherits="ZO_CustomDialogButton" />
+                <Control name="$(parent)Create" inherits="ZO_CustomDialogButton" />
+            </Controls>
+        </TopLevelControl>
+    </Controls>
 </GuiXml>

@@ -11,19 +11,19 @@ function util.SignItemInstanceId(itemInstanceId)
     local SIGNED_INT_MAX = 2^32 / 2 - 1
     local INT_MAX = 2^32
 
-	if itemInstanceId and itemInstanceId > SIGNED_INT_MAX then
-		itemInstanceId = itemInstanceId - INT_MAX
-	end
+    if itemInstanceId and itemInstanceId > SIGNED_INT_MAX then
+        itemInstanceId = itemInstanceId - INT_MAX
+    end
 
-	return itemInstanceId
+    return itemInstanceId
 end
 
 function util.RGBToHex(r, g, b)
-	r = r <= 1 and r >= 0 and r or 0
-	g = g <= 1 and g >= 0 and g or 0
-	b = b <= 1 and b >= 0 and b or 0
+    r = r <= 1 and r >= 0 and r or 0
+    g = g <= 1 and g >= 0 and g or 0
+    b = b <= 1 and b >= 0 and b or 0
 
-	return string.format("%02x%02x%02x", r * 255, g * 255, b * 255)
+    return string.format("%02x%02x%02x", r * 255, g * 255, b * 255)
 end
 
 function util.HexToRGB(hex)
@@ -59,27 +59,27 @@ end
 
 function util.GetInfoFromRowControl(rowControl)
     if not rowControl then return end
-    
+
     local dataEntry = rowControl.dataEntry
-	local bagId, slotIndex
+    local bagId, slotIndex
 
-	--case to handle equiped items
-	if not dataEntry then
-		bagId = rowControl.bagId
-		slotIndex = rowControl.slotIndex
-	else
-		bagId = dataEntry.data.bagId
-		slotIndex = dataEntry.data.slotIndex
-	end
+    --case to handle equiped items
+    if not dataEntry then
+        bagId = rowControl.bagId
+        slotIndex = rowControl.slotIndex
+    else
+        bagId = dataEntry.data.bagId
+        slotIndex = dataEntry.data.slotIndex
+    end
 
-	--case to handle list dialog, list dialog uses index instead of slotIndex
-	--and bag instead of badId...?
-	if dataEntry and not bagId and not slotIndex then
-		bagId = dataEntry.data.bag
-		slotIndex = dataEntry.data.index
-	end
+    --case to handle list dialog, list dialog uses index instead of slotIndex
+    --and bag instead of badId...?
+    if dataEntry and not bagId and not slotIndex then
+        bagId = dataEntry.data.bag
+        slotIndex = dataEntry.data.index
+    end
 
-	return bagId, slotIndex
+    return bagId, slotIndex
 end
 
 function util.CreateMarkerControl(parent)
@@ -159,13 +159,13 @@ function util.CreateMarkerControl(parent)
 end
 
 function util.RefreshEquipmentControls()
-	for i = 1, ZO_Character:GetNumChildren() do
-		local child = ZO_Character:GetChild(i)
+    for i = 1, ZO_Character:GetNumChildren() do
+        local child = ZO_Character:GetChild(i)
 
-		if child and child:GetName():find("ZO_CharacterEquipmentSlots") then
-			util.CreateMarkerControl(ZO_Character:GetChild(i))
-		end
-	end
+        if child and child:GetName():find("ZO_CharacterEquipmentSlots") then
+            util.CreateMarkerControl(ZO_Character:GetChild(i))
+        end
+    end
 end
 
 function util.RequestUpdate(filterTypes)
@@ -182,5 +182,5 @@ function util.RefreshAll()
     }
 
     util.RequestUpdate(filterTypes)
-	util.RefreshEquipmentControls()
+    util.RefreshEquipmentControls()
 end
