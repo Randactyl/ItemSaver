@@ -31,16 +31,17 @@ local function addContextMenuOptionSoon(rowControl)
     local function addContextMenuOption(rowControl)
         local bagId, slotIndex = util.GetInfoFromRowControl(rowControl)
         local setNames = ItemSaver_GetSaveSets()
+        local createSetEntry = {
+            label = GetString(SI_ITEMSAVER_CREATE_SAVE_SET),
+            callback = function()
+                ZO_Dialogs_ShowDialog("ITEMSAVER_SAVE", {bagId, slotIndex})
+                ClearMenu()
+            end,
+        }
 
         local function setupSubmenu(bagId, slotIndex)
             local entries = {
-                [1] = {
-                    label = GetString(SI_ITEMSAVER_CREATE_SAVE_SET),
-                    callback = function()
-                        ZO_Dialogs_ShowDialog("ITEMSAVER_SAVE", {bagId, slotIndex})
-                        ClearMenu()
-                    end,
-                },
+                [1] = createSetEntry,
             }
 
             for _, setName in pairs(setNames) do
@@ -67,6 +68,7 @@ local function addContextMenuOptionSoon(rowControl)
                 if #setNames > deferSubmenuNum then
                     setupSubmenu(bagId, slotIndex)
                 else
+                    AddCustomMenuItem(createSetEntry.label, createSetEntry.callback, MENU_ADD_OPTION_LABEL)
                     for _, setName in pairs(setNames) do
                         AddCustomMenuItem(GetString(SI_ITEMSAVER_SAVE_TO) .. " \"" .. setName .. "\"", function()
                             ItemSaver_ToggleItemSave(setName, bagId, slotIndex)
