@@ -487,6 +487,10 @@ function settings.InitializeSettings()
                 func = function()
                     vars.savedSetInfo[editSetName] = nil
 
+                    for index, setName in ipairs(vars.keybindSetMap) do
+                        if setName == editSetName then vars.keybindSetMap[index] = nil end
+                    end
+
                     clearSet(editSetName)
 
                     if setName == "Default" then
