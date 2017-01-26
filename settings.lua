@@ -656,28 +656,35 @@ function settings.ToggleItemSave(setName, bagId, slotIndex)
         setName = ItemSaver_GetSetNameByKeybindIndex(setName)
     end
     if not setName then
-        local isSaved
-        isSaved, setName = ItemSaver_IsItemSaved(bagId, slotIndex)
-
-        if not isSaved then setName = ItemSaver_GetDefaultSet() end
+        setName = ItemSaver_GetDefaultSet()
     end
 
-    local areItemsUnique = ItemSaver_GetSetData(setName).areItemsUnique or false
-    local id
+    local isSaved, oldSetName = ItemSaver_IsItemSaved(bagId, slotIndex)
+    local areItemsUnique, id
 
+    --unsave item
+    if isSaved then
+        areItemsUnique = ItemSaver_GetSetData(oldSetName).areItemsUnique or false
+        if areItemsUnique then
+            id = Id64ToString(GetItemUniqueId(bagId, slotIndex))
+        else
+            id = util.SignItemInstanceId(GetItemInstanceId(bagId, slotIndex))
+        end
+
+        vars.savedItems[id] = nil
+
+        return false
+    end
+
+    --save item
+    areItemsUnique = ItemSaver_GetSetData(setName).areItemsUnique or false
     if areItemsUnique then
         id = Id64ToString(GetItemUniqueId(bagId, slotIndex))
     else
         id = util.SignItemInstanceId(GetItemInstanceId(bagId, slotIndex))
     end
 
-    if vars.savedItems[id] then
-        vars.savedItems[id] = nil
+    vars.savedItems[id] = setName
 
-        return false
-    else
-        vars.savedItems[id] = setName
-
-        return true
-    end
+    return true
 end

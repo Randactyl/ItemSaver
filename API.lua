@@ -66,8 +66,8 @@ function ItemSaver_IsItemSaved(bagId, slotIndex)
     return settings.IsItemSaved(bagId, slotIndex)
 end
 
---returns true and the maximum number of sets that will be shown without a submenu
---if submenu creation is deferred.
+--returns true and the maximum number of sets that will be shown without a
+--submenu if submenu creation is deferred.
 --returns false if submenu creation is not deferred.
 function ItemSaver_IsSubmenuDeferred()
     return settings.IsSubmenuDeferred()
@@ -87,7 +87,10 @@ function ItemSaver_RegisterMarker(markerInformation)
     return true
 end
 
---returns true if item was saved successfully. Returns false if item was unsaved.
+--returns true if item was saved successfully. Returns false if item was
+--unsaved.
+--if setName is a number from 1 - 5, the set corresponding to that keybind index
+--will be used.
 --if setName is nil, the default set will be used.
 function ItemSaver_ToggleItemSave(setName, bagId, slotIndex)
     if bagId == nil then --keybind
