@@ -235,7 +235,7 @@ function settings.InitializeSettings()
                             this = WINDOW_MANAGER:GetControlByName("IS_KeybindSet1Dropdown")
                             this:UpdateChoices(ItemSaver_GetSaveSets())
 
-                            return vars.keybindSetMap[1]
+                            return vars.keybindSetMap[1] or ItemSaver_GetDefaultSet()
                         end,
                         setFunc = function(value)
                             vars.keybindSetMap[1] = value
@@ -250,7 +250,7 @@ function settings.InitializeSettings()
                             this = WINDOW_MANAGER:GetControlByName("IS_KeybindSet2Dropdown")
                             this:UpdateChoices(ItemSaver_GetSaveSets())
 
-                            return vars.keybindSetMap[2]
+                            return vars.keybindSetMap[2] or ItemSaver_GetDefaultSet()
                         end,
                         setFunc = function(value)
                             vars.keybindSetMap[2] = value
@@ -265,7 +265,7 @@ function settings.InitializeSettings()
                             this = WINDOW_MANAGER:GetControlByName("IS_KeybindSet3Dropdown")
                             this:UpdateChoices(ItemSaver_GetSaveSets())
 
-                            return vars.keybindSetMap[3]
+                            return vars.keybindSetMap[3] or ItemSaver_GetDefaultSet()
                         end,
                         setFunc = function(value)
                             vars.keybindSetMap[3] = value
@@ -280,7 +280,7 @@ function settings.InitializeSettings()
                             this = WINDOW_MANAGER:GetControlByName("IS_KeybindSet4Dropdown")
                             this:UpdateChoices(ItemSaver_GetSaveSets())
 
-                            return vars.keybindSetMap[4]
+                            return vars.keybindSetMap[4] or ItemSaver_GetDefaultSet()
                         end,
                         setFunc = function(value)
                             vars.keybindSetMap[4] = value
@@ -295,7 +295,7 @@ function settings.InitializeSettings()
                             this = WINDOW_MANAGER:GetControlByName("IS_KeybindSet5Dropdown")
                             this:UpdateChoices(ItemSaver_GetSaveSets())
 
-                            return vars.keybindSetMap[5]
+                            return vars.keybindSetMap[5] or ItemSaver_GetDefaultSet()
                         end,
                         setFunc = function(value)
                             vars.keybindSetMap[5] = value
