@@ -91,6 +91,7 @@ function util.CreateMarkerControl(parent)
                 y = -offsetValue,
             },
             [TOP] = {
+                x = 0,
                 y = -offsetValue,
             },
             [TOPRIGHT] = {
@@ -99,12 +100,14 @@ function util.CreateMarkerControl(parent)
             },
             [RIGHT] = {
                 x = offsetValue,
+                y = 0,
             },
             [BOTTOMRIGHT] = {
                 x = offsetValue,
                 y = offsetValue,
             },
             [BOTTOM] = {
+                x = 0,
                 y = offsetValue,
             },
             [BOTTOMLEFT] = {
@@ -113,8 +116,12 @@ function util.CreateMarkerControl(parent)
             },
             [LEFT] = {
                 x = -offsetValue,
+                y = 0,
             },
-            [CENTER] = {},
+            [CENTER] = {
+                x = 0,
+                y = 0,
+            },
         }
 
         return offsets[markerAnchor].x, offsets[markerAnchor].y
@@ -136,8 +143,10 @@ function util.CreateMarkerControl(parent)
         return
     end
 
-    local markerAnchor = ItemSaver_GetMarkerAnchor()
+    local markerAnchor, customOffsetX, customOffsetY = ItemSaver_GetMarkerAnchor()
     local offsetX, offsetY = getMarkerControlAnchorOffsets(markerAnchor)
+    offsetX = offsetX + customOffsetX
+    offsetY = offsetY + customOffsetY
     local anchorTarget = parent:GetNamedChild("Button")
 
     if anchorTarget then

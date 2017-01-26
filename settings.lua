@@ -112,11 +112,11 @@ function settings.InitializeSettings()
         }
 
         local optionsData = {
-            [1] = {
+            {
                 type = "header",
                 name = SI_ITEMSAVER_GENERAL_OPTIONS_HEADER,
             },
-            [2] = {
+            {
                 type = "dropdown",
                 name = SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_LABEL,
                 tooltip = SI_ITEMSAVER_DEFAULT_SET_DROPDOWN_TOOLTIP,
@@ -134,7 +134,7 @@ function settings.InitializeSettings()
                 end,
                 reference = "IS_DefaultSetDropdown",
             },
-            [3] = {
+            {
                 type = "dropdown",
                 name = SI_ITEMSAVER_MARKER_ANCHOR_LABEL,
                 tooltip = SI_ITEMSAVER_MARKER_ANCHOR_TOOLTIP,
@@ -163,7 +163,31 @@ function settings.InitializeSettings()
                     if value == ANCHOR_OPTIONS[9] then vars.markerAnchor = CENTER end
                 end,
             },
-            [4] = {
+            {
+                type = "slider",
+                name = SI_ITEMSAVER_OFFSET_X_SLIDER,
+                tooltip = SI_ITEMSAVER_OFFSET_X_TOOLTIP,
+                getFunc = function() return vars.offsetX end,
+                setFunc = function(value) vars.offsetX = value end,
+                min = -10,
+                max = 10,
+                step = 1,
+                autoSelect = true,
+                width = "half",
+            },
+            {
+                type = "slider",
+                name = SI_ITEMSAVER_OFFSET_Y_SLIDER,
+                tooltip = SI_ITEMSAVER_OFFSET_Y_TOOLTIP,
+                getFunc = function() return vars.offsetY end,
+                setFunc = function(value) vars.offsetY = value end,
+                min = -10,
+                max = 10,
+                step = 1,
+                autoSelect = true,
+                width = "half",
+            },
+            {
                 type = "checkbox",
                 name = SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_LABEL,
                 tooltip = SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_TOOLTIP,
@@ -175,7 +199,7 @@ function settings.InitializeSettings()
                 end,
                 width = "half",
             },
-            [5] = {
+            {
                 type = "dropdown",
                 name = SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_LABEL,
                 tooltip = SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_TOOLTIP,
@@ -199,7 +223,7 @@ function settings.InitializeSettings()
                 disabled = not vars.deferSubmenu,
                 reference = "IS_DeferSubmenuDropdown",
             },
-            [6] = {
+            {
                 type = "dropdown",
                 name = SI_ITEMSAVER_EDIT_SET_DROPDOWN_LABEL,
                 choices = ItemSaver_GetSaveSets(),
@@ -218,12 +242,12 @@ function settings.InitializeSettings()
                 tooltip = SI_ITEMSAVER_EDIT_SET_DROPDOWN_TOOLTIP,
                 reference = "IS_EditSetDropdown",
             },
-            [7] = {
+            {
                 type = "header",
                 name = GetString(SI_ITEMSAVER_SET_DATA_HEADER) .. " - " .. editSetName,
                 reference = "IS_EditSetHeader",
             },
-            [8] = {
+            {
                 type = "dropdown",
                 name = SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_LABEL,
                 tooltip = SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_TOOLTIP,
@@ -254,7 +278,7 @@ function settings.InitializeSettings()
                 warning = SI_ITEMSAVER_SAVE_TYPE_DROPDOWN_WARNING,
                 reference = "IS_SaveTypeDropdown",
             },
-            [9] = {
+            {
                 type = "iconpicker",
                 name = SI_ITEMSAVER_MARKER_LABEL,
                 tooltip = SI_ITEMSAVER_MARKER_TOOLTIP,
@@ -283,7 +307,7 @@ function settings.InitializeSettings()
                 width = "half",
                 reference = "IS_IconPicker",
             },
-            [10] = {
+            {
                 type = "colorpicker",
                 name = SI_ITEMSAVER_TEXTURE_COLOR_LABEL,
                 tooltip = SI_ITEMSAVER_TEXTURE_COLOR_TOOLTIP,
@@ -302,7 +326,7 @@ function settings.InitializeSettings()
                 end,
                 width = "half",
             },
-            [11] = {
+            {
                 type = "checkbox",
                 name = SI_ITEMSAVER_FILTERS_VENDORSELL_LABEL,
                 tooltip = SI_ITEMSAVER_FILTERS_VENDORSELL_TOOLTIP,
@@ -313,7 +337,7 @@ function settings.InitializeSettings()
                 end,
                 width = "half",
             },
-            [12] = {
+            {
                 type = "checkbox",
                 name = SI_ITEMSAVER_FILTERS_SMITHINGDECONSTRUCT_LABEL,
                 tooltip = SI_ITEMSAVER_FILTERS_SMITHINGDECONSTRUCT_TOOLTIP,
@@ -324,7 +348,7 @@ function settings.InitializeSettings()
                 end,
                 width = "half",
             },
-            [13] = {
+            {
                 type = "checkbox",
                 name = SI_ITEMSAVER_FILTERS_SMITHINGRESEARCH_LABEL,
                 tooltip = SI_ITEMSAVER_FILTERS_SMITHINGRESEARCH_TOOLTIP,
@@ -335,7 +359,7 @@ function settings.InitializeSettings()
                 end,
                 width = "half",
             },
-            [14] = {
+            {
                 type = "checkbox",
                 name = SI_ITEMSAVER_FILTERS_GUILDSTORESELL_LABEL,
                 tooltip = SI_ITEMSAVER_FILTERS_GUILDSTORESELL_TOOLTIP,
@@ -346,7 +370,7 @@ function settings.InitializeSettings()
                 end,
                 width = "half",
             },
-            [15] = {
+            {
                 type = "checkbox",
                 name = SI_ITEMSAVER_FILTERS_MAILSEND_LABEL,
                 tooltip = SI_ITEMSAVER_FILTERS_MAILSEND_TOOLTIP,
@@ -357,7 +381,7 @@ function settings.InitializeSettings()
                 end,
                 width = "half",
             },
-            [16] = {
+            {
                 type = "checkbox",
                 name = SI_ITEMSAVER_FILTERS_TRADE_LABEL,
                 tooltip = SI_ITEMSAVER_FILTERS_TRADE_TOOLTIP,
@@ -368,14 +392,14 @@ function settings.InitializeSettings()
                 end,
                 width = "half",
             },
-            [17] = {
+            {
                 type = "button",
                 name = SI_ITEMSAVER_CLEAR_SET_BUTTON,
                 tooltip = SI_ITEMSAVER_CLEAR_SET_TOOLTIP,
                 func = function() clearSet(editSetName) end,
                 isDangerous = true,
             },
-            [18] = {
+            {
                 type = "button",
                 name = SI_ITEMSAVER_DELETE_SET_BUTTON,
                 tooltip = SI_ITEMSAVER_DELETE_SET_TOOLTIP,
@@ -407,6 +431,8 @@ function settings.InitializeSettings()
 
     local defaults = {
         markerAnchor = TOPLEFT,
+        offsetX = 0,
+        offsetY = 0,
         savedSetInfo = {},
         savedItems = {},
         deferSubmenu = false,
@@ -473,7 +499,7 @@ function settings.GetFilters(setName)
 end
 
 function settings.GetMarkerAnchor()
-    return vars.markerAnchor
+    return vars.markerAnchor, vars.offsetX, vars.offsetY
 end
 
 function settings.GetMarkerInfo(bagId, slotIndex)

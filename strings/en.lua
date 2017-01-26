@@ -19,6 +19,11 @@ local strings = {
     ["SI_ITEMSAVER_ANCHOR_LABEL_LEFT"] = "Left",
     ["SI_ITEMSAVER_ANCHOR_LABEL_CENTER"] = "Center",
 
+    ["SI_ITEMSAVER_OFFSET_X_SLIDER"] = "Custom Horizontal Offset",
+    ["SI_ITEMSAVER_OFFSET_X_TOOLTIP"] = "Add an additional offset to the marker's horizontal position.",
+    ["SI_ITEMSAVER_OFFSET_Y_SLIDER"] = "Custom Vertical Offset",
+    ["SI_ITEMSAVER_OFFSET_Y_TOOLTIP"] = "Add an additional offset to the marker's vertical position.",
+
     ["SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_LABEL"] = "Defer Submenu Creation",
     ["SI_ITEMSAVER_DEFER_SUBMENU_CHECKBOX_TOOLTIP"] = "Only use a submenu if there are more than the specified number of sets.",
 
