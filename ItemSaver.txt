@@ -5,28 +5,29 @@
 ## SavedVariables: ItemSaver_Settings
 ## OptionalDependsOn: LibFilters-2.0
 
-lib\LibStub\LibStub.lua
-lib\LibFilters-2.0\LibFilters-2.0.lua
-lib\LibFilters-2.0\helper.lua
-lib\LibCustomMenu\LibCustomMenu.lua
-lib\LibAddonMenu-2.0\LibAddonMenu-2.0.lua
-lib\LibAddonMenu-2.0\controls\panel.lua
-lib\LibAddonMenu-2.0\controls\submenu.lua
-lib\LibAddonMenu-2.0\controls\button.lua
-lib\LibAddonMenu-2.0\controls\checkbox.lua
-lib\LibAddonMenu-2.0\controls\colorpicker.lua
-lib\LibAddonMenu-2.0\controls\custom.lua
-lib\LibAddonMenu-2.0\controls\description.lua
-lib\LibAddonMenu-2.0\controls\dropdown.lua
-lib\LibAddonMenu-2.0\controls\editbox.lua
-lib\LibAddonMenu-2.0\controls\header.lua
-lib\LibAddonMenu-2.0\controls\slider.lua
-lib\LibAddonMenu-2.0\controls\texture.lua
-lib\LibAddonMenu-2.0\controls\iconpicker.lua
-lib\LibCustomTitles\LibCustomTitles.lua
+lib/LibStub/LibStub.lua
+lib/libAddonKeybinds/libAddonKeybinds.lua
+lib/LibAddonMenu-2.0/LibAddonMenu-2.0.lua
+lib/LibAddonMenu-2.0/controls/panel.lua
+lib/LibAddonMenu-2.0/controls/submenu.lua
+lib/LibAddonMenu-2.0/controls/button.lua
+lib/LibAddonMenu-2.0/controls/checkbox.lua
+lib/LibAddonMenu-2.0/controls/colorpicker.lua
+lib/LibAddonMenu-2.0/controls/custom.lua
+lib/LibAddonMenu-2.0/controls/description.lua
+lib/LibAddonMenu-2.0/controls/dropdown.lua
+lib/LibAddonMenu-2.0/controls/editbox.lua
+lib/LibAddonMenu-2.0/controls/header.lua
+lib/LibAddonMenu-2.0/controls/slider.lua
+lib/LibAddonMenu-2.0/controls/texture.lua
+lib/LibAddonMenu-2.0/controls/iconpicker.lua
+lib/LibCustomMenu/LibCustomMenu.lua
+lib/LibCustomTitles/LibCustomTitles.lua
+lib/LibFilters-2.0/LibFilters-2.0.lua
+lib/LibFilters-2.0/helper.lua
 
-strings\en.lua
-strings\$(language).lua
+strings/en.lua
+strings/$(language).lua
 
 main.lua
 util.lua
@@ -37,8 +38,8 @@ API.lua
 
 bindings.xml
 
-markertextures\boxstar.lua
-markertextures\flag.lua
-markertextures\padlock.lua
-markertextures\star.lua
-markertextures\timer.lua
+markertextures/boxstar.lua
+markertextures/flag.lua
+markertextures/padlock.lua
+markertextures/star.lua
+markertextures/timer.lua
