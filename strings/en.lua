@@ -30,6 +30,13 @@ local strings = {
     ["SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_LABEL"] = "Number of Sets",
     ["SI_ITEMSAVER_DEFER_SUBMENU_DROPDOWN_TOOLTIP"] = "A submenu will be used if there are more than this number of sets.",
 
+    ["SI_ITEMSAVER_KEYBIND_SUBMENU_NAME"] = "Keybind Options",
+    ["SI_ITEMSAVER_KEYBIND_SET_1_NAME"] = "Set 1",
+    ["SI_ITEMSAVER_KEYBIND_SET_2_NAME"] = "Set 2",
+    ["SI_ITEMSAVER_KEYBIND_SET_3_NAME"] = "Set 3",
+    ["SI_ITEMSAVER_KEYBIND_SET_4_NAME"] = "Set 4",
+    ["SI_ITEMSAVER_KEYBIND_SET_5_NAME"] = "Set 5",
+
     ["SI_ITEMSAVER_SET_DATA_HEADER"] = "Set Data",
 
     ["SI_ITEMSAVER_EDIT_SET_DROPDOWN_LABEL"] = "Edit Set",
@@ -83,7 +90,11 @@ local strings = {
     ["SI_ITEMSAVER_USED_NAME_WARNING"] = "Set not saved - given set name is already in use.",
     ["SI_ITEMSAVER_SELECT_FILTERS_LABEL"] = "Filters",
 
-    ["SI_BINDING_NAME_ITEM_SAVER_TOGGLE"] = "Toggle Item Saved",
+    ["SI_BINDING_NAME_ITEM_SAVER_TOGGLE_1"] = "Save to set 1",
+    ["SI_BINDING_NAME_ITEM_SAVER_TOGGLE_2"] = "Save to set 2",
+    ["SI_BINDING_NAME_ITEM_SAVER_TOGGLE_3"] = "Save to set 3",
+    ["SI_BINDING_NAME_ITEM_SAVER_TOGGLE_4"] = "Save to set 4",
+    ["SI_BINDING_NAME_ITEM_SAVER_TOGGLE_5"] = "Save to set 5",
 }
 
 for stringId, stringValue in pairs(strings) do

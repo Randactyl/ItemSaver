@@ -53,6 +53,13 @@ function ItemSaver_GetSetData(setName)
     return settings.GetSetData(setName)
 end
 
+--returns the string set name if the supplied index is 1 - 5
+--returns nil if the supplied index is out of range or if no set has been
+--assigned to that index
+function ItemSaver_GetSetNameByKeybindIndex(index)
+    return settings.GetSetNameByKeybindIndex(index)
+end
+
 --returns true and the string set name if the item is saved. Returns false if
 --the item is not saved.
 function ItemSaver_IsItemSaved(bagId, slotIndex)

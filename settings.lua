@@ -224,6 +224,87 @@ function settings.InitializeSettings()
                 reference = "IS_DeferSubmenuDropdown",
             },
             {
+                type = "submenu",
+                name = SI_ITEMSAVER_KEYBIND_SUBMENU_NAME,
+                controls = {
+                    {
+                        type = "dropdown",
+                        name = SI_ITEMSAVER_KEYBIND_SET_1_NAME,
+                        choices = ItemSaver_GetSaveSets(),
+                        getFunc = function()
+                            this = WINDOW_MANAGER:GetControlByName("IS_KeybindSet1Dropdown")
+                            this:UpdateChoices(ItemSaver_GetSaveSets())
+
+                            return vars.keybindSetMap[1]
+                        end,
+                        setFunc = function(value)
+                            vars.keybindSetMap[1] = value
+                        end,
+                        reference = "IS_KeybindSet1Dropdown",
+                    },
+                    {
+                        type = "dropdown",
+                        name = SI_ITEMSAVER_KEYBIND_SET_2_NAME,
+                        choices = ItemSaver_GetSaveSets(),
+                        getFunc = function()
+                            this = WINDOW_MANAGER:GetControlByName("IS_KeybindSet2Dropdown")
+                            this:UpdateChoices(ItemSaver_GetSaveSets())
+
+                            return vars.keybindSetMap[2]
+                        end,
+                        setFunc = function(value)
+                            vars.keybindSetMap[2] = value
+                        end,
+                        reference = "IS_KeybindSet2Dropdown",
+                    },
+                    {
+                        type = "dropdown",
+                        name = SI_ITEMSAVER_KEYBIND_SET_3_NAME,
+                        choices = ItemSaver_GetSaveSets(),
+                        getFunc = function()
+                            this = WINDOW_MANAGER:GetControlByName("IS_KeybindSet3Dropdown")
+                            this:UpdateChoices(ItemSaver_GetSaveSets())
+
+                            return vars.keybindSetMap[3]
+                        end,
+                        setFunc = function(value)
+                            vars.keybindSetMap[3] = value
+                        end,
+                        reference = "IS_KeybindSet3Dropdown",
+                    },
+                    {
+                        type = "dropdown",
+                        name = SI_ITEMSAVER_KEYBIND_SET_4_NAME,
+                        choices = ItemSaver_GetSaveSets(),
+                        getFunc = function()
+                            this = WINDOW_MANAGER:GetControlByName("IS_KeybindSet4Dropdown")
+                            this:UpdateChoices(ItemSaver_GetSaveSets())
+
+                            return vars.keybindSetMap[4]
+                        end,
+                        setFunc = function(value)
+                            vars.keybindSetMap[4] = value
+                        end,
+                        reference = "IS_KeybindSet4Dropdown",
+                    },
+                    {
+                        type = "dropdown",
+                        name = SI_ITEMSAVER_KEYBIND_SET_5_NAME,
+                        choices = ItemSaver_GetSaveSets(),
+                        getFunc = function()
+                            this = WINDOW_MANAGER:GetControlByName("IS_KeybindSet5Dropdown")
+                            this:UpdateChoices(ItemSaver_GetSaveSets())
+
+                            return vars.keybindSetMap[5]
+                        end,
+                        setFunc = function(value)
+                            vars.keybindSetMap[5] = value
+                        end,
+                        reference = "IS_KeybindSet5Dropdown",
+                    },
+                },
+            },
+            {
                 type = "dropdown",
                 name = SI_ITEMSAVER_EDIT_SET_DROPDOWN_LABEL,
                 choices = ItemSaver_GetSaveSets(),
@@ -439,6 +520,7 @@ function settings.InitializeSettings()
         deferSubmenuNum = 3,
         defaultSet = "Default",
         shouldCreateDefault = true,
+        keybindSetMap = {},
     }
 
     settings.vars = ZO_SavedVars:NewAccountWide("ItemSaver_Settings", 2.0, nil, defaults)
@@ -532,6 +614,10 @@ function settings.GetSetData(setName)
     return vars.savedSetInfo[setName]
 end
 
+function settings.GetSetNameByKeybindIndex(index)
+    return vars.keybindSetMap[index]
+end
+
 function settings.IsItemSaved(bagId, slotIndex)
     local uIdString = Id64ToString(GetItemUniqueId(bagId, slotIndex))
     local signedInstanceId = util.SignItemInstanceId(GetItemInstanceId(bagId, slotIndex))
@@ -562,6 +648,9 @@ function settings.IsSubmenuDeferred()
 end
 
 function settings.ToggleItemSave(setName, bagId, slotIndex)
+    if type(setName) == "number" then
+        setName = ItemSaver_GetSetNameByKeybindIndex(setName)
+    end
     if not setName then
         local isSaved
         isSaved, setName = ItemSaver_IsItemSaved(bagId, slotIndex)
