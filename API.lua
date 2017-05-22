@@ -47,8 +47,21 @@ function ItemSaver_GetSaveSets()
     return settings.GetSaveSets()
 end
 
---returns a table with the full info of the provided set name.
---returns nil if the set doesn't exist.
+--[[
+    returns a table with the full info of the provided set name.
+    returns nil if the set doesn't exist.
+    example:
+        setData = {
+            ["markerColor"] = "ff0000",
+            ["filterMail"] = true,
+            ["filterResearch"] = true,
+            ["filterGuildStore"] = true,
+            ["filterDeconstruction"] = true,
+            ["filterTrade"] = true,
+            ["filterStore"] = true,
+            ["markerTexture"] = "Two-Handed",
+        }
+]]
 function ItemSaver_GetSetData(setName)
     return settings.GetSetData(setName)
 end
