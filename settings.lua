@@ -626,18 +626,10 @@ function settings.IsItemSaved(bagId, slotIndex)
     local uIdString = Id64ToString(GetItemUniqueId(bagId, slotIndex))
     local signedInstanceId = util.SignItemInstanceId(GetItemInstanceId(bagId, slotIndex))
 
-    if vars.savedItems[signedInstanceId] then
-        local setData = ItemSaver_GetSetData(vars.savedItems[signedInstanceId])
-
-        if not setData.areItemsUnique then
-            return true, vars.savedItems[signedInstanceId]
-        end
-    elseif vars.savedItems[uIdString] then
-        local setData = ItemSaver_GetSetData(vars.savedItems[uIdString])
-
-        if setData.areItemsUnique then
-            return true, vars.savedItems[uIdString]
-        end
+    if vars.savedItems[uIdString] then
+        return true, vars.savedItems[uIdString]
+    elseif vars.savedItems[signedInstanceId] then
+        return true, vars.savedItems[signedInstanceId]
     end
 
     return false
