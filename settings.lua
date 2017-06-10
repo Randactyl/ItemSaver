@@ -589,8 +589,6 @@ function settings.GetMarkerAnchor()
 end
 
 function settings.GetMarkerInfo(bagId, slotIndex)
-    local uIdString = Id64ToString(GetItemUniqueId(bagId, slotIndex))
-    local signedInstanceId = util.SignItemInstanceId(GetItemInstanceId(bagId, slotIndex))
     local _, setName = ItemSaver_IsItemSaved(bagId, slotIndex)
 
     if setName then
