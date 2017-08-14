@@ -1,6 +1,6 @@
 ## Title: Item Saver
 ## Author: Randactyl
-## Version: 3.3.2.0
+## Version: 3.4.0.0
 ## APIVersion: 100020
 ## SavedVariables: ItemSaver_Settings
 ## OptionalDependsOn: LibFilters-2.0
