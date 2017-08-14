@@ -36,7 +36,8 @@ function dialog.SetupDialog(self)
                 end
             end
 
-            setData.markerColor = util.RGBToHex(IS_COLOR_PICKER:GetColors())
+            -- HotR temporary fix --setData.markerColor = util.RGBToHex(IS_COLOR_PICKER:GetColors())
+            setData.markerColor = util.RGBToHex(1, 1, 0, 1)
             setData.filterStore = storeCheckbox.value
             setData.filterDeconstruction = deconstructionCheckbox.value
             setData.filterResearch = researchCheckbox.value
@@ -66,12 +67,14 @@ function dialog.SetupDialog(self)
         ItemSaverDialogSaveTypeDropdown:UpdateValue()
         ItemSaverDialogIconpicker:UpdateValue()
 
+        --[[ HotR temporary fix
         local colorpicker = ItemSaverDialogColorpickerContent
         IS_COLOR_PICKER.initialR = 1
         IS_COLOR_PICKER.initialG = 1
         IS_COLOR_PICKER.initialB = 0
         IS_COLOR_PICKER:SetColor(1, 1, 0)
         IS_COLOR_PICKER.previewInitialTexture:SetColor(1, 1, 0)
+        ]]
 
         ItemSaverDialogStoreCheckbox:UpdateValue()
         ItemSaverDialogDeconstructionCheckbox:UpdateValue()
@@ -200,7 +203,7 @@ function dialog.InitializeDialog()
     local editbox = LAMCreateControl["editbox"](parent, controlData.editbox, "ItemSaverDialogEditbox")
     local saveTypeDropdown = LAMCreateControl["dropdown"](parent, controlData.saveTypeDropdown, "ItemSaverDialogSaveTypeDropdown")
     local iconpicker = LAMCreateControl["iconpicker"](parent, controlData.iconpicker, "ItemSaverDialogIconpicker")
-    local colorpicker = WINDOW_MANAGER:CreateControlFromVirtual("ItemSaverDialogColorpicker", parent, "IS_ColorPickerControl"):GetNamedChild("Content")
+    -- HotR temporary fix --local colorpicker = WINDOW_MANAGER:CreateControlFromVirtual("ItemSaverDialogColorpicker", parent, "IS_ColorPickerControl"):GetNamedChild("Content")
     local header = LAMCreateControl["header"](parent, controlData.header, "ItemSaverDialogHeader")
     local storeCheckbox = LAMCreateControl["checkbox"](parent, GetCheckboxData("store"), "ItemSaverDialogStoreCheckbox")
     local deconstructionCheckbox = LAMCreateControl["checkbox"](parent, GetCheckboxData("deconstruction"), "ItemSaverDialogDeconstructionCheckbox")
@@ -212,7 +215,7 @@ function dialog.InitializeDialog()
     editbox:SetAnchor(TOPLEFT, ItemSaverDialogDivider, LEFT, 75, 16)
     saveTypeDropdown:SetAnchor(TOPLEFT, editbox, BOTTOMLEFT, 0, 16)
     iconpicker:SetAnchor(TOPLEFT, saveTypeDropdown, BOTTOMLEFT, 0, 16)
-    colorpicker:SetAnchor(TOP, iconpicker, BOTTOM, 0, 16)
+    -- HotR temporary fix --colorpicker:SetAnchor(TOP, iconpicker, BOTTOM, 0, 16)
     header:SetAnchor(TOPLEFT, iconpicker, BOTTOMLEFT, 0, 240)
     storeCheckbox:SetAnchor(TOPLEFT, header, BOTTOMLEFT, 0, 16)
     deconstructionCheckbox:SetAnchor(TOPLEFT, storeCheckbox, TOPRIGHT, 16)
@@ -222,6 +225,7 @@ function dialog.InitializeDialog()
     tradeCheckbox:SetAnchor(TOPLEFT, mailCheckbox, TOPRIGHT, 16)
 
     --prehook to change marker texture color
+    --[[ HotR temporary fix
     local oldOnColorSet = IS_COLOR_PICKER.OnColorSet
     IS_COLOR_PICKER.OnColorSet = function(IS_COLOR_PICKER, r, g, b)
         iconpicker.icon.color.r = r
@@ -231,4 +235,5 @@ function dialog.InitializeDialog()
 
         oldOnColorSet(IS_COLOR_PICKER, r, g, b)
     end
+    ]]
 end
