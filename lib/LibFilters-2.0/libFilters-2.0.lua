@@ -1,4 +1,4 @@
-local MAJOR, MINOR = "LibFilters-2.0", 3.1
+local MAJOR, MINOR = "LibFilters-2.0", 3.6
 local LibFilters, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 if not LibFilters then return end
 
@@ -30,6 +30,15 @@ LF_FENCE_SELL            = 24
 LF_FENCE_LAUNDER         = 25
 LF_CRAFTBAG              = 26
 LF_QUICKSLOT             = 27
+LF_RETRAIT               = 28
+LF_HOUSE_BANK_WITHDRAW   = 29
+LF_HOUSE_BANK_DEPOSIT    = 30
+LF_JEWELRY_REFINE        = 31
+LF_JEWELRY_CREATION      = 32
+LF_JEWELRY_DECONSTRUCT   = 33
+LF_JEWELRY_IMPROVEMENT   = 34
+LF_JEWELRY_RESEARCH      = 35
+LF_FILTER_MAX            = LF_JEWELRY_RESEARCH
 
 LibFilters.isInitialized = false
 LibFilters.filters = {
@@ -60,6 +69,14 @@ LibFilters.filters = {
     [LF_FENCE_LAUNDER] = {},
     [LF_CRAFTBAG] = {},
     [LF_QUICKSLOT] = {},
+    [LF_RETRAIT] = {},
+    [LF_HOUSE_BANK_WITHDRAW] = {},
+    [LF_HOUSE_BANK_DEPOSIT] = {},
+    [LF_JEWELRY_REFINE]      = {},
+    [LF_JEWELRY_CREATION]    = {},
+    [LF_JEWELRY_DECONSTRUCT] = {},
+    [LF_JEWELRY_IMPROVEMENT] = {},
+    [LF_JEWELRY_RESEARCH]    = {},
 }
 local filters = LibFilters.filters
 
@@ -91,6 +108,14 @@ local filterTypeToUpdaterName = {
     [LF_FENCE_LAUNDER] = "INVENTORY",
     [LF_CRAFTBAG] = "CRAFTBAG",
     [LF_QUICKSLOT] = "QUICKSLOT",
+    [LF_RETRAIT] = "RETRAIT",
+    [LF_HOUSE_BANK_WITHDRAW] = "HOUSE_BANK_WITHDRAW",
+    [LF_HOUSE_BANK_DEPOSIT] = "INVENTORY",
+    [LF_JEWELRY_REFINE]      = "SMITHING_REFINE",
+    [LF_JEWELRY_CREATION]    = "SMITHING_CREATION",
+    [LF_JEWELRY_DECONSTRUCT] = "SMITHING_DECONSTRUCT",
+    [LF_JEWELRY_IMPROVEMENT] = "SMITHING_IMPROVEMENT",
+    [LF_JEWELRY_RESEARCH]    = "SMITHING_RESEARCH",
 }
 
 --if the mouse is enabled, cycle its state to refresh the integrity of the control beneath it
@@ -158,6 +183,12 @@ local inventoryUpdaters = {
     QUICKSLOT = function()
         SafeUpdateList(QUICKSLOT_WINDOW)
     end,
+    RETRAIT = function()
+        ZO_RETRAIT_STATION_KEYBOARD:HandleDirtyEvent()
+    end,
+    HOUSE_BANK_WITHDRAW = function()
+        SafeUpdateList(PLAYER_INVENTORY, INVENTORY_HOUSE_BANK )
+    end,
 }
 
 local function df(...)
@@ -218,6 +249,10 @@ local function HookAdditionalFilters()
     LibFilters:HookAdditionalFilter(LF_SMITHING_DECONSTRUCT, SMITHING.deconstructionPanel.inventory)
     LibFilters:HookAdditionalFilter(LF_SMITHING_IMPROVEMENT, SMITHING.improvementPanel.inventory)
     LibFilters:HookAdditionalFilter(LF_SMITHING_RESEARCH, SMITHING.researchPanel)
+    --LibFilters:HookAdditionalFilter(LF_JEWELRY_CREATION, )
+    LibFilters:HookAdditionalFilter(LF_JEWELRY_DECONSTRUCT, SMITHING.deconstructionPanel.inventory)
+    LibFilters:HookAdditionalFilter(LF_JEWELRY_IMPROVEMENT, SMITHING.improvementPanel.inventory)
+    LibFilters:HookAdditionalFilter(LF_JEWELRY_RESEARCH, SMITHING.researchPanel)
 
     LibFilters:HookAdditionalFilter(LF_ALCHEMY_CREATION, ALCHEMY.inventory)
 
@@ -233,6 +268,11 @@ local function HookAdditionalFilters()
     LibFilters:HookAdditionalFilter(LF_CRAFTBAG, PLAYER_INVENTORY.inventories[INVENTORY_CRAFT_BAG])
 
     LibFilters:HookAdditionalFilter(LF_QUICKSLOT, QUICKSLOT_WINDOW)
+
+    LibFilters:HookAdditionalFilter(LF_RETRAIT, ZO_RETRAIT_STATION_KEYBOARD)
+
+    LibFilters:HookAdditionalFilter(LF_HOUSE_BANK_WITHDRAW, PLAYER_INVENTORY.inventories[INVENTORY_HOUSE_BANK])
+    LibFilters:HookAdditionalFilter(LF_HOUSE_BANK_DEPOSIT, BACKPACK_HOUSE_BANK_LAYOUT_FRAGMENT)
 end
 LibFilters.helpers = {}
 local helpers = LibFilters.helpers
@@ -339,4 +379,8 @@ function LibFilters:UnregisterFilter(filterTag, filterType)
             callbacks[filterTag] = nil
         end
     end
+end
+
+function LibFilters:GetMaxFilter()
+    return LF_FILTER_MAX
 end

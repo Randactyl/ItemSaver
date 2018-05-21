@@ -137,10 +137,11 @@ helpers["REPAIR_WINDOW"] = {
 --enable LF_ALCHEMY_CREATION, LF_ENCHANTING_CREATION, LF_ENCHANTING_EXTRACTION,
 --  LF_SMITHING_REFINE
 helpers["enumerate"] = {
-    version = 2,
+    version = 3,
     locations = {
         [1] = ZO_AlchemyInventory,
         [2] = ZO_EnchantingInventory,
+        [3] = ZO_SmithingExtractionInventory,
     },
     helper = {
         funcName = "EnumerateInventorySlotsAndAddToScrollData",
@@ -178,7 +179,7 @@ helpers["enumerate"] = {
 
 --enable LF_SMITHING_DECONSTRUCT, LF_SMITHING_IMPROVEMENT
 helpers["GetIndividualInventorySlotsAndAddToScrollData"] = {
-    version = 1,
+    version = 2,
     locations = {
         [1] = ZO_SmithingExtractionInventory,
         [2] = ZO_SmithingImprovementInventory,
@@ -187,14 +188,14 @@ helpers["GetIndividualInventorySlotsAndAddToScrollData"] = {
         funcName = "GetIndividualInventorySlotsAndAddToScrollData",
         func = function(self, predicate, filterFunction, filterType, data, useWornBag)
             local oldPredicate = predicate
-            predicate = function(bagId, slotIndex)
+            predicate = function(itemData)
                 local result = true
 
                 if type(self.additionalFilter) == "function" then
-                    result = self.additionalFilter(bagId, slotIndex)
+                    result = self.additionalFilter(itemData.bagId, itemData.slotIndex)
                 end
 
-                return oldPredicate(bagId, slotIndex) and result
+                return oldPredicate(itemData) and result
             end
 
             -- Begin original function
@@ -216,67 +217,54 @@ helpers["GetIndividualInventorySlotsAndAddToScrollData"] = {
     },
 }
 
---enable LF_SMITHING_RESEARCH
-helpers["SMITHING.researchPanel"] = {
-    version = 1,
+--enable LF_SMITHING_RESEARCH -- since API 100023 Summerset
+ helpers["SMITHING.researchPanel"] = {
+    version = 4,
     locations = {
         [1] = SMITHING.researchPanel,
     },
     helper = {
         funcName = "Refresh",
         func = function(self)
-            local function DetermineResearchLineFilterType(craftingType, researchLineIndex)
-                local traitType = GetSmithingResearchLineTraitInfo(craftingType, researchLineIndex, 1)
-
-                if ZO_CraftingUtils_IsTraitAppliedToWeapons(traitType) then
-                    return ZO_SMITHING_RESEARCH_FILTER_TYPE_WEAPONS
-                elseif ZO_CraftingUtils_IsTraitAppliedToArmor(traitType) then
-                    return ZO_SMITHING_RESEARCH_FILTER_TYPE_ARMOR
-                end
+            -- Include functions local to smithingresearch_shared.lua
+            local function IsNotLockedOrRetraitedItem(bagId, slotIndex)
+                return not IsItemPlayerLocked(bagId, slotIndex) and GetItemTraitInformation(bagId, slotIndex) ~= ITEM_TRAIT_INFORMATION_RETRAITED
             end
 
-            self.dirty = false
-            self.researchLineList:Clear()
+            -- Our filter function to insert LibFilter rules
+            local function predicate(bagId, slotIndex)
+                local result = IsNotLockedOrRetraitedItem(bagId, slotIndex)
 
+                if type(self.additionalFilter) == "function" then
+                    result = result and self.additionalFilter(bagId, slotIndex)
+                end
+
+                return result
+            end
+
+            -- Begin original function, ZO_SharedSmithingResearch:Refresh()
+            self.dirty = false
+
+            self.researchLineList:Clear()
             local craftingType = GetCraftingInteractionType()
+
             local numCurrentlyResearching = 0
+
+            local virtualInventoryList = PLAYER_INVENTORY:GenerateListOfVirtualStackedItems(INVENTORY_BACKPACK, predicate) --IsNotLockedOrRetraitedItem
+            PLAYER_INVENTORY:GenerateListOfVirtualStackedItems(INVENTORY_BANK, predicate, virtualInventoryList) -- IsNotLockedOrRetraitedItem, virtualInventoryList
 
             for researchLineIndex = 1, GetNumSmithingResearchLines(craftingType) do
                 local name, icon, numTraits, timeRequiredForNextResearchSecs = GetSmithingResearchLineInfo(craftingType, researchLineIndex)
-
                 if numTraits > 0 then
                     local researchingTraitIndex, areAllTraitsKnown = self:FindResearchingTraitIndex(craftingType, researchLineIndex, numTraits)
-
                     if researchingTraitIndex then
                         numCurrentlyResearching = numCurrentlyResearching + 1
                     end
 
-                    if DetermineResearchLineFilterType(craftingType, researchLineIndex) == self.typeFilter then
-                        local function predicate(bagId, slotIndex)
-                            local result = true
-
-                            if type(self.additionalFilter) == "function" then
-                                result = self.additionalFilter(bagId, slotIndex)
-                            end
-
-                            return result
-                        end
-
-                        local virtualInventoryList = PLAYER_INVENTORY:GenerateListOfVirtualStackedItems(INVENTORY_BANK, predicate, PLAYER_INVENTORY:GenerateListOfVirtualStackedItems(INVENTORY_BACKPACK, predicate))
-
+                    local expectedTypeFilter = ZO_CraftingUtils_GetSmithingFilterFromTrait(GetSmithingResearchLineTraitInfo(craftingType, researchLineIndex, 1))
+                    if expectedTypeFilter == self.typeFilter then
                         local itemTraitCounts = self:GenerateResearchTraitCounts(virtualInventoryList, craftingType, researchLineIndex, numTraits)
-                        local data = {
-                            craftingType = craftingType,
-                            researchLineIndex = researchLineIndex,
-                            name = name,
-                            icon = icon,
-                            numTraits = numTraits,
-                            timeRequiredForNextResearchSecs = timeRequiredForNextResearchSecs,
-                            researchingTraitIndex = researchingTraitIndex,
-                            areAllTraitsKnown = areAllTraitsKnown,
-                            itemTraitCounts = itemTraitCounts
-                        }
-
+                        local data = { craftingType = craftingType, researchLineIndex = researchLineIndex, name = name, icon = icon, numTraits = numTraits, timeRequiredForNextResearchSecs = timeRequiredForNextResearchSecs, researchingTraitIndex = researchingTraitIndex, areAllTraitsKnown = areAllTraitsKnown, itemTraitCounts = itemTraitCounts }
                         self.researchLineList:AddEntry(data)
                     end
                 end
@@ -296,9 +284,11 @@ helpers["SMITHING.researchPanel"] = {
             if self.activeRow then
                 self:OnResearchRowActivate(self.activeRow)
             end
+
         end,
     },
-}
+ }
+
 
 --enable LF_QUICKSLOT
 helpers["QUICKSLOT_WINDOW"] = {
@@ -324,6 +314,25 @@ helpers["QUICKSLOT_WINDOW"] = {
             return false
         end,
     },
+}
+
+--enable LF_RETRAIT
+helpers["ZO_RetraitStation_CanItemBeRetraited"] = {
+    version = 1,
+    locations = { _G, },
+    helper = {
+        funcName = "ZO_RetraitStation_CanItemBeRetraited",
+        func = function(itemData)
+            local base = ZO_RETRAIT_STATION_KEYBOARD
+            local result = CanItemBeRetraited(itemData.bagId, itemData.slotIndex)
+
+            if type(base.additionalFilter) == "function" then
+                result = result and base.additionalFilter(itemData.bagId, itemData.slotIndex)
+            end
+
+            return result
+        end,
+    }
 }
 
 --copy helpers into LibFilters
