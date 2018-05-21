@@ -47,8 +47,14 @@ end
 local function toggleFilters()
     for setName, setInfo in pairs(vars.savedSetInfo) do
         if setInfo.filterStore then toggleFilter(setName, "_VendorSell", LF_VENDOR_SELL) end
-        if setInfo.filterDeconstruction then toggleFilter(setName, "_Deconstruct", LF_SMITHING_DECONSTRUCT) end
-        if setInfo.filterResearch then toggleFilter(setName, "_Research", LF_SMITHING_RESEARCH) end
+        if setInfo.filterDeconstruction then
+            toggleFilter(setName, "_SmithingDeconstruct", LF_SMITHING_DECONSTRUCT)
+            toggleFilter(setName, "_JewelryDeconstruct", LF_JEWELRY_DECONSTRUCT)
+        end
+        if setInfo.filterResearch then
+            toggleFilter(setName, "_SmithingResearch", LF_SMITHING_RESEARCH)
+            toggleFilter(setName, "_JewelryResearch", LF_JEWELRY_RESEARCH)
+        end
         if setInfo.filterGuildStore then toggleFilter(setName, "_GuildStoreSell", LF_GUILDSTORE_SELL) end
         if setInfo.filterMail then toggleFilter(setName, "_MailSend", LF_MAIL_SEND) end
         if setInfo.filterTrade then toggleFilter(setName, "_Trade", LF_TRADE) end
@@ -425,7 +431,8 @@ function settings.InitializeSettings()
                 getFunc = function() return editSetData.filterDeconstruction end,
                 setFunc = function(value)
                     editSetData.filterDeconstruction = value
-                    toggleFilter(editSetName, "_Deconstruct", LF_SMITHING_DECONSTRUCT)
+                    toggleFilter(editSetName, "_SmithingDeconstruct", LF_SMITHING_DECONSTRUCT)
+                    toggleFilter(editSetName, "_JewelryDeconstruct", LF_JEWELRY_DECONSTRUCT)
                 end,
                 width = "half",
             },
@@ -436,7 +443,8 @@ function settings.InitializeSettings()
                 getFunc = function() return editSetData.filterResearch end,
                 setFunc = function(value)
                     editSetData.filterResearch = value
-                    toggleFilter(editSetName, "_Research", LF_SMITHING_RESEARCH)
+                    toggleFilter(editSetName, "_SmithingResearch", LF_SMITHING_RESEARCH)
+                    toggleFilter(editSetName, "_JewelryResearch", LF_JEWELRY_RESEARCH)
                 end,
                 width = "half",
             },
@@ -555,7 +563,10 @@ function settings.AddSet(setName, setData)
 
     vars.savedSetInfo[setName] = setData
     toggleFilter(setName, "_VendorSell", LF_VENDOR_SELL)
-    toggleFilter(setName, "_Deconstruct", LF_SMITHING_DECONSTRUCT)
+    toggleFilter(setName, "_SmithingDeconstruct", LF_SMITHING_DECONSTRUCT)
+    toggleFilter(setName, "_JewelryDeconstruct", LF_JEWELRY_DECONSTRUCT)
+    toggleFilter(setName, "_SmithingResearch", LF_SMITHING_RESEARCH)
+    toggleFilter(setName, "_JewelryResearch", LF_JEWELRY_RESEARCH)
     toggleFilter(setName, "_GuildStoreSell", LF_GUILDSTORE_SELL)
     toggleFilter(setName, "_MailSend", LF_MAIL_SEND)
     toggleFilter(setName, "_Trade", LF_TRADE)
